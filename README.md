@@ -93,11 +93,26 @@
 
 ### 综述/趋势
 - [UAV 自主系统综述索引](references/papers/uav-autonomy-surveys.md)
-- [USV / AMR / 多机器人综述索引](references/papers/usv-robotics-autonomy-surveys.md)
+- [UAV GNSS拒止导航综述 2025](references/papers/uav-gnss-denied-navigation-2025.md)
+- [仓储与物流机器人综述 2026](references/papers/amr-logistics-2026.md)
+- [多机器人导航综述 2025](references/papers/multi-robot-navigation-2025.md)
+- [USV 方法与应用综述 2025](references/papers/usv-overview-2025.md)
+- [Edge Robotics 综述 2025](references/papers/edge-robotics-2025.md)
+- [VLA 端侧效率问题综述 2025](references/papers/vla-efficiency-2025.md)
 - [Foundation Models / VLM / VLA / Edge Robotics](references/papers/foundation-models-robotics.md)
 
 ### 现有计算平台
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
+
+## 应用—工作负载基线
+
+- [无人装备端侧智能应用—工作负载需求矩阵](research/scenarios/application-workload-matrix.md)
+- [UAV / UAS](research/scenarios/uav.md)
+- [UGV / 自动驾驶 / AMR](research/scenarios/ugv-amr.md)
+- [USV / 无人船](research/scenarios/usv.md)
+- [机器人、VLA 与固定边缘智能](research/scenarios/robotics-fixed-edge.md)
+- [工作负载分类 W1–W9](research/workloads/workload-taxonomy.md)
+- [当前真实自主系统/产品证据](references/webpages/deployed-autonomous-systems.md)
 
 ## 工程 Case
 
@@ -114,10 +129,12 @@
 
 ## 下一阶段
 
-1. 建立“平台类型 × 任务场景 × 功能栈 × 自主性画像”的需求矩阵；
-2. 分别形成 UAV、UGV/AMR、USV、机器人四类场景研究；
-3. 建立典型工作负载族：视频感知、VIO/SLAM、BEV/Transformer、规划控制、VLM/VLA、多机协同；
-4. 对 NVIDIA、Qualcomm、瑞芯微、地平线、黑芝麻、后摩、Hailo、Axelera 等平台按统一字段建立事实数据；
+第一版“场景—功能栈—工作负载”矩阵与 W1–W9 workload taxonomy 已建立。下一阶段转向定量化：
+
+1. 为 W1–W8 分别建立可计算 workload profile 和公开 benchmark 基线；
+2. 优先量化多路视频、VIO/SLAM、DNN perception、BEV/Transformer、planning 和 VLM/VLA；
+3. 对 NVIDIA、Qualcomm、瑞芯微、地平线、黑芝麻、后摩、Hailo、Axelera 等平台按统一字段建立事实数据；
+4. 建立“工作负载 profile → 平台特性”的适配矩阵；
 5. 用六摄像头 Case 和公开 Benchmark 验证平台边界。
 
 研究和提交规范以 [AGENTS.md](AGENTS.md) 为准。
