@@ -111,6 +111,8 @@ scripts/
 - [NVIDIA Isaac ROS 资料摘要](references/webpages/nvidia-isaac-ros.md)
 - [Nav2 自主导航资料摘要](references/webpages/nav2-navigation.md)
 - [OpenVLA 论文摘要](references/papers/openvla.md)
+- [六摄像头工作负载模型](research/workloads/six-camera-workload-model.md)
+- [端侧计算平台产品数据模型](data/product-specs/schema.md)
 
 ## 当前工程判断
 
@@ -125,10 +127,10 @@ scripts/
 
 近期优先推进：
 
-1. 建立六摄像头系统的数据流和工作负载模型；
-2. 明确分辨率、帧率、同步、算法并行度等参数对带宽和算力的影响；
-3. 建立端侧计算平台产品数据模型；
-4. 分路线研究 RK3588、NVIDIA Jetson、后摩智能、Axelera AI、地平线、黑芝麻、昇腾等平台；
+1. 冻结六摄像头工作负载关键输入：分辨率、帧率、像素格式、同步、目标延迟和算法基线；
+2. 基于工作负载模型进行第一轮数据率、内存带宽和计算负载推导；
+3. 分路线研究 RK3588、NVIDIA Jetson、后摩智能、Axelera AI、地平线、黑芝麻、昇腾等平台；
+4. 按统一产品数据模型建立首批平台数据；
 5. 设计第一版多路视频 + 检测 + SLAM/VIO Benchmark。
 
 ---
