@@ -1,21 +1,22 @@
 # 代表性端侧计算平台事实底座
 
-- 日期：2026-09-29
-- 状态：v0.1
-- 目的：证明当前产业的产品形态与工作负载正在分化，不用于简单 TOPS 排名
+- 日期：2026-09-30
+- 状态：v0.2
+- 目的：记录代表性平台的官方事实、产品形态和证据边界，不用于简单 TOPS 排名
+- 适配分析：[`workload-platform-fit-matrix.md`](workload-platform-fit-matrix.md)
+- 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
 
 ## 1. 产品形态
 
-本文件故意把产品按形态分组，而不是按 TOPS 排序：
-
+本文件按形态分组：
 1. 通用/AIoT SoC
-2. 机器人专用异构平台
-3. GPU/Physical AI 模组
+2. 机器人/工业异构 SoC
+3. GPU/Physical AI SoM
 4. 车规智能驾驶 SoC
-5. 独立 AI 加速器
+5. PCIe/M.2 独立 AI Accelerator
 6. 边缘计算整机/组合方案
 
-不同形态不可直接以峰值算力比较。
+不同形态不可直接用峰值算力横排。
 
 ## 2. 代表产品
 
@@ -25,55 +26,89 @@
 
 **官方已确认**
 - 4× Cortex-A76 + 4× Cortex-A55
-- Mali-G610 MP4 GPU
-- 6 TOPS NPU
-- 强视频编解码能力
-- MIPI CSI、PCIe、双 GMAC 等接口
-- 目标应用含 AI Camera、Edge Computing、NVR 等
+- Mali-G610 MC4
+- triple-core NPU，6 TOPS
+- dual ISP，多路 MIPI CSI
+- 8K H.265/H.264 video codec
+- PCIe、SATA、双 GbE 等
 
-**工程意义**
-适合用来研究“CPU/GPU/NPU + ISP/VPU + 丰富 I/O”的低功耗一体化路线。其价值不能只用 6 TOPS 描述。
+**证据边界**
+官方资料证明 W1/W3 的硬件基础，但本轮没有找到条件完整、可与 Orin/Metis 等同口径比较的自主导航系统 benchmark。W2/W4/W6 暂不从 6 TOPS 推断。
 
 来源：
-- Rockchip RK3588 Brief Datasheet
-- Rockchip 官方产品/开发板资料
+- https://www.rock-chips.com/a/en/products/RK35_Series/2022/0926/1660.html
+- https://www.rock-chips.com/a/en/download/index.html
 
-### Qualcomm Robotics RB5
+### Qualcomm Flight RB5 / Robotics RB5
 
-**形态**：机器人/无人机开发平台，QRB5165
+**形态**：机器人/无人机 reference platform，QRB5165
 
 **官方已确认**
 - 15 TOPS AI Engine
-- 8-core Kryo CPU + GPU + Hexagon Tensor Accelerator
-- 支持 7 路并发 Camera
-- 集成 ISP/CV 能力
-- 支持 Linux/Ubuntu/ROS2
-- 可扩展 4G/5G
-- 官方定位 consumer / enterprise / industrial robots and drones
+- Kryo CPU + Adreno GPU + Hexagon Tensor Accelerator
+- 7 路并发 Camera
+- Spectra 480 ISP
+- Linux/Ubuntu/ROS2
+- 5G/Wi-Fi 6
+- Flight RB5 官方明确列出 VIO、SLAM、DFS、object detection/tracking、stereo depth、path planning、obstacle avoidance
 
 **工程意义**
-体现机器人平台需要同时解决 AI、Camera、连接、传感器和 ROS，而不只是 NPU。
+这是目前公开资料中“无人机端一体化异构计算”的直接 reference-design 证据之一。
 
 来源：
-https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm-robotics-rb5-platform-product-brief.pdf
+- https://www.qualcomm.com/internet-of-things/products/flight-rb5-platform
+- https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm-robotics-rb5-platform-product-brief.pdf
+
+### Qualcomm Dragonwing IQ-9075
+
+**形态**：新一代工业/机器人异构 SoC / EVK
+
+**官方已确认**
+- 100 dense TOPS variant
+- 最高 36GB LPDDR5，inline ECC
+- 最多 16 concurrent cameras
+- 8-core Kryo CPU + GPU + NPU
+- 4-core real-time MCU subsystem
+- Ubuntu / Qualcomm Linux
+- 官方面向 Robotics、AMR、Drones
+- 官方称可运行 13B 模型；EVK 页面有约 12 tokens/s 示例
+
+**工程意义**
+与 RB5 相比，IQ-9075 更值得作为 2026 后续机器人/无人平台候选跟踪；它同时覆盖多摄像头、AI、较大内存和实时子系统。
+
+**证据边界**
+尚缺公开的 VIO/SLAM/ROS2 端到端机器人 benchmark。
+
+来源：
+- https://www.qualcomm.com/internet-of-things/products/iq9-series/iq-9075
+- https://www.qualcomm.com/developer/hardware/qualcomm-iq-9075-evaluation-kit-evk
 
 ### NVIDIA Jetson Orin
 
 **形态**：GPU 异构 SoM / 开发平台
 
 **官方已确认**
-- Orin 系列覆盖不同性能档位
-- AGX Orin 64GB：最高 275 sparse INT8 TOPS
-- 最高 64GB LPDDR5
-- 204.8 GB/s 内存带宽
+- AGX Orin 64GB：275 sparse INT8 TOPS
+- 64GB LPDDR5，204.8 GB/s
 - Arm CPU + Ampere GPU + Tensor Cores + NVDLA + PVA
-- 官方面向 robotics / autonomous machines / multi-sensor fusion / 3D perception
+- 最多 6 个物理 CSI cameras（16 virtual channels）
+- 完整 JetPack / CUDA / TensorRT / Isaac ROS 软件栈
+
+**公开案例/benchmark**
+- Isaac ROS 提供 AGX Orin 的 Stereo Disparity、DNN、视频编解码等 benchmark。
+- Skydio X10 使用 Jetson Orin + 6 路导航相机，支持 GPS-denied navigation、obstacle avoidance、tracking 和机上 2D/3D mapping。
+- 2024–2026 论文已有 Jetson AGX Orin / Orin Nano 上的 VINS、ORB-SLAM3 和 LLM 实测。
 
 **工程意义**
-适合研究通用 GPU 与 AI 加速器协同，对 VIO/SLAM、CUDA算法、多模型并发和复杂机器人软件栈更有代表性。
+当前公开证据最完整的“通用 GPU + AI + robotics stack”路线之一，尤其适合 W1–W7 的跨 workload 研究。
+
+**证据边界**
+Skydio 等整机案例没有公开每个模块的精确处理器分区；不能把整机功能都当成 Orin 单芯片性能。
 
 来源：
-https://www.nvidia.com/en-us/lp/embedded-computing/robotics-edge-ai-tech-brief/
+- https://www.nvidia.com/content/dam/en-zz/Solutions/gtcf21/jetson-orin/nvidia-jetson-agx-orin-technical-brief.pdf
+- https://nvidia-isaac-ros.github.io/performance/index.html
+- https://www.skydio.com/x10
 
 ### NVIDIA Jetson Thor
 
@@ -85,141 +120,148 @@ https://www.nvidia.com/en-us/lp/embedded-computing/robotics-edge-ai-tech-brief/
 - 128GB LPDDR5X
 - 273 GB/s
 - 40–130W
-- MIG 支持资源隔离
-- 官方定位 Agentic AI / Physical AI / Robotics / generative models
+- MIG
+- 面向 Agentic AI / Physical AI / Robotics / generative models
 
 **工程意义**
-表明机器人端计算需求正在从传统 INT8 CV 模型扩展到大模型、VLM/VLA 和混合关键度任务。其 FP4 TFLOPS 也进一步说明不能跨产品只比较“TOPS”。
+更适合研究高端机器人 W7/VLA、复杂多模型和资源隔离，不应与十几瓦级 UAV 加速卡按单一算力指标直接比较。
 
 来源：
-https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/
+- https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson/back-to-school/
 
-### 地平线征程 6
+### 地平线 Journey 6
 
 **形态**：车规智能驾驶 SoC 系列
 
-**官方已确认/厂商宣称**
-- 系列算力覆盖约 10+～560 TOPS
-- 集成 BPU、CPU、GPU、MCU
+**官方已确认**
+- 系列覆盖多个算力档位
+- BPU + CPU + GPU + MCU
 - 原生支持大参数 Transformer
-- 产品覆盖不同辅助驾驶/全场景智能驾驶需求
+- 支持端到端智能驾驶路线
+
+**量产事实**
+2026-09-03 地平线公开：截至 2026-08，Journey 6M 已落地 20+ 车企、70+ 量产上市车型；7 家品牌已实现城区辅助驾驶平台化上车。6M 为 128 TOPS。
 
 **工程意义**
-体现汽车端的“系列化工作负载覆盖”和高度集成路线，适合研究 BEV/Transformer/E2E 等车端负载。
+可作为 W1–W6 高并发车端 workload 的量产参考，但汽车的散热、供电、功能安全和传感器配置与 UAV 不同。
 
 来源：
-https://www.horizon.auto/solutions/horizon-journey/horizon-journey6
+- https://www.horizon.auto/solutions/horizon-journey/horizon-journey6
+- https://www.horizon.auto/news/product/473
 
 ### 黑芝麻智能华山 A2000
 
 **形态**：车规智能驾驶 SoC
 
 **官方已确认/厂商宣称**
-- 集成 CPU、DSP、GPU、NPU、MCU、ISP、CV 等单元
-- 支持 INT4/INT8/INT16、FP8/FP16 等精度
+- NPU 混合精度支持 INT8/FP8/FP16
+- Transformer 硬件加速
+- 三层内存架构
 - 面向 BEV + Transformer、Multi-Modal LM、E2E
-- 多芯片可扩展
+- Safety NPU
 
-**工程意义**
-体现高阶智驾计算已经从 CNN 感知转向 Transformer、多模态和 E2E，并强调内存/数据闭环和异构计算。
+**证据边界**
+本轮以产品架构事实为主，尚未得到可与公开 benchmark 直接对照的系统性能数据。
 
 来源：
-https://www.blacksesame.com.cn/zh/huashan-a2000/
+- https://www.blacksesame.com.cn/zh/huashan-a2000/
 
 ### Axelera Metis
 
 **形态**：PCIe / M.2 独立 AI Accelerator
 
-**官方已确认**
+**官方已确认/公开 benchmark**
 - Digital In-Memory Compute
-- 约 214 INT8 TOPS
-- PCIe Gen3 x4
-- 不同产品/版本提供约 4GB 或 16GB memory 配置
-- 典型应用功耗为个位数至十余瓦，视产品形态而定
 - Voyager SDK
-- 官方文档明确：真实 pipeline 性能取决于模型、PCIe传输和前后处理，不应只看 peak TOPS
+- 官方公开 YOLOv5/YOLOv8 等 FPS 和 end-to-end FPS
+- benchmark 页面注明 host 条件，例如 Intel Core i9-13900K
+- Voyager 文档明确 host 参与视频 decode 和 pre/post-processing
+
+**真实案例**
+DroneStar 搜救无人机使用 Metis M.2，在机上运行光学/热成像的 detection + tracking。
 
 **工程意义**
-是“Host + 独立 NPU”路线的典型代表；必须额外评价 host CPU、视频处理和 PCIe 数据搬运。
+证明 Host + Accelerator 可以用于 UAV，但评估必须包含 host、PCIe、视频解码和总功耗。
 
 来源：
-https://docs.axelera.ai/sdk/reference/system/hardware/
-https://axelera.ai/ai-accelerators/aipu/metis
+- https://axelera.ai/metis-aipu-benchmarks
+- https://axelera.ai/blog/how-dronestar-ai-scaled-one-operator-into-a-whole-pack
+- https://docs.axelera.ai/sdk/
 
-### Hailo-10H
+### Hailo-8 / Hailo-10H
 
-**形态**：M.2 / Chip-on-board GenAI Edge Accelerator
+**形态**：M.2 / Chip-on-board AI Accelerator
 
-**官方已确认/厂商宣称**
+**Hailo-8 公开案例**
+- Bluewhite 农业无人车：object detection、semantic segmentation、lane detection
+- Astrial drone：Hailo-8 26 TOPS，实时 people counting / face detection
+- Limelight 4 robot controller：视觉 AI 与 3D localization 系统案例
+
+**Hailo-10H 官方已确认**
 - 40 TOPS INT4 / 20 TOPS INT8
-- 典型功耗约 2.5W
-- 支持视觉 AI 与生成式 AI
-- 官方强调 on-device LLM/VLM
-- LPDDR4/4X
+- 典型 2.5W
+- 视觉 + Generative AI
+- on-device LLM/VLM
 
 **工程意义**
-代表低功耗独立加速器开始从传统视觉推理扩展到小型生成式 AI/VLM。
+Hailo-8 的现实证据集中在 W3；Hailo-10H 将路线扩展到 W7。两者都不应被视为完整机器人主控或安全飞控。
 
 来源：
-https://hailo.ai/company-overview/newsroom/news/hailo-announces-general-availability-of-hailo-10h-edge-ai-accelerator-with-generative-ai-capabilities/
+- https://hailo.ai/resources/industries/automotive/bluewhite-vehicle-agnostic-self-driving-robot-kit-for-agricultural-farms/
+- https://hailo.ai/resources/industries/security/system-electronics-astrial-board-on-a-drone-platform/
+- https://hailo.ai/hailo-files/hailo-10h-product-brief-en/
 
-### Firefly + 后摩 LQ50 模组
+### 后摩智能 M50 / LQ50 M.2
 
-**形态**：第三方边缘平台中的 M.2 AI 模组
+**形态**：M.2 独立 AI Accelerator
 
-**第三方/合作方资料**
-Firefly 当前公开的 RK1828 AI 双卡算力阵列套件页面列出：
-- 后摩 LQ50
-- 48GB LPDDR5
-- 160 TOPS INT8
-- 页面宣称可运行 35B 以内大模型
+**官方已确认**
+后摩开发者文档当前明确列出 LQ50-24GB：
+- 1× M50，2 个 IPU 核
+- 最高 160 TOPS
+- 最高 100 TFLOPS @ bFP16
+- 24GB LPDDR5/LPDDR5X
+- 153.6 GB/s
+- PCIe Gen4 ×4
+- 22×80 mm
+- 典型功耗 13W
 
-**证据限制**
-当前本项目只取得 Firefly 公开页面，不能把这些数据标记为“后摩官方独立确认”。后续必须补后摩官方 Datasheet/SDK/Benchmark。
+M50 产品页还给出：
+- INT8/INT16/FP16/FP32/bFP16/bFP24
+- 最大 48GB LPDDR5
+- 典型芯片功耗 10W
+
+**厂商展示**
+2025 WAIC 材料给出 7B/8B 模型 25+ tokens/s，并把 M50/LQ50 定位于端边大模型、机器人等场景。
+
+**工程意义**
+LQ50 已不能再只依据 Firefly 二手材料描述；官方资料已足够确认其硬件规格和 W7 路线。
+
+**证据边界**
+当前尚缺公开、条件完整的 W3 视觉 benchmark，以及无人机 W2/W3/W6 端到端案例。160 TOPS 不构成这些 workload 的适配证明。
 
 来源：
-https://community.t-firefly.com/eco-hardware/rk1828-kit
+- https://developer.houmoai.com/hmdoc/m50/hardware-manuals/latest/product-manuals/lq50-m.2/LQ50_M.2_guidelines/intro/index.html
+- https://houmoai.com/60/ProductType.html
+- https://www.houmoai.com/1/40/NewsDetails.html
 
-## 3. 初步产业观察
+## 3. 当前产业观察
 
-### 事实 1：产品形态已经明显分化
+### 事实 1：平台形态决定“还缺什么”
+高集成 SoC/SoM 自带更多 CPU/ISP/VPU/I/O；独立 Accelerator 必须依赖 host。即使后者 TOPS 更高，也不能直接替代前者。
 
-同样被称为“端侧算力”，实际可能是：
-- 集成 SoC
-- SOM
-- 机器人平台
-- 车规 SoC
-- M.2/PCIe 加速器
-- 计算盒/边缘服务器
+### 事实 2：真实系统是 workload 组合
+Skydio X10、Flight RB5、Journey 6M 等都指向 W1–W6 的组合，而不是单一 DNN inference。
 
-因此不能直接横向 TOPS 排名。
+### 事实 3：独立加速器公开证据目前主要集中在 W3/W7
+Metis/Hailo 已有真实视觉案例；LQ50 目前官方证据更偏大模型。W2/W6/W9 要看 host 和完整系统。
 
-### 事实 2：新平台开始公开强调 Transformer、VLM/LLM、E2E
+### 事实 4：大模型端侧化已经是产品事实，但不是所有无人平台的必需项
+Jetson、IQ-9075、Hailo-10H、M50/A2000 都在公开支持 LLM/VLM/Multi-Modal/E2E，但是否投入 UAV 仍需按任务价值和 SWaP-C 判断。
 
-Jetson Thor、Hailo-10H、Axelera 当前产品，及地平线/黑芝麻车规路线，都已经公开面向 Transformer、生成式 AI、多模态或 E2E。
+## 4. 下一步
 
-这证明“大模型/多模态进入端侧”是产业事实，但其是否适合 UAV 等严格 SWaP 场景仍需任务级分析。
-
-### 事实 3：传统视觉/机器人负载仍然重要
-
-RB5、RK3588、Jetson Orin 的产品特征仍大量围绕：
-- Camera
-- ISP/Video
-- 多传感器
-- ROS
-- CV
-- 实时推理
-
-说明未来不是“大模型取代一切”，而更可能是多类工作负载并存。
-
-## 4. 待补充
-
-后续优先补齐：
-- 后摩官方产品/SDK/Benchmark
-- NVIDIA Orin NX/AGX Orin完整功耗/Camera参数
-- Hailo-8/Hailo-15
-- Axelera不同模块/板卡形态
-- 地平线征程6具体型号
-- 黑芝麻 A2000 Lite/Pro
-- 昇腾/寒武纪/算能适合无人端侧的具体产品
-- Qualcomm 新一代 Robotics / Dragonwing 平台
+1. 将产品事实转成结构化 CSV/JSON；
+2. 补各平台 model/input/precision/software/host/power 条件明确的 benchmark；
+3. 优先补 RK3588、IQ-9075、LQ50 的机器人/视觉实测；
+4. 对六摄像头 Case 分别验证“一体 SoC”和“Host + AI Accelerator”两条路线。

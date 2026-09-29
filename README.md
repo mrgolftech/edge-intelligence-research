@@ -22,55 +22,31 @@
 ## 研究框架
 
 ### 1. 任务与应用场景
-
 先回答“系统在什么环境中完成什么任务”，包括任务复杂度、环境复杂度、传感器配置、人机关系和安全约束。
 
 ### 2. 通用自主系统功能栈
-
 参考 PX4、Nav2、Autoware 以及近年无人系统/机器人综述，采用业内常见功能划分：
 
 **Sensing / Data Acquisition → State Estimation & Localization → Perception & World Modeling → Prediction / Tracking → Planning & Decision → Control & Execution**
 
-在此基础上扩展：
-
-- Mission / Task Management
-- Human-Machine Interaction / Remote Operation
-- Multi-Agent Coordination / Fleet Management
-- Edge-Cloud Collaboration
-- Safety / Security / Health Monitoring
-
-这是一套“功能分解”，不是自定义的自主等级。
+在此基础上扩展 Mission/Task Management、HMI/Remote Operation、Multi-Agent/Fleet、Edge-Cloud、Safety/Security/Health Monitoring。
 
 ### 3. 自主性画像
-
-跨无人系统不使用项目自创的 L1–L5。
-
-通用分析优先参考 NIST ALFUS 的多维思想：
-
-- Mission Complexity：任务复杂度
-- Environmental Complexity：环境复杂度
-- Human Independence：人类独立性/人机交互程度
-
-不同领域另参考其专用术语和标准，例如：
-
-- 道路车辆：SAE J3016
-- 海上自主船：IMO MASS
-- 无人机/机器人：结合具体任务、系统架构和行业文献描述，不强行套用道路车辆等级
+跨无人系统不使用项目自创的 L1–L5。通用分析优先参考 NIST ALFUS 的 Mission Complexity、Environmental Complexity、Human Independence；道路车辆另参考 SAE J3016，海上自主船参考 IMO MASS。
 
 详见：[无人系统端侧智能应用、功能栈与自主性框架](research/scenarios/unmanned-intelligence-scenarios.md)
 
 ## 算力研究原则
 
 平台评估至少同时分析：
-
 - CPU / GPU / NPU / DSP / MCU
-- INT4 / INT8 / FP16 / BF16 / FP32 等精度
+- INT4 / INT8 / FP16 / BF16 / FP32
 - 内存容量、带宽、Cache
-- ISP、多路视频编解码、Camera/SerDes
-- PCIe、Ethernet、CAN、USB、MIPI 等 I/O
+- ISP、视频编解码、Camera/SerDes
+- PCIe、Ethernet、CAN、USB、MIPI
 - ROS2、Linux、PyTorch、ONNX、厂商 SDK、算子覆盖
 - 实时性、任务并发、数据搬运
-- SWaP-C：尺寸、重量、功耗、成本
+- SWaP-C
 - 热稳定性、可靠性、供货与国产化
 - 实际模型性能与系统级持续性能
 
@@ -109,8 +85,11 @@
 - [Nav2 MPPI](references/benchmarks/nav2-mppi.md)
 - [OpenVLA / LIBERO](references/benchmarks/vla-libero.md)
 
-### 现有计算平台
+### 平台与适配
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
+- [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
+- [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
+- [机器可读适配矩阵](data/product-specs/workload-platform-evidence.csv)
 
 ## 应用—工作负载基线
 
@@ -136,27 +115,28 @@
 - [Model memory baselines](data/calculations/model-memory-baselines.csv)
 
 ## 工程 Case
-
 - [六摄像头无人平台](cases/six-camera-uav/README.md)
 - [六摄像头工作负载模型](research/workloads/six-camera-workload-model.md)
 
 ## 当前研究判断
 
-1. 不存在一个可直接横跨 UAV、道路车辆、USV、AMR、操作机器人的统一“L1–L5 算力等级”；自主性应结合任务、环境和人类参与程度描述。
-2. 感知、定位/建图、规划、控制是当前自主系统反复出现的核心功能链；任务管理、多机协同和人机交互位于更上层。
-3. AI/ML 正从单点感知模块扩展到预测、规划、端到端策略、世界模型和 VLM/VLA，但经典/确定性模块仍大量存在，混合架构是重要现实形态。
-4. 大模型进入机器人端侧已经有真实产品和研究依据，但其价值与算力需求必须按具体任务评估，不能把“支持 LLM/VLM”作为所有无人装备的默认需求。
-5. 端侧与边缘/云协同将长期并存：低时延、安全关键和断网可用能力倾向本地执行，训练、全局知识、重计算和群体信息可按任务放到近端边缘或云端。
-6. 公开 workload 已可以用 EuRoC/TUM-VI、MLPerf、nuScenes/Waymo、Nav2 MPPI、OpenVLA/LIBERO 等形成第一版跨平台基准，但数据集速率和论文参数只能作为 benchmark 条件，不能冒充行业需求阈值。
+1. 不存在一个可直接横跨 UAV、道路车辆、USV、AMR、操作机器人的统一“L1–L5 算力等级”。
+2. 感知、定位/建图、规划、控制是当前自主系统反复出现的核心功能链。
+3. AI/ML 正从单点感知扩展到预测、规划、端到端策略、世界模型和 VLM/VLA，但经典/确定性模块仍大量存在。
+4. 大模型进入机器人端侧已有真实产品和研究依据，但不能作为所有无人装备的默认需求。
+5. 端侧与边缘/云协同将长期并存。
+6. 公开 workload 已可用 EuRoC/TUM-VI、MLPerf、nuScenes/Waymo、Nav2 MPPI、OpenVLA/LIBERO 建立第一版跨平台基准。
+7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**
 
 ## 下一阶段
 
-第一版跨域场景矩阵、W1–W9 taxonomy 和 W1–W8 定量 workload profile 已建立。下一阶段进入“平台事实数据 + workload适配”：
+第一版“场景 → workload → 平台证据”链路已经贯通。下一阶段从“是否有证据”进一步进入“多少资源、在什么条件下能跑”：
 
-1. 按统一字段建立 NVIDIA、Qualcomm、瑞芯微、地平线、黑芝麻、后摩、Hailo、Axelera 等平台的结构化事实数据；
-2. 优先收集可复现、测试条件明确的公开 Benchmark，而不是厂商峰值 TOPS；
-3. 建立“workload profile → CPU/GPU/NPU/内存/带宽/I/O → 平台”的适配矩阵；
-4. 对六摄像头 Case 冻结关键输入，执行 W1/W2/W3 第一轮定量推导；
-5. 再设计实际平台 Benchmark 脚本。
+1. 按统一 schema 补全 Jetson Orin、IQ-9075、RK3588、Journey 6、A2000、Metis、Hailo、LQ50 的结构化产品数据；
+2. 将公开 benchmark 的 model/input/precision/host/software/power 条件结构化；
+3. 补 RK3588、IQ-9075、LQ50 的 W2/W3 公开或自测证据；
+4. 冻结六摄像头 Case 的 W1 输入参数；
+5. 分别设计“一体 SoC”和“Host + AI Accelerator”两条实验路径；
+6. 逐步用实测替换矩阵中的 INFER/GAP。
 
 研究和提交规范以 [AGENTS.md](AGENTS.md) 为准。

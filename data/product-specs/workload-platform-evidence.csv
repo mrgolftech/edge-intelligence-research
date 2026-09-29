@@ -1,0 +1,10 @@
+platform,product_type,W1_sensor_video,W2_localization,W3_perception,W4_mapping_bev,W5_prediction_tracking,W6_planning,W7_llm_vlm_vla,W8_multi_agent,W9_safety_control,evidence_ids,primary_boundary
+"NVIDIA Jetson Orin","SoM","SPEC+BENCH","CASE+PAPER","CASE+BENCH","CASE+PAPER","CASE","CASE(system)","PAPER","GAP","GAP","E01|E02|E03|E04|E05|E06","System case does not disclose exact partition; hard real-time flight control should not be assumed on Orin"
+"Qualcomm Flight RB5","robotics/drone reference platform","REF","REF","REF","REF(depth/SLAM)","REF","REF","GAP","REF","GAP","E07","Reference-design evidence; independent benchmark still needed"
+"Qualcomm IQ-9075","industrial/robotics SoC","SPEC","INFER","SPEC","INFER","INFER","INFER","SPEC","INFER","SPEC","E08","Strong heterogeneous resources; robotics workload benchmark gap"
+"Rockchip RK3588","AIoT SoC","SPEC","INFER","SPEC","INFER","INFER","INFER","GAP","GAP","INFER","E20","Do not infer navigation capability from 6 TOPS; benchmark W2/W4/W6"
+"Horizon Journey 6M","automotive SoC","CASE(system)","CASE(system)","CASE+SPEC","CASE+SPEC","CASE(system)","CASE+SPEC","GAP","GAP","SPEC","E09|E10","Mass-production automotive evidence; workload partition and UAV transferability are not public"
+"Black Sesame A2000","automotive SoC","SPEC","INFER","SPEC","SPEC","INFER","SPEC","SPEC","GAP","SPEC","E11","Architecture evidence only in this pass; public comparable benchmark gap"
+"Axelera Metis M.2","AI accelerator","HOST","GAP","CASE+BENCH","GAP","CASE","GAP","SPEC(experimental)","GAP","GAP","E12|E13|E14","Host handles video/pre-post and other robotics workloads"
+"Hailo-8 / Hailo-10H","AI accelerator","HOST","CASE(system)","CASE","GAP","INFER","GAP","SPEC","GAP","GAP","E15|E16|E17","Perception and GenAI evidence; host/control partition required"
+"Houmo M50 / LQ50 M.2","AI accelerator","HOST","GAP","GAP","GAP","GAP","GAP","SPEC+vendor benchmark","GAP","GAP","E18|E19","Current public evidence strongest for edge LLM; UAV perception/navigation benchmark gap"
