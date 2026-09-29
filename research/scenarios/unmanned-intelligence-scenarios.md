@@ -1,609 +1,580 @@
-# 无人装备端侧智能应用场景与能力分级
+# 无人系统端侧智能应用、功能栈与自主性框架
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-29
-- 性质：研究基线
-- 证据状态：公开资料 + 工程推断
+- 性质：跨域研究基线
+- 证据：标准/官方架构/综述/现有产品
 
-## 研究问题
+## 1. 研究问题
 
-端侧智能计算调研首先需要回答的不是“哪一块算力卡有多少 TOPS”，而是：
+端侧算力需求不能由某个芯片的 TOPS 倒推，也不能围绕一个六摄像头案例建立全部结论。
 
-1. 无人装备需要在端侧完成哪些智能任务？
-2. 不同任务产生什么数据流和算法负载？
-3. 能力从基础视觉发展到自主导航、VLM/Agent 时，系统资源需求如何变化？
-4. 哪些任务属于实时安全链路，哪些任务属于高层认知链路？
-5. 如何建立一个后续可以映射到芯片与平台的能力分级体系？
+本研究首先回答：
 
-## 背景
-
-无人装备的机载/车载计算不是单一 AI 模型推理问题。
-
-以视觉无人平台为例，真实链路可能同时包含：
-
-```text
-Camera / IMU / GNSS / LiDAR
-        ↓
-采集、时间同步、ISP、编解码
-        ↓
-检测 / 跟踪 / 分割 / 深度估计
-        ↓
-多传感器融合 / VIO / SLAM
-        ↓
-障碍地图 / 局部规划 / 全局规划
-        ↓
-控制与任务执行
-        ↓
-VLM / LLM / Agent（可选的高层认知）
-```
-
-不同环节对硬件的要求差异很大：
-
-- 视频采集更关注接口、ISP、DMA、编解码和内存带宽；
-- CNN/Transformer 推理更关注 GPU/NPU 算力和算子支持；
-- VIO/SLAM 同时依赖 CPU/GPU、低时延同步、内存访问和实时性；
-- VLM/LLM 更关注模型容量、内存容量、内存带宽以及低精度大模型推理能力；
-- 飞控和安全关键控制更关注确定性与低时延，不应简单交给大模型。
-
-因此，必须先建立任务和工作负载模型，再讨论计算平台。
+1. 当前无人系统有哪些真实应用模式？
+2. 行业内如何拆分自主系统功能？
+3. “自主程度”如何客观描述？
+4. 不同功能对应什么计算工作负载？
+5. 未来的 E2E、World Model、VLM/VLA、多机协同会增加哪些新负载？
+6. 最后哪些端侧计算平台能满足这些需求？
 
 ---
 
-## 已知事实
+## 2. 为什么不采用项目自定义 L1–L5
 
-### 1. 视觉定位与避障是无人机端侧计算的成熟需求
+此前版本使用 L1–L5 组织讨论，但没有对应跨无人系统的行业标准依据，因此本版本撤销。
 
-PX4 官方文档将计算机视觉用于：
+### 已确认事实：跨域自主性本身就是多维问题
 
-- Optical Flow：二维速度估计；
-- Visual Inertial Odometry：融合视觉与 IMU，输出三维位姿和速度；
-- Collision Prevention：碰撞预防；
-- 相关视觉任务通常由 Companion Computer 承担。
+NIST 的 ALFUS（Autonomy Levels for Unmanned Systems）面向多类无人系统，核心不是简单按算力或功能数量排成一条线，而是用多个维度描述 Contextual Autonomous Capability。
 
-这说明无人平台上的视觉计算不仅是“识别目标”，还直接参与定位和导航链路。
+其经典三个方面是：
 
-证据摘要：[`references/webpages/px4-computer-vision.md`](../../references/webpages/px4-computer-vision.md)
+- Mission Complexity：任务复杂度
+- Environmental Complexity：环境复杂度
+- Human Independence：人类独立性/人机交互程度
 
-### 2. 自主导航本身是一条完整计算链路
+ALFUS 还强调不同 unmanned systems 的任务、环境、人机关系差别很大，需要任务上下文。
 
-ROS 2 Nav2 官方资料将自主导航拆分为：
+### 领域专用标准并不通用
 
-- State Estimation
-- Environmental Representation
+**SAE J3016** 描述的是道路机动车驾驶自动化，Level 0–5 围绕 Dynamic Driving Task 和驾驶员角色定义，不能直接拿来定义无人机、无人船或机器人。
+
+**IMO MASS** 面向 Maritime Autonomous Surface Ship。IMO 早期监管梳理提出自动化/远控/自主等不同运作方式，并明确同一航程可处于一个或多个自主程度；2026 年 IMO 又采用了 MASS Code，强调对具体船舶功能采用 functional approach。
+
+### 项目结论
+
+本项目不再构造一个“所有无人设备从 L1 升到 L5”的线性体系。
+
+改为：
+
+> **任务场景 + 功能栈 + 自主性画像 + 工作负载画像**
+
+四个维度联合描述。
+
+---
+
+## 3. 当前无人系统的应用事实底座
+
+### 3.1 UAV / UAS
+
+近年综述和 PX4 工程体系反复出现的应用/能力包括：
+
+**任务应用**
+- 监视与侦察
+- 基础设施/电力/工业巡检
+- 测绘与三维重建
+- 农业监测与作业
+- 搜索与救援
+- 物流/运输
+- 环境监测
+- 应急/灾害响应
+
+**自主相关任务**
+- GNSS/INS 导航
+- Optical Flow
+- VIO / SLAM
+- 目标/障碍物感知
+- 路径规划
+- Collision Avoidance
+- GNSS-denied localization
+- 多机协同
+
+UAV 的突出工程约束是 SWaP、续航、振动、传感器同步和弱/断网络下的本机可用性。
+
+### 3.2 UGV / 自动驾驶车辆
+
+Autoware 当前公开架构覆盖完整 autonomous driving stack：
+
+- Sensing
+- Map
+- Localization
+- Perception
 - Planning
 - Control
-- Behaviors / Behavior Trees
-
-Nav2 的插件体系还包括 costmap、planner、controller、behavior 和 navigator。
-
-因此，“自主导航”不能被压缩成一个单独的 AI TOPS 指标。
-
-证据摘要：[`references/webpages/nav2-navigation.md`](../../references/webpages/nav2-navigation.md)
-
-### 3. 现代机器人端侧平台同时处理感知、定位、建图和规划
-
-NVIDIA Isaac ROS 官方资料覆盖：
-
-- AI perception / inference
-- Visual SLAM
-- 3D scene reconstruction
-- depth estimation
-- pose estimation/tracking
-- motion planning
-
-这说明高性能端侧平台的价值通常来自完整机器人计算流水线，而不是单模型峰值性能。
-
-截至 2026-09-29，Isaac ROS Visual SLAM 文档还记录了多摄像头 VIO / SLAM、RGB-D 支持等演进；2026-09-21 文档记录该包更名为 `isaac_ros_cuvslam`。
-
-证据摘要：[`references/webpages/nvidia-isaac-ros.md`](../../references/webpages/nvidia-isaac-ros.md)
-
-### 4. VLM/VLA 正在进入机器人高层任务与动作研究
-
-OpenVLA 展示了视觉-语言-动作模型将视觉、语言指令与机器人动作连接起来的技术路线。
-
-但 OpenVLA 主要面向通用机器人操作研究，并不是无人机实时飞控的直接证据。
-
-因此，本项目把 VLM/VLA/Agent 放在高级认知和任务级智能层，而不是把它们作为基础自主导航的必要条件。
-
-证据摘要：[`references/papers/openvla.md`](../../references/papers/openvla.md)
-
----
-
-## 项目能力分级
-
-> **重要说明：以下 L1–L5 是本项目内部研究框架，不是行业标准。**
->
-> 其目的不是给产品贴标签，而是把“能力升级”转换为“工作负载升级”，后续再映射到平台资源。
-
-### L1：基础视觉处理
-
-**目标**
-
-完成多路传感器数据的可靠获取和基础视觉处理。
-
-**典型任务**
-
-- 摄像头采集
-- 多摄像头同步
-- ISP
-- 畸变校正
-- Resize / Crop / Color Convert
-- 视频编码/解码
-- 图像拼接
-- 轻量传统视觉算法
-
-**计算特征**
-
-AI 算力未必是主要瓶颈，更容易受以下资源限制：
-
-- MIPI / SerDes 接入能力
-- ISP 吞吐
-- DMA
-- 内存带宽
-- 视频编解码单元
-- CPU 图像处理效率
-
-**工程判断**
-
-六路甚至更多摄像头场景下，即使暂时没有复杂 AI 模型，也可能因数据搬运、图像格式转换、拼接和编码造成较高系统负载。
-
-因此 L1 不能简单理解为“低 TOPS = 没有难度”。
-
----
-
-### L2：实时环境感知
-
-**目标**
-
-让无人平台知道“周围有什么”。
-
-**典型任务**
-
-- 目标检测
-- 分类/识别
-- 多目标跟踪
-- 语义/实例分割
-- 深度估计
-- 光流
-- 双目/多目匹配
-- 障碍物检测
-- 多摄像头感知融合
-
-**主要输出**
-
-- Bounding Box
-- Track ID
-- Semantic Mask
-- Depth Map
-- Optical Flow
-- Obstacle List
-
-**计算特征**
-
-开始形成持续 AI 推理负载：
-
-```text
-多路视频输入
-  ↓
-预处理
-  ↓
-一个或多个视觉模型
-  ↓
-后处理 / 跟踪 / 融合
-```
-
-关键指标从单纯的模型 FPS 扩展到：
-
-- 多路并发 FPS
-- 端到端延迟
-- 模型切换/并发能力
-- 内存带宽
-- 预处理与后处理开销
-- NPU/GPU 实际利用率
-
-**工程判断**
-
-这一等级通常是 AI 加速器最直接发挥作用的阶段，但“标称 TOPS”仍不能代表真实系统能力。
-
----
-
-### L3：定位、SLAM 与自主导航
-
-**目标**
-
-不仅知道“有什么”，还要知道：
-
-- 我在哪里？
-- 障碍物在哪里？
-- 应该往哪里走？
-- 如何实时避开障碍物？
-
-**典型任务**
-
-- Visual Odometry
-- VIO
-- SLAM / VSLAM
-- GNSS/INS/视觉融合
-- 局部/全局地图
-- Occupancy / Cost Map
-- 障碍物融合
-- 局部路径规划
-- 全局路径规划
-- 自主避障
-
-**典型链路**
-
-```text
-Camera + IMU + GNSS
-       ↓
-时间同步 / 标定
-       ↓
-VO / VIO / SLAM
-       ↓
-位姿 + 地图
-       ↓
-感知障碍物融合
-       ↓
-Cost Map
-       ↓
-Path Planning
-       ↓
-Control Setpoint
-```
-
-**计算特征**
-
-L3 与 L2 的关键差别是：
-
-1. AI 模型不再是唯一负载；
-2. CPU 和 GPU 通用计算的重要性上升；
-3. 传感器时间同步和标定直接影响系统质量；
-4. 数据链路延迟比单个模型 FPS 更重要；
-5. 系统需要持续运行多个相互依赖的节点。
-
-**工程判断**
-
-纯 NPU 型平台即使拥有较高 INT8 TOPS，也未必适合复杂 SLAM/VIO。
-
-评估 L3 平台时，应显著提高以下指标权重：
-
-- CPU
-- GPU/通用并行计算
-- 内存带宽
-- ROS2 支持
-- 传感器时间戳和同步
-- 系统实时性
-- 长时间稳定性
-
----
-
-### L4：Transformer / BEV / VLM 高级感知
-
-**目标**
-
-从“检测物体”进一步发展为理解复杂环境和关系。
-
-**可能任务**
-
-- Vision Transformer
-- BEV 感知
-- 多摄像头时空融合
-- 开放词汇检测
-- VLM 场景问答
-- 场景描述
-- 语义关系理解
-- 多模态传感器理解
-
-**计算特征**
-
-相比传统 CNN 感知，可能明显提高：
-
-- Transformer 算力需求
-- 内存容量
-- 内存带宽
-- 中间特征存储
-- 多摄像头融合开销
-- FP16/BF16/INT8/INT4 混合精度需求
-
-**工程判断**
-
-进入这一等级后，仅用 INT8 TOPS 进行跨平台比较会越来越失真。
-
-平台比较必须增加：
-
-- 实际 Transformer Benchmark
-- 支持的算子和量化精度
-- 模型可用内存
-- 内存带宽
-- 模型编译/转换成熟度
-
----
-
-### L5：VLM / LLM / Agent 任务级智能
-
-**目标**
-
-让无人平台具备更高层次的：
-
-- 自然语言理解
-- 场景推理
-- 任务分解
-- 人机交互
-- 多步骤任务规划
-- 工具/API 调用
-- 多平台协同任务编排
-
-**可能链路**
-
-```text
-视觉/地图/状态/任务指令
-          ↓
-       VLM / LLM
-          ↓
-   场景理解 / 任务规划
-          ↓
-       Agent / VLA
-          ↓
-受约束的技能或导航指令
-          ↓
-确定性的导航 / 控制系统
-```
-
-**计算特征**
-
-资源压力逐渐从单纯视觉推理转向：
-
-- 模型权重容量
-- KV Cache
-- 内存容量
-- 内存带宽
-- INT4 / INT8 / FP16
-- 首 Token 延迟
-- Token 生成速度
-- 多模态输入处理
-- 多模型共存
-
-**工程判断**
-
-当前更稳妥的系统架构是：
-
-> **大模型负责高层认知和任务规划，确定性算法负责实时导航和安全关键控制。**
-
-VLM/LLM 是否值得部署到无人机本体，需要根据：
-
-- 飞行器 SWaP
-- 通信条件
-- 任务自主性
-- 延迟容忍度
-- 模型规模
-- 安全边界
-
-单独评估。
-
-不能因为“端侧支持 LLM”就认为该平台更适合所有无人场景。
-
----
-
-## 能力等级与资源变化
-
-| 维度 | L1 | L2 | L3 | L4 | L5 |
-|---|---|---|---|---|---|
-| 摄像头/传感器 I/O | 高 | 高 | 高 | 高 | 中-高 |
-| ISP/编解码 | 高 | 高 | 中-高 | 中-高 | 中 |
-| CPU | 中 | 中 | **高** | 高 | 高 |
-| GPU/NPU | 低-中 | **高** | 高 | **很高** | 高-很高 |
-| 内存容量 | 中 | 中 | 中-高 | 高 | **很高** |
-| 内存带宽 | 高 | 高 | **高** | **很高** | **很高** |
-| 低时延确定性 | 中 | 高 | **很高** | 高 | 视任务而定 |
-| ROS/机器人生态 | 低-中 | 中 | **很高** | 高 | 高 |
-| 大模型生态 | 低 | 低 | 低 | 中-高 | **很高** |
-
-> 表中“高/低”仅表示同一研究框架中的相对关注度，不代表量化门槛。
-
----
-
-## 应用场景到任务的映射
-
-### 无人机
-
-常见端侧需求可能包括：
-
-- 多路可见光/红外采集
-- 目标检测与跟踪
-- 光流
-- VIO
-- GNSS 拒止环境定位
-- 避障
-- 地图构建
-- 自主航线与任务规划
-- 高层场景理解
-
-特点：
-
-- SWaP 约束最强；
-- 持续功耗直接影响续航；
-- 摄像头、IMU 和飞控时间同步重要；
-- 实时控制与高层 AI 必须分层。
-
-### 无人车 / AMR
-
-常见任务：
-
-- 多摄像头/激光雷达感知
-- 定位
-- 地图
-- 障碍物融合
-- 路径规划
-- 行为规划
-
-相比小型无人机，对功耗和重量的约束通常较宽松，但传感器数量和数据吞吐可能更大。
-
-### 无人船
-
-可能增加：
-
-- 远距离目标识别
-- 水面障碍物检测
-- 雷达/AIS/视觉融合
-- 长时间持续运行
-- 高可靠通信
-
-### 机器人
-
-根据移动、操作或复合任务，可能组合：
-
-- VSLAM
-- 深度估计
-- 6D Pose
+- Vehicle Interface
+
+其当前公开能力还包括多传感器融合、动态目标跟踪、NDT/GNSS/IMU 定位、动态避障、E2E driving model 支持。
+
+典型应用包括：
+- Robotaxi
+- 城市/园区运输
+- Cargo Delivery
+- Shuttle
+- 特种无人车
+- 自动驾驶乘用车
+
+这类平台通常拥有更高功耗预算，但传感器数量、3D感知、功能安全和冗余要求也更高。
+
+### 3.3 AMR / 移动机器人
+
+仓储/物流 AMR 文献中的核心能力长期稳定在：
+
+- Perception
+- Localization & Mapping
+- Global/Local Planning
+- Motion Control
+- Fleet Coordination / Task Allocation
+
+应用包括：
+- 仓内物料运输
+- 制造物流
+- 巡检
+- 医疗/服务移动机器人
+- 多机器人协同
+
+与无人车相比，AMR 常工作在更结构化环境，但长期自主运行、动态人群、地图变化和多机调度成为重要负载。
+
+### 3.4 USV / 无人船
+
+近年 USV 综述将核心能力集中在：
+
+- Navigation
+- Guidance
+- Control
+- Perception
+- Path Planning
+- Collision Avoidance
+- Decision Making
+- Human-Machine Interface
+
+实际任务包括：
+- 海洋测绘/调查
+- 环境监测
+- 巡检
+- 监视
+- 科研
+- 工程/商业与防务任务
+
+特有负载还包括：
+- Radar/AIS/视觉融合
+- COLREGs 约束下的避碰
+- 长航时和高可靠通信
+- 海况、天气、低纹理水面等复杂环境
+
+### 3.5 操作机器人 / 具身机器人
+
+传统机器人主要是：
+- 目标/姿态感知
+- 状态估计
 - Motion Planning
-- VLM/VLA
+- Manipulation
+- Force/Impedance Control
 
-### 固定式多摄像头边缘设备
+2023–2026 年公开研究又出现：
+- PaLM-E：Embodied multimodal language model
+- RT-2：Vision-Language-Action
+- OpenVLA：开源 VLA
+- NVIDIA GR00T N1/N1.x：机器人 foundation model
+- Gemini Robotics / On-Device：VLA 与 embodied reasoning
 
-主要关注：
+这证明 Foundation Model / VLM / VLA 已成为真实研究和产品路线，但不能据此认为所有无人装备都需要大模型。
 
-- 多路视频接入
-- 编解码
-- 多模型推理
-- 多目标跟踪
-- 数据汇聚
+### 3.6 固定式边缘智能
 
-这类系统不需要自身定位导航，因此不能直接套用无人平台的 L3 资源需求。
+常见应用：
+- 多路视频分析
+- 工业视觉
+- NVR / IPC
+- 交通/安防
+- 多摄像头检测与跟踪
+- 本地生成式 AI
 
----
-
-## 对算力调研的直接影响
-
-后续调研产品时，不再先问：
-
-> “这张卡是多少 TOPS？”
-
-而应先问：
-
-### 对 L1/L2
-
-- 能接几路相机？
-- ISP 和编解码能力如何？
-- 多路模型实际能跑多少 FPS？
-- 是否有零拷贝/高效数据通路？
-
-### 对 L3
-
-- CPU/GPU 能否支撑 SLAM/VIO？
-- ROS2 生态如何？
-- 摄像头 + IMU 同步能力如何？
-- 多节点并发时的端到端延迟如何？
-
-### 对 L4
-
-- Transformer/BEV 有哪些实际 Benchmark？
-- 内存带宽够不够？
-- NPU 算子覆盖如何？
-
-### 对 L5
-
-- 能部署多大的 VLM/LLM？
-- INT4/INT8/FP16 支持情况？
-- 可用内存和带宽？
-- TTFT 和生成吞吐？
-- 能否与实时视觉/导航负载共存？
+这些系统可能没有 localization/planning/control，却可能具有很重的视频和推理负载，说明“算力需求”和“自主程度”不是同一个轴。
 
 ---
 
-## 工程判断
+## 4. 通用自主系统功能栈
 
-### 判断 1：无人装备“需要 AI 算力”是一个过于粗糙的表述
+综合 Autoware、PX4、Nav2、UAV/AMR/USV 文献，本项目采用以下功能分类。
 
-更准确地说，无人装备需要的是：
+### F1 Sensing / Data Acquisition
 
-> **面向多传感器数据流、实时感知、定位导航和可选高层认知的异构计算能力。**
+负责获取和同步原始环境/本体数据：
 
-### 判断 2：能力提升不是简单的 TOPS 线性增长
+- RGB / IR Camera
+- LiDAR
+- Radar
+- IMU
+- GNSS
+- Ultrasonic
+- AIS
+- Audio
+- Encoder / Joint / Force sensors
 
-例如从 L2 到 L3，SLAM/VIO 会显著增加 CPU、GPU通用计算、同步和系统实时性要求，而不只是增加 NPU TOPS。
+典型计算资源：
+- ISP
+- VPU
+- DMA
+- MCU
+- Camera/SerDes I/O
+- DDR bandwidth
 
-从 L3 到 L5，则可能突然出现大容量内存和内存带宽需求。
+### F2 State Estimation / Localization
 
-### 判断 3：端侧大模型不是所有无人装备的必选项
+回答“我在哪里、以什么状态运动”。
 
-目标检测、VIO、SLAM 和自主避障完全可以在没有 LLM/VLM 的情况下实现。
+包括：
+- GNSS/INS
+- EKF/UKF
+- Optical Flow
+- VO / VIO
+- LiDAR-Inertial Odometry
+- Visual/LiDAR localization
 
-VLM/LLM 的主要价值应优先放在：
+典型资源：
+- CPU
+- SIMD/GPU
+- 低时延内存
+- 精确时间同步
 
-- 开放场景理解
-- 自然语言交互
-- 复杂任务规划
-- 多步骤任务编排
-- 人机协同
+### F3 Mapping / World Modeling
 
-### 判断 4：实时安全链路与认知链路应分层
+建立环境表示：
 
-现阶段工程设计中，不宜让非确定性 VLM/LLM 直接承担毫秒级姿态控制或安全关键闭环。
+- 2D/3D Mapping
+- SLAM
+- Occupancy Grid
+- Point Cloud Map
+- BEV / Occupancy
+- Semantic Map
+- Dynamic World Model
 
-更合理的结构是：
+典型资源：
+- CPU/GPU
+- 内存容量/带宽
+- 3D计算
+- 持久化存储
 
-```text
-VLM/LLM/Agent：理解“做什么”
-        ↓
-任务规划/技能调度：决定“调用什么能力”
-        ↓
-SLAM/规划/控制：确定“怎么可靠执行”
-        ↓
-飞控/执行器：完成实时闭环
-```
+### F4 Perception
+
+回答“周围有什么”。
+
+包括：
+- Detection / Classification
+- Tracking
+- Segmentation
+- Depth
+- Pose
+- Free-space / Obstacle
+- Traffic / Maritime object perception
+- Multi-modal fusion
+
+典型资源：
+- GPU/NPU
+- ISP
+- DDR
+- Video pipeline
+
+### F5 Prediction / Situation Understanding
+
+回答“周围对象接下来可能做什么、当前局势意味着什么”。
+
+包括：
+- Multi-object tracking/prediction
+- Intent prediction
+- Scene understanding
+- Interaction modeling
+- VLM-based semantic reasoning
+
+传统感知系统可能很轻；自动驾驶/高级机器人可能很重。
+
+### F6 Planning / Decision
+
+回答“下一步应该怎么走/做”。
+
+包括：
+- Mission Planning
+- Global Route Planning
+- Local Planning
+- Trajectory Planning
+- Behavior Planning
+- Collision Avoidance
+- Task Allocation
+- Learned/E2E policy
+
+计算可能由 CPU优化算法、GPU/NPU学习模型或两者混合承担。
+
+### F7 Control / Execution
+
+包括：
+- Flight control
+- Motion control
+- Trajectory tracking
+- MPC/PID
+- Actuator control
+- Manipulator control
+
+安全关键控制通常强调：
+- 确定性
+- 周期性
+- Worst-case latency
+- 功能安全/故障安全
+
+其需求不能用 AI TOPS 衡量。
+
+### F8 Mission / HMI / Remote Operation
+
+包括：
+- 任务管理
+- 任务状态机
+- 遥控/远程接管
+- 人机交互
+- 自然语言任务输入
+- 任务解释/报告
+
+### F9 Multi-Agent / Fleet / Collaboration
+
+包括：
+- Fleet management
+- Task allocation
+- Cooperative perception
+- Collaborative localization/mapping
+- Multi-robot planning
+- Swarm coordination
+
+新增计算和通信负载：
+- 网络
+- 分布式状态
+- 多机数据融合
+- 协同优化
+
+### F10 Safety / Security / Health
+
+包括：
+- Fault detection
+- Health monitoring
+- Safety supervisor
+- Redundancy
+- Cybersecurity
+- Trusted identity/secure communication
+
+这是产品化无人系统的横向能力，不属于“更高 TOPS”。
 
 ---
 
-## 风险与限制
+## 5. 自主性画像：采用 ALFUS 思路而不是算力等级
 
-1. 当前 L1–L5 属于项目自定义框架，需要后续用真实平台和 Benchmark 校正。
-2. 不同无人装备的任务差别非常大，不能直接用统一 TOPS 阈值划分。
-3. VLM/VLA 发展迅速，目前大量公开成果来自机器人操作而非无人飞行，不能直接外推。
-4. 厂商公开的 TOPS、模型 FPS 和功耗测试条件通常不同，后续产品对比必须统一口径。
-5. 六摄像头 Case 的分辨率、帧率、算法模型和实时性指标尚需形成明确工作负载基线。
+对每个场景记录至少三个维度。
+
+### A. Mission Complexity
+
+例如：
+- 固定航线采集
+- 动态目标跟踪
+- 开放环境搜救
+- 多步骤任务执行
+- 多机协同任务
+
+### B. Environmental Complexity
+
+例如：
+- 结构化室内
+- 固定园区
+- 城市道路
+- 复杂低空
+- GNSS拒止
+- 动态海况
+- 高密度动态障碍
+
+### C. Human Independence
+
+例如：
+- 人持续遥控
+- 人在环决策
+- 人监督、必要时接管
+- 系统自主完成任务、人仅给目标
+
+注意：这些描述不强行映射成一个统一 0–5 数字。
 
 ---
 
-## 结论
+## 6. 从功能到计算：工作负载类型
 
-端侧算力调研应坚持以下顺序：
+后续算力需求按“负载族”建立，而不是按自主等级建立。
 
-> **先定义应用和智能能力，再构造工作负载，再推导算力和系统资源，最后做产品选型。**
-
-本项目下一步不应急于制作“大而全的产品 TOPS 排名”，而应先完成六摄像头系统的工作负载模型，并用该模型反向验证不同计算架构。
+| 工作负载族 | 典型算法 | 主要硬件关注 |
+|---|---|---|
+| Sensor I/O / Video | ISP、编解码、同步 | ISP/VPU、I/O、DDR |
+| Classical Estimation | EKF、VIO、图优化 | CPU、GPU、内存、实时性 |
+| DNN Perception | YOLO、Seg、Depth | NPU/GPU、DDR、算子 |
+| 3D / Mapping | SLAM、Point Cloud、BEV | CPU/GPU、内存、带宽 |
+| Planning / Optimization | A*、RRT、MPC、优化器 | CPU/GPU、确定性 |
+| Learned Planning / E2E | Transformer、Diffusion、Policy | GPU/NPU、FP16/INT8、DDR |
+| Foundation Model | VLM/LLM/VLA | 内存容量/带宽、INT4/FP8/FP16 |
+| Collaboration | 多机融合/任务分配 | 网络、CPU/GPU、分布式状态 |
+| Safety/Control | RT loop、supervisor | MCU/CPU、实时OS、冗余 |
 
 ---
 
-## 待验证问题
+## 7. 当前主流技术形态
 
-1. 六摄像头系统最终分辨率、帧率和同步误差指标是多少？
-2. L2 阶段采用哪些检测、跟踪、深度算法作为基准模型？
-3. L3 阶段是否需要双目/多目 VIO，还是独立定位相机？
-4. SLAM/VIO 与多路检测同时运行时的 CPU、GPU/NPU 占用如何？
-5. L4/L5 的 VLM 使用场景是否存在明确任务价值？
-6. 无人机本体与边缘计算盒/地面站之间应如何进行算力拆分？
+### 7.1 经典模块化自主系统
+
+Sensing → Localization/Perception → Planning → Control
+
+仍然是 PX4、Nav2、Autoware 等成熟工程体系的重要基础。
+
+优点：
+- 模块边界清楚
+- 可验证/可调试
+- 便于安全隔离
+
+### 7.2 学习增强的模块化系统
+
+用 DNN/Transformer 替代或增强：
+- Perception
+- Prediction
+- Depth
+- Planning
+- Sensor fusion
+
+这是当前大量量产/工程应用的现实路径。
+
+### 7.3 End-to-End / Learned Policy
+
+Autoware 2.0 已明确讨论传统固定 pipeline 与 E2E/diffusion model 的共存，并引入 generator-selector 思路对候选 trajectory 做 safety check 和选择。
+
+这说明 E2E 已进入工程框架讨论，但仍需要显式安全约束。
+
+### 7.4 Foundation Model / VLM / VLA
+
+RT-2、OpenVLA、GR00T、Gemini Robotics 代表从视觉/语言理解向动作策略扩展。
+
+其端侧计算特征：
+- 权重更大
+- 内存容量要求更高
+- KV Cache/多模态 encoder
+- INT4/FP8/FP16 等多精度
+- latency 与控制频率矛盾更突出
+
+### 7.5 Edge-Cloud / Distributed Autonomy
+
+2025 年 Edge Robotics 综述强调低时延机器人任务适合在边缘处理，同时云/边缘计算用于补充本机资源。
+
+未来需要研究：
+- On-device 必须常驻的安全/实时功能
+- Near-edge 可卸载的重计算
+- Cloud 训练/知识/全局优化
+- 断网降级策略
+- 多机器人共享感知与协作
+
+---
+
+## 8. 现有产品对需求演进的客观印证
+
+当前产品本身已经体现不同负载方向：
+
+- **RK3588**：6 TOPS NPU + 强视频/ISP/CPU/GPU，说明轻量边缘视觉不仅需要 NPU，还需要多媒体与 I/O。
+- **Qualcomm Robotics RB5**：15 TOPS、7路并发相机、ROS2、5G，直接面向 robots/drones，强调异构计算、视觉和连接。
+- **Jetson Orin**：最高 275 TOPS、最高 64GB、CUDA/NVDLA/PVA，面向多传感器和多并发 AI。
+- **Jetson Thor**：128GB、273GB/s、FP4/FP8、40–130W，官方直接定位 Physical AI/Agentic AI/Robotics，体现 foundation model 负载进入机器人平台。
+- **地平线征程6**：10+～560 TOPS系列，集成 CPU/GPU/MCU/BPU，原生支持 Transformer，体现自动驾驶从基础 ADAS 到全场景智驾的不同负载。
+- **黑芝麻 A2000**：支持 BEV+Transformer、Multi-Modal LM、E2E 和多精度，体现车端算法从感知向多模态/E2E演进。
+- **Axelera Metis**：独立 PCIe/M.2 AI 加速器，约214 INT8 TOPS；官方文档明确指出实际吞吐仍取决于模型、PCIe 和 pipeline。
+- **Hailo-10H**：40 INT4 / 20 INT8 TOPS、典型2.5W，定位视觉 + GenAI/VLM/LLM 端侧加速。
+- **Firefly 后摩 LQ50 模组**：Firefly 公开页面宣称 160 INT8 TOPS、48GB LPDDR5、可运行较大模型；当前证据来自合作方/产品页，后续需补后摩官方资料验证。
+
+这些产品不是一个维度上的“高低等级”，而是不同系统形态和工作负载定位。
+
+详见：[`research/products/representative-edge-compute-platforms.md`](../products/representative-edge-compute-platforms.md)
+
+---
+
+## 9. 未来趋势对需求的影响
+
+### 趋势 1：感知从单模型走向多模态时空融合
+
+从 Camera 单模型检测发展到 Camera/LiDAR/Radar、BEV、Occupancy、Temporal Fusion。
+
+影响：
+- 带宽和内存压力增大
+- 多模型并发
+- Transformer 算子需求增加
+
+### 趋势 2：定位/规划继续与学习模型融合
+
+UAV/USV/自动驾驶研究均出现 learning-assisted estimation、RL planning、E2E planning。
+
+影响：
+- CPU/GPU/NPU并行更复杂
+- 不能只买“纯推理 NPU”
+
+### 趋势 3：Foundation Models进入机器人和自动驾驶
+
+公开研究已覆盖：
+- multimodal reasoning
+- scenario understanding
+- long-horizon planning
+- VLA action generation
+
+影响：
+- 内存容量成为核心指标
+- INT4/FP8/BF16等精度重要
+- 大模型与实时任务的资源隔离重要
+
+### 趋势 4：世界模型与生成式仿真用于预测、规划和验证
+
+自动驾驶综述中 world model 已用于未来场景生成、行为规划和 prediction-planning interaction。
+
+影响：
+- 端侧不一定全部运行世界模型
+- 训练/仿真更可能依赖高性能边缘或云
+- 端侧可能部署压缩后的 prediction/policy 模型
+
+### 趋势 5：多机器人协作
+
+2025–2026 多机器人综述重点讨论 perception、planning、collaboration，以及 LLM 在 task allocation / planning / HRI 中的作用。
+
+影响：
+- 单机算力之外，网络、同步、分布式状态和安全通信成为系统资源。
+
+---
+
+## 10. 结论
+
+本项目后续不再问：
+
+> “无人装备处于 L 几，所以需要多少 TOPS？”
+
+而改为：
+
+> **某个平台，在某一任务和环境中，需要哪些功能模块，以多大自主程度运行；这些模块产生什么工作负载；哪些必须在本机实时完成，哪些可以边缘/云协同；最后推导需要的计算、内存、带宽、I/O、功耗和软件能力。**
+
+六摄像头项目用于验证这套方法，但总体需求研究必须来自 UAV、UGV、USV、AMR、机器人和固定边缘系统的广泛事实底座。
 
 ---
 
 ## References
 
-1. PX4 Documentation, Computer Vision (Optical Flow, MoCap, VIO, Avoidance)  
+### 标准/机构
+1. NIST, Autonomy Levels for Unmanned Systems (ALFUS)  
+   https://www.nist.gov/publications/autonomy-levels-unmanned-systems-alfus-frameworkvolume-ii-framework-models-initial
+2. SAE J3016, Taxonomy and Definitions for Terms Related to Driving Automation Systems for On-Road Motor Vehicles  
+   https://saemobilus.sae.org/topics/electrical-electronics-and-avionics/automation/driving-automation/automated-driving-systems
+3. IMO, Maritime Autonomous Surface Ships (MASS)  
+   https://www.imo.org/en/mediacentre/hottopics/pages/autonomous-shipping.aspx
+
+### 官方工程架构
+4. PX4 Computer Vision  
    https://docs.px4.io/main/en/advanced/computer_vision
-
-2. PX4 Documentation, Visual Inertial Odometry  
-   https://docs.px4.io/main/en/computer_vision/visual_inertial_odometry
-
-3. NVIDIA Isaac ROS  
-   https://developer.nvidia.com/isaac/ros
-
-4. NVIDIA Isaac ROS Visual SLAM / cuVSLAM documentation  
-   https://nvidia-isaac-ros.github.io/repositories_and_packages/isaac_ros_visual_slam/index.html
-
 5. Nav2 Documentation  
    https://docs.nav2.org/
+6. Autoware Documentation  
+   https://docs.autoware.org/main/home/
+7. Autoware Architecture  
+   https://docs.autoware.org/main/design/autoware-architecture-v1/
+8. NVIDIA Isaac ROS  
+   https://developer.nvidia.com/isaac/ros
 
-6. Nav2 Navigation Concepts  
-   https://docs.nav2.org/rolling/getting_started/navigation_concepts/
-
-7. Kim et al., OpenVLA: An Open-Source Vision-Language-Action Model, 2024  
-   https://arxiv.org/abs/2406.09246
+### 综述/论文
+9. UAV control in autonomous object-goal navigation: a systematic literature review, Artificial Intelligence Review
+10. From GPS to AI: A comprehensive review of UAV localization solutions, ISPRS JPRS, 2025
+11. An overview of Unmanned Surface Vehicles: Methods, practices, and applications, Control Engineering Practice, 2025
+12. A survey of autonomous robots and multi-robot navigation: Perception, planning and collaboration, 2025
+13. Edge Computing and Its Application in Robotics: A Survey, 2025
+14. PaLM-E: An Embodied Multimodal Language Model, ICML 2023
+15. RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control, 2023
+16. OpenVLA: An Open-Source Vision-Language-Action Model, 2024
+17. GR00T N1 / N1.x, NVIDIA Research
+18. A Survey of World Models for Autonomous Driving, 2025

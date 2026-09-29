@@ -170,21 +170,23 @@
 
 ---
 
-## 4. 与能力等级的映射
+## 4. 与场景和工作负载的映射
 
 后续每个产品除参数外，还应给出基于证据的适配分析：
 
-- L1 基础视觉
-- L2 实时感知
-- L3 VIO/SLAM/自主导航
-- L4 Transformer/BEV/VLM
-- L5 LLM/VLM/Agent
+- Sensor I/O / Video
+- Classical Estimation / VIO / SLAM
+- DNN Perception
+- 3D / Mapping / BEV
+- Planning / Optimization
+- Learned Planning / E2E
+- Foundation Model / VLM / LLM / VLA
+- Multi-Agent / Collaboration
+- Safety-Critical / Real-Time Control Support
 
-注意：
+并记录其适用平台形态和任务场景，例如 UAV、UGV、USV、AMR、操作机器人、固定边缘节点。
 
-**能力等级不是产品评级。**
-
-判断的是“该平台在给定工作负载和约束下是否具备实现条件”，而不是给厂商打分。
+判断的是“该平台在给定任务、环境、工作负载和 SWaP-C 约束下是否具备实现条件”，不是给产品打统一能力分。
 
 ---
 
