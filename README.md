@@ -100,6 +100,14 @@
 - [Edge Robotics 综述 2025](references/papers/edge-robotics-2025.md)
 - [VLA 端侧效率问题综述 2025](references/papers/vla-efficiency-2025.md)
 - [Foundation Models / VLM / VLA / Edge Robotics](references/papers/foundation-models-robotics.md)
+- [BEVFormer](references/papers/bevformer.md)
+
+### Benchmark
+- [EuRoC / TUM-VI](references/benchmarks/euroc-tumvi.md)
+- [MLPerf Edge](references/benchmarks/mlperf-edge.md)
+- [nuScenes / Waymo](references/benchmarks/nuscenes-waymo.md)
+- [Nav2 MPPI](references/benchmarks/nav2-mppi.md)
+- [OpenVLA / LIBERO](references/benchmarks/vla-libero.md)
 
 ### 现有计算平台
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
@@ -112,7 +120,20 @@
 - [USV / 无人船](research/scenarios/usv.md)
 - [机器人、VLA 与固定边缘智能](research/scenarios/robotics-fixed-edge.md)
 - [工作负载分类 W1–W9](research/workloads/workload-taxonomy.md)
+- [定量工作负载基线](research/workloads/quantitative-workload-baselines.md)
+- [W1 Sensor/Video](research/workloads/profiles/w1-sensor-video.md)
+- [W2 VIO/SLAM](research/workloads/profiles/w2-localization-slam.md)
+- [W3 DNN Perception](research/workloads/profiles/w3-dnn-perception.md)
+- [W4 3D/BEV/Mapping](research/workloads/profiles/w4-3d-bev-mapping.md)
+- [W5 Prediction](research/workloads/profiles/w5-prediction.md)
+- [W6 Planning](research/workloads/profiles/w6-planning.md)
+- [W7 VLM/VLA](research/workloads/profiles/w7-vla.md)
+- [W8 Multi-Agent](research/workloads/profiles/w8-multi-agent.md)
 - [当前真实自主系统/产品证据](references/webpages/deployed-autonomous-systems.md)
+
+### 可复用计算数据
+- [Sensor payload baselines](data/calculations/sensor-payload-baselines.csv)
+- [Model memory baselines](data/calculations/model-memory-baselines.csv)
 
 ## 工程 Case
 
@@ -126,15 +147,16 @@
 3. AI/ML 正从单点感知模块扩展到预测、规划、端到端策略、世界模型和 VLM/VLA，但经典/确定性模块仍大量存在，混合架构是重要现实形态。
 4. 大模型进入机器人端侧已经有真实产品和研究依据，但其价值与算力需求必须按具体任务评估，不能把“支持 LLM/VLM”作为所有无人装备的默认需求。
 5. 端侧与边缘/云协同将长期并存：低时延、安全关键和断网可用能力倾向本地执行，训练、全局知识、重计算和群体信息可按任务放到近端边缘或云端。
+6. 公开 workload 已可以用 EuRoC/TUM-VI、MLPerf、nuScenes/Waymo、Nav2 MPPI、OpenVLA/LIBERO 等形成第一版跨平台基准，但数据集速率和论文参数只能作为 benchmark 条件，不能冒充行业需求阈值。
 
 ## 下一阶段
 
-第一版“场景—功能栈—工作负载”矩阵与 W1–W9 workload taxonomy 已建立。下一阶段转向定量化：
+第一版跨域场景矩阵、W1–W9 taxonomy 和 W1–W8 定量 workload profile 已建立。下一阶段进入“平台事实数据 + workload适配”：
 
-1. 为 W1–W8 分别建立可计算 workload profile 和公开 benchmark 基线；
-2. 优先量化多路视频、VIO/SLAM、DNN perception、BEV/Transformer、planning 和 VLM/VLA；
-3. 对 NVIDIA、Qualcomm、瑞芯微、地平线、黑芝麻、后摩、Hailo、Axelera 等平台按统一字段建立事实数据；
-4. 建立“工作负载 profile → 平台特性”的适配矩阵；
-5. 用六摄像头 Case 和公开 Benchmark 验证平台边界。
+1. 按统一字段建立 NVIDIA、Qualcomm、瑞芯微、地平线、黑芝麻、后摩、Hailo、Axelera 等平台的结构化事实数据；
+2. 优先收集可复现、测试条件明确的公开 Benchmark，而不是厂商峰值 TOPS；
+3. 建立“workload profile → CPU/GPU/NPU/内存/带宽/I/O → 平台”的适配矩阵；
+4. 对六摄像头 Case 冻结关键输入，执行 W1/W2/W3 第一轮定量推导；
+5. 再设计实际平台 Benchmark 脚本。
 
 研究和提交规范以 [AGENTS.md](AGENTS.md) 为准。

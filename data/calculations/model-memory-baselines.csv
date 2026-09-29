@@ -1,0 +1,4 @@
+model,parameters_billion,precision_bits,raw_weight_GB_decimal,notes
+OpenVLA,7,16,14.0,raw weights only; excludes activations/runtime/cache/encoder
+OpenVLA,7,8,7.0,raw weights only; quantization overhead not included
+OpenVLA,7,4,3.5,raw weights only; quantization metadata/runtime overhead not included
