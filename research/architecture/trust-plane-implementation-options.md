@@ -526,3 +526,18 @@ Linux IMA
 - 普通安全芯片；
 - 密码模块；
 - 还是可以承担 Remote Attestation 的可信密码模块。
+
+
+## 12. 已发现的现实一体化候选：NS350 / Z32H330TC
+
+进一步公开资料检索已经确认，国产可信计算芯片中存在能够同时覆盖 **TCM/TPM + SM2/SM3/SM4 + PCR/度量 + 嵌入式 Arm** 的产品。
+
+重点参考：
+- 国民技术 NS350：TCM 2.0 / TPM 2.0 兼容、SM2/SM3/SM4、24 个 SM3 PCR、EK 证书、SPI/I2C、Arm/Linux/嵌入式；
+- Z32H330TC：官方明确给出平台完整性保护和平台远程身份证明。
+
+详见：
+- `research/products/trusted-crypto-module-candidates.md`
+- `data/product-specs/trusted-crypto-module-candidates.csv`
+
+这证明 Option D 不是纯概念路线。但是否能在 RK3588 / A1000 等目标 BSP 上实现 Linux IMA + TCM/TPM Quote + model measurement，仍需开发板/SDK 实测后才能升级为 Confirmed-fit。
