@@ -1,6 +1,6 @@
 # 六摄像头 UAV：Phase 2 Validation Plan
 
-- 状态：v0.2
+- 状态：v0.3
 - 日期：2026-09-30
 - 目的：把 Architecture Gate 的 GAP 转成可执行、可复现的验证项
 - 当前约束：暂时无实机测试条件；因此本文件同时区分“公开证据可关闭”和“必须后续实测”的项
@@ -142,6 +142,28 @@ A/C/D/E/F/G。
 - 绑定 R08/R09/R25；
 - 建立 ServiceTime；
 - 用于后续 `Demand_engine` 计算。
+
+### V03-P — PER_VIEW
+
+统一测试：
+- 2 / 4 / 6 independent views；
+- 10 / 20 / 30 Hz test grid；
+- exact same model/input/precision；
+- multi-stream queue / scheduler。
+
+### V03-F — FUSED_MULTI_VIEW
+
+单独测试：
+- exact fused model；
+- views/call；
+- fused update Hz；
+- cross-view / temporal operators；
+- model memory；
+- GPU/NPU/CPU placement；
+- fused graph latency；
+- temporal-state memory/bandwidth。
+
+**禁止使用 V03-P 的 YOLO latency 估算 V03-F。**
 
 ---
 
@@ -372,10 +394,10 @@ performance vs temperature vs power vs time
 
 | Route | 最关键验证 |
 |---|---|
-| RK3588 Integrated | W1+W2+W3 shared DDR / CPU tail / thermal |
-| Jetson Orin | exact project graph P99 / power mode / SWaP |
-| IQ-9075 | physical Camera→DMABUF→QNN + visual VIO concurrency |
-| RK3588 + Accelerator | Host headroom + H2D/D2H + total system power |
+| RK3588 Integrated | W1+W2+W3 shared DDR / CPU tail / thermal；FUSED topology 需单独验证 transformer/operator deployment |
+| Jetson Orin | exact project graph P99 / power mode / SWaP；fused-BEV class 已有公开 Orin benchmark但非项目同构 |
+| IQ-9075 | physical Camera→DMABUF→QNN + visual VIO concurrency；BEVFormer AI Hub support metadata 需澄清 |
+| RK3588 + Accelerator | Host headroom + H2D/D2H + total system power；FUSED exact model/operator support 当前为 GAP |
 
 统一 testcase 保证横向结构一致；差异项保证不会把不同架构硬塞进一个 Benchmark。
 

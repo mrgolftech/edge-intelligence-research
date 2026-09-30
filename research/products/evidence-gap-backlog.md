@@ -114,6 +114,24 @@
 
 在这些证据出现前，16-stream video benchmark 不得写成“16-camera autonomous perception benchmark”。
 
+## P1.5：Perception Topology
+
+### G10 — FUSED Multi-View / BEV 平台证据
+
+当前：
+- Jetson Orin：NVIDIA-AI-IOT CUDA-BEVFusion 已有 Orin TensorRT 18/25 FPS 的 fused-BEV 类 BENCH，但包含 LiDAR、输入/软件条件与本项目不同，因此是 BENCH(class)+GAP(exact)；
+- IQ-9075：Qualcomm AI Hub BEVFormer 页给出 6×3×480×800、27M、120MB，并把 IQ-9075 EVK/chipset 列入 supported list，但同页又显示 Not supported，当前记 REF/GAP + metadata conflict；
+- RK3588：官方 RKNN software 有 transformer/operator support 演进，但未找到 official exact BEVFormer/BEVFusion benchmark，记 SPEC/INFER+GAP；
+- RK3588+M50/Metis/Hailo：本轮官方域定向检索未获得条件完整的 BEVFormer/BEVFusion benchmark，继续 GAP。
+
+详细：
+`references/benchmarks/fused-multiview-platform-evidence-2026.md`
+
+规则：
+- PER_VIEW YOLO evidence 不升级 FUSED；
+- generic Transformer/LLM support 不升级 BEV；
+- fused model 必须记录 exact model / views / resolution / precision / operator placement / memory / latency / software / power。
+
 ## P2：Host + Accelerator 路线
 
 ### G06 — Metis on low-power ARM Host

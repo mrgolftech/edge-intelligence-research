@@ -94,6 +94,7 @@
 - [ARM Host + Accelerator 公开基线](references/benchmarks/arm-host-accelerator-evidence-2026.md)
 - [Isaac ROS 5.0 / Orin 时延锚点](references/benchmarks/isaac-ros-5.0-latency-anchors.md)
 - [时延证据缺口审计 2026](references/benchmarks/latency-gap-audit-2026.md)
+- [FUSED Multi-View / BEV 平台证据审计](references/benchmarks/fused-multiview-platform-evidence-2026.md)
 
 ### 平台与适配
 - [Host + Accelerator 架构分析](research/architecture/host-accelerator-edge-architecture.md)
@@ -109,6 +110,7 @@
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
 - [机器可读适配矩阵](data/product-specs/workload-platform-evidence.csv)
+- [六摄 topology→platform evidence](data/product-specs/six-camera-topology-platform-evidence.csv)
 
 ## 应用—工作负载基线
 

@@ -1,6 +1,6 @@
 # 六摄像头 UAV：Candidate Architecture Resource Map
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 基础 Composition：C2 Visual Autonomy
 - 目的：把候选平台从“规格/算力对比”推进为“工作负载职责 + 数据路径 + 共享资源 + 架构边界”比较
@@ -411,3 +411,27 @@ T_H2D
 
 配套见：
 `cases/six-camera-uav/phase-2-validation-plan.md`
+
+
+---
+
+## 9. Topology-specific Platform Evidence
+
+PER_VIEW 与 FUSED 的平台证据不能共用。
+
+配套审计：
+- `references/benchmarks/fused-multiview-platform-evidence-2026.md`
+- `data/product-specs/six-camera-topology-platform-evidence.csv`
+
+当前：
+
+| Route | PER_VIEW | FUSED |
+|---|---|---|
+| RK3588 | BENCH+REF | SPEC/INFER + GAP |
+| Jetson Orin | BENCH+CASE | BENCH(class) + exact-project GAP |
+| IQ-9075 | REF+PARTNER_BENCH | REF/GAP，AI Hub support metadata 有冲突 |
+| RK3588+Accelerator | VENDOR_BENCH/CASE/REF | GAP |
+
+因此：
+- 若项目选择 PER_VIEW，四条路线都已有较直接的 W3 证据入口；
+- 若项目选择 FUSED，平台 shortlist 不能复用 YOLO 证据，必须重新验证 exact model/operator/whole-graph deployment。
