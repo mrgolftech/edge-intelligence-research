@@ -99,6 +99,7 @@
 ### 平台与适配
 - [安全可信型无人装备端侧智能计算平台](research/architecture/secure-trusted-edge-intelligence-platform.md)
 - [Trust Plane 实现方案：TEE / TPM-TCM / 商密安全芯片](research/architecture/trust-plane-implementation-options.md)
+- [可信密码模块/安全芯片候选事实底座](research/products/trusted-crypto-module-candidates.md)
 - [国产候选平台 Security Gate 证据](references/webpages/domestic-platform-security-evidence-2026.md)
 - [安全可信无人智算证据索引 2026](references/webpages/secure-edge-intelligence-evidence-2026.md)
 - [Security/Trust capability matrix](data/product-specs/security-trust-capability-matrix-2026.csv)
