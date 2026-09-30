@@ -1,0 +1,11 @@
+component,primary_role,solves,does_not_automatically_solve,recommended_phase
+SoC BootROM/eFuse/Secure Boot,Boot trust,"Authorized boot chain; root public-key hash; anti-tamper boot","Remote attestation; model runtime confidentiality",P0
+TrustZone/OP-TEE,Runtime isolation,"Trusted applications; key wrappers; secure services; secure storage API","Whole GPU/NPU/DDR confidentiality; platform measurement by itself",P0
+Discrete SM Crypto/SE,Crypto identity,"SM2/SM3/SM4/TRNG; non-exportable keys; device identity; model/mission key wrapping","PCR/quote/measured boot unless explicitly implemented",P0
+TPM/TCM,Measurement and attestation,"PCR; sealed key; measured boot; quote; attestation","General high-throughput application encryption; full TEE",P1
+Linux IMA,Runtime/file measurement,"Measure files/apps/config; extend platform state","Protect signing key or provide hardware root",P1
+dm-verity/fs-verity,Integrity enforcement,"Rootfs/file integrity verification","Device identity; secret storage",P0-P1
+Disk/Data Encryption,Physical data confidentiality,"Protect data/model/logs on lost storage","Running-device access control; software integrity",P0
+SROS2/DDS Security,Middleware security,"Participant auth; ACL; encrypted/authenticated DDS traffic","OS-level isolation; raw-socket/shared-memory bypass",P0
+SELinux/AppArmor/Container,OS isolation,"Limit node/process/file/socket/device access","Hardware identity; boot trust",P0
+Attestation Verifier/Fleet CA,Remote trust decision,"Reference values; policy appraisal; revocation; mission admission","Local hardware root",P1
