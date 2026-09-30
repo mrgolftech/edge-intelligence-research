@@ -12,7 +12,8 @@
 - W3 已有 Rockchip 官方 RKNN Model Zoo 单核 NPU benchmark：YOLOv8n INT8 640×640 为 73.5 FPS，YOLO11n 为 60.0 FPS；
 - W2/W4 已有 2026 Sensors 论文在 RK3588 上运行多传感器 SLAM 的系统证据；
 - Rockchip 官方 API 已确认 `rknn_dup_context` 与三核 `core_mask` 调度路径，官方 `rknn_benchmark` 可指定 1/2/3 核；
-- **仍缺** 可复现的 VIO/SLAM + 多路视频 + detection 并发数据，且不得按核心数线性外推吞吐。
+- 已审计社区 `dongyuzhen/rk3588-yolo` 的单路 1080p60 RGA/RKNN/MPP pipeline：分阶段 P99 有工程参考价值，但其 README 中“E2E 16.6ms/P99 22.3ms”小于同表 NPU avg 25.5ms，且另一处又写 E2E <200ms，口径冲突；**不升级为主 Benchmark**；
+- **仍缺** 可复现的 VIO/SLAM + 多路视频 + detection 并发 Frame Age 数据，且不得按核心数线性外推吞吐。
 
 可接受证据：
 1. 官方/论文/开源项目，明确板卡、算法、输入、FPS、软件版本；
@@ -35,6 +36,7 @@
 - BX50 已证明 RK3588 host + M50 可作为多路视频分析系统；
 - 后摩官方 Model Zoo 已给出 M50-compatible xh2 的 YOLOv5s/YOLO11m accuracy、inference latency、end-to-end latency 与 throughput；
 - 官方 `resnet50_multistreams` 还提供单设备/多设备、多线程、多 stream runtime 示例（默认 1 device / 4 threads，每线程 1 stream），证明并发软件路径存在；
+- 官方 `tools/bandwidth_perf` 已审计：它通过芯片上 load/store/transpose 模型测 AI Core 实际读写带宽，XH2 示例约 123.43/127.14 GiB/s；**它不是 PCIe Host↔Device 带宽，不能填 T_H2D/T_D2H**；
 - **剩余 GAP 已从“有没有视觉性能/并发路径”进一步收敛为“LQ50 板卡 + host + Camera/video/PCIe 的多流端到端性能、功耗和热稳态”。**
 
 可接受证据：
@@ -74,9 +76,15 @@
 - acontis EtherCAT：1 ms target cycle、约100 μs round-trip、<8 μs jitter；
 - 当前缺口转为 **物理多 camera 同步、VIO/视觉 SLAM 定量数据、SLAM+AI+planning 全并发性能**。
 
+新增事实：
+- Qualcomm 官方 `qrb_ros_benchmark` 明确支持 IQ-9075 EVK，可 Benchmark QRB Image/IMU/PointCloud/TensorList 与 DMA-BUF Image/PointCloud；
+- 官方 `qrb_ros_nn_inference` 支持 IQ-9075，并封装 QNN / AI Engine Direct；
+- 当前 `qrb_ros_benchmark/results` 公开数字仅发现 QCM6490 IMU JSON，**没有 IQ-9075 Camera/NN 结果**。
+
 目标：
-- 搜索 Qualcomm/partner robotics reference implementation；
-- 如果只有产品规格，继续标 SPEC/INFER，不升级为 BENCH。
+- 不再重复搜索“有没有官方 benchmark 方法”——方法已经确认；
+- 下一步寻找公开 IQ-9075 result，或未来按官方 harness 复测 physical Camera→DMABUF→QNN；
+- 没有 IQ-9075 numeric result 前继续标 REF+GAP，不升级为 BENCH。
 
 ### G05 — Black Sesame A2000: 从汽车案例到可量化 workload
 当前：
@@ -91,6 +99,10 @@
 ### G09 — IQ-9075 physical multi-camera / VIO
 
 已有多 stream benchmark 主要由 H.264 文件流构成，InnoPPE 只有 1 路 live UVC camera。
+
+已确认可复现入口：
+- `qrb_ros_camera → qrb_ros_transport/DMABUF → preprocess → qrb_ros_nn_inference → qrb_ros_benchmark monitor`；
+- 官方 benchmark calculator 可产生 latency/jitter/missed-frame/CPU 一类指标，但当前公开 IQ-9075 Camera/NN 数字仍缺。
 
 仍需公开证据：
 - 6+ physical CSI/GMSL cameras；
@@ -109,7 +121,9 @@
 - i9-13900K 官方 YOLO benchmark 已有；
 - Axelera 官方 ARM Host 页面已验证 Firefly ITX-3588J / Orange Pi 5 Plus / NanoPC-T6（RK3588）、RPi5、Jetson Orin Nano/NX；
 - Axelera Team 已发布 NanoPC-T6 + Metis / SDK1.5.2 的 YOLOv8n/v8s 性能量级；
-- RK3588 Host 需要关注 PCIe non-prefetchable memory window / device-tree 配置。
+- RK3588 Host 需要关注 PCIe non-prefetchable memory window / device-tree 配置；
+- Voyager 官方 double buffering 文档确认可把 data transfer 与 compute overlap，典型 transfer-heavy workload 可提高吞吐，但代价是 **2×N frame result delay**；官方明确不建议用于 latency-critical workload；
+- Voyager v1.8 `axzoo benchmark` 可输出 P50/P95/P99/P99.9、jitter、per-frame device-vs-host split、CPU/内存，为后续复测提供官方方法。
 
 剩余需要：
 - exact Metis SKU
@@ -127,7 +141,9 @@ ARM Host “能运行”已确认，下一步是测系统代价。
 - Raspberry Pi 5 + Hailo-8L/8/10H 已有官方产品与 camera-stack integration；
 - Hailo Apps multisource 支持 USB/RTSP/file 多源并行 pipeline；
 - 官方对 RPi 给出 up to 3 sources optimal、15 FPS、640×640 的应用指导；
-- 这些属于 REF，不是标准化性能 Benchmark。
+- 这些属于 REF，不是标准化性能 Benchmark；
+- Hailo Model Zoo 官方 `hailortcli benchmark` 可测 HEF 的 hw-only FPS、hardware latency 和 power；**这些属于 T_inference(hw)，不能替代 live Camera Frame Age**；
+- Hailo Apps 中的 `pipeline_latency` 配置值不得当作实测结果。
 
 仍需：
 - exact Hailo SKU
@@ -140,6 +156,11 @@ ARM Host “能运行”已确认，下一步是测系统代价。
 
 ### G08 — Accelerator 与 Host 数据搬运
 闭环时延映射已经明确 Host+Accelerator 需要单独记录 H2D/accelerator queue/D2H。
+
+已完成证据审计：
+- Metis：官方确认 transfer/compute overlap 与 double-buffer latency trade-off，但没有统一 RK3588 Host absolute H2D/D2H；
+- Hailo：官方可以测 hw-only inference latency/power，但 live Camera→result P95/P99 仍缺；
+- M50/LQ50：官方 bandwidth_perf 是 AI Core/model memory bandwidth，**不是 PCIe H2D/D2H**。
 
 Metis/Hailo/LQ50统一测试：
 - host decode

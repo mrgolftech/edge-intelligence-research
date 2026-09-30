@@ -1,6 +1,6 @@
 # 六摄像头自主避障：闭环时延预算 → 平台架构映射
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 目的：把避障的 deadline 从“一个总毫秒数”拆到架构阶段，并用公开证据标记可量化项与证据空白
 - 输入：
@@ -94,6 +94,9 @@ Isaac ROS 5.0 / AGX Orin：
 ### IQ-9075 / 一体 SoC
 
 已有：
+- Qualcomm 官方 `qrb_ros_benchmark` 已提供 IQ-9075 EVK 的 ROS2 benchmark harness，支持 QRB/DMABUF Image、IMU、PointCloud2、TensorList；
+- `qrb_ros_nn_inference` 提供 IQ-9075 QNN inference ROS node；
+- 但官方 benchmark repo 当前公开结果仅发现 **QCM6490 IMU**，没有 IQ-9075 Camera/NN latency result；
 - W1 Camera timestamp → ROS stamp 路径；
 - DMA-BUF zero-copy Reference；
 - 1/4/9/16 stream W1+W3 throughput；
@@ -120,8 +123,10 @@ Isaac ROS 5.0 / AGX Orin：
 - 多 Camera capture + VIO + DNN 并发 Frame Age；
 - DDR / queue / thermal 下的 tail latency。
 
+社区工程仓库已经出现 RGA/NPU/MPP 分阶段 P99 数据，但其“E2E 16.6ms/P99 22.3ms”与同表 NPU 单帧 avg 25.5ms 发生定义冲突，本项目不把该 E2E 数字升级为主证据。
+
 因此 RK3588 当前最大的证据缺口不是“能不能跑 YOLO”，而是：
-> **并发后 Frame Age 会变成多少。**
+> **多 Camera + VIO/SLAM + DNN 并发后的、定义清晰的 Frame Age P95/P99 会变成多少。**
 
 ### RK3588 + M50 / Host+Accelerator
 
@@ -140,13 +145,23 @@ M50-compatible xh2：
 
 因此这些 9.8/20.2 ms 只能填 `T_W3_model`，不能填 `T_pipeline`。
 
+另外，后摩官方 `bandwidth_perf` 测得的是芯片运行 load/store 模型时的 AI Core/model memory bandwidth。XH2 示例的百 GiB/s 量级**不能**解释为 RK3588↔LQ50 的 PCIe H2D/D2H。
+
 ### RK3588 + Metis / Host+Accelerator
 
 Axelera Team 的 NanoPC-T6 数据给出：
 - YOLOv8n：61 ms OpenCL latency；
 - YOLOv8s：77 ms OpenCL latency。
 
-它证明 ARM Host 路线有实际 latency 数据，但条件仍不完整：
+Voyager 官方还明确给出了一个对无人系统很重要的 trade-off：
+- double buffering 将 data transfer 与 compute overlap；
+- throughput-heavy workload 可能获益；
+- 结果会延迟 **2×N frames**（N=workers）；
+- latency-critical workload 不建议开启。
+
+因此 **throughput optimization 不能自动当作 latency optimization**。
+
+现有 NanoPC-T6 数据证明 ARM Host 路线有实际 latency 数据，但条件仍不完整：
 - exact Metis SKU/input/precision 未全部公开；
 - “OpenCL latency”统计边界需按 SDK 复现；
 - Camera/VIO/SLAM/PCIe/full pipeline 未覆盖。
@@ -154,6 +169,8 @@ Axelera Team 的 NanoPC-T6 数据给出：
 ### Raspberry Pi 5 + Hailo / Host+Accelerator
 
 当前官方材料证明：
+- `hailortcli benchmark` 能测 HEF 的 hw-only FPS / hardware latency / streaming power；
+- 这只能量化 accelerator hardware inference，不覆盖 Camera/GStreamer/queue/postprocess；
 - Camera stack；
 - multisource；
 - Hailo offload；
@@ -161,7 +178,7 @@ Axelera Team 的 NanoPC-T6 数据给出：
 
 但没有足够统一的 P95/P99 E2E latency。
 
-因此在 deadline mapping 中继续标 **GAP**，不能拿 TOPS 或“实时”描述替代毫秒证据。
+因此在 deadline mapping 中继续标 **GAP**，不能拿 TOPS、“实时”描述或 `pipeline_latency` 配置值替代 live-camera P95/P99。
 
 ## 4. 架构对时延预算的影响
 
@@ -227,6 +244,15 @@ Camera
 | RPi5+Hailo | REF | Host依赖 | REF/厂商量级 | Host依赖 | Host依赖 | GAP |
 
 这里不产生分数，不选“赢家”。
+
+## 6.1 已建立 GAP 审计与复现实验入口
+
+详见：
+- `references/benchmarks/latency-gap-audit-2026.md`
+- `data/benchmarks/latency-gap-audit.csv`
+- `research/architecture/latency-reproduction-methods.md`
+
+从本轮开始，“已找到官方方法但未找到目标数字”会作为 REF+GAP 单独落盘，避免重复搜索，也避免把方法存在误写成性能结果存在。
 
 ## 6. 下一步最值得补的数字
 

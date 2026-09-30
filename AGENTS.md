@@ -139,6 +139,29 @@ TOPS 只是一个指标。必须同时关注 CPU、GPU、NPU/AI ASIC、精度、
 - 禁止把从旧页面摘出的固定数字长期绑定到 `latest` URL；
 - 新 release 与旧 release 的数字不得拼成一次端到端 pipeline。
 
+### 7.4 GAP 与负证据也必须落盘
+
+如果经过官方文档/GitHub/论文检索后：
+- 找到了官方 Benchmark 方法，但未找到目标平台 numeric result；
+- 找到了相邻指标，但其统计边界不属于目标阶段；
+- 找到社区结果，但定义自相矛盾或无法追溯；
+
+必须记录：
+- access date；
+- 搜索/来源入口；
+- 当前能确认什么；
+- 为什么不能升级证据；
+- 下一步复现实验。
+
+禁止：
+- “工具存在”写成“性能已验证”；
+- 芯片内部 memory bandwidth 写成 PCIe H2D/D2H；
+- throughput/双缓冲增益写成更低 Frame Age；
+- hw-only inference latency 写成 Camera→result E2E；
+- 自相矛盾的社区 E2E 数字进入主 Benchmark。
+
+机器可读审计：`data/benchmarks/latency-gap-audit.csv`。
+
 当前证据索引：
 - references/webpages/platform-workload-evidence-2026.md
 - research/products/workload-platform-fit-matrix.md
@@ -300,7 +323,8 @@ scripts/
 - **PX4/EGO/FASTER 证据锚定的避障闭环时延预算与计算脚本**；
 - **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**；
 - **闭环时延→平台阶段映射与 pipeline latency evidence 表**；
-- **Isaac ROS 5.0 / Jetson Orin 固定版本时延锚点**。
+- **Isaac ROS 5.0 / Jetson Orin 固定版本时延锚点**；
+- **时延 GAP 审计：记录“方法存在但数字缺失”、指标边界与下一步复现路径**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；

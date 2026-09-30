@@ -26,6 +26,12 @@ TABLES = {
         "latency_id", "platform", "architecture", "stage", "workload",
         "metric", "host", "evidence_status", "source_url", "limitations"
     ],
+    ROOT / "data/benchmarks/latency-gap-audit.csv": [
+        "gap_id", "platform", "architecture", "target_metric",
+        "official_method_available", "published_numeric_result",
+        "evidence_status", "source_url", "current_conclusion",
+        "next_repro_step", "access_date"
+    ],
     ROOT / "data/calculations/six-camera-reference-profiles.csv": [
         "profile_id", "basis", "equivalent_camera_count", "width", "height",
         "fps", "pixel_rate_mp_s", "bpp_scenario", "payload_gbps",
