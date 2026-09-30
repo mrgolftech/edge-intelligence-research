@@ -221,7 +221,8 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 
 Phase 3 已进入正式报告编制阶段：
 
-- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.3（当前版，证据强化）](reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md)
+- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.4（当前版：分类依据与国产可信标准强化）](reports/drafts/secure-trusted-edge-intelligence-report-v0.4.md)
+- [v0.3 证据强化版](reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md)
 - [v0.2 可读性增强版](reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md)
 - [v0.1 初稿](reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md)
 - [最终调研报告 Evidence Map v0.3](reports/drafts/final-report-evidence-map-v0.3.md)
@@ -242,3 +243,11 @@ Phase 3 已进入正式报告编制阶段：
 - [六摄需求—资源—架构 Mermaid 图源](assets/diagrams/six-camera-requirement-resource-architecture-v03.mmd)
 - [产品形态对比数据](data/product-specs/final-report-product-form-comparison-v03.csv)
 - [六摄需求→Workload→资源→架构数据](data/calculations/six-camera-requirement-workload-resource-architecture-v03.csv)
+
+
+### v0.4 新增研究依据
+
+- [W1–W9 工作负载分类定义依据](research/workloads/workload-taxonomy-definition-basis-v1.md)
+- [C1–C5 工作负载组合定义依据](research/workloads/workload-composition-definition-basis-v1.md)
+- [国产可信计算与商用密码标准证据索引](references/standards/china-trusted-computing-crypto-standards-2026.md)
+- [最终报告参考文献索引 v0.4](references/final-report-reference-index-v0.4.md)
