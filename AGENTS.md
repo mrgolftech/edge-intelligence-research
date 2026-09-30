@@ -501,9 +501,11 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 产品层代表性调研已达到停止扩张条件，正式报告编制已启动。
 
 当前已落盘：
-- `reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md`（当前正式初稿）
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md`（当前证据强化版）
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md`（可读性增强版）
 - `reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md`（历史初稿）
-- `reports/drafts/final-report-evidence-map.md`
+- `reports/drafts/final-report-evidence-map-v0.3.md`
+- `references/final-report-reference-index-v0.3.md`
 
 报告主线：
 ```text
@@ -524,11 +526,13 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 3. 六摄 Case 单独作为 Requirement→Workload→Resource→Architecture→Validation 方法验证；
 4. 工程建议必须标明 FACT / VENDOR / INFER / GAP；
 5. 若报告写作发现证据缺口，只按具体结论回补资料，不重新开启泛产品搜索；
-6. v0.3 优先补正式编号 References、核心架构图、产品形态对比表和六摄 Gate 总表；
+6. v0.3 已完成正式编号 References、核心 Mermaid 架构图、产品形态对比表和六摄需求→Workload→资源→架构总表；后续 v0.4 优先做引用审计、国产 GM/T 资料补强和矢量图输出；
 7. 最终报告图表必须保留原始数据与可重复生成路径；
 8. 最终报告必须兼顾跨专业可读性：专业术语首次出现采用“中文名称（英文全称，缩写）”，并解释其作用与工程意义；
 9. 禁止用连续名词/缩写替代技术论述。关键章节应回答“是什么、为什么重要、如何在无人装备中使用、对计算/接口/实时性/安全有什么影响”；
-10. 最终报告保留独立术语与缩略语章节，但正文仍需对首次出现的核心术语进行就地解释。
+10. 最终报告保留独立术语与缩略语章节，但正文仍需对首次出现的核心术语进行就地解释；
+11. W1–W9、C1–C5、Camera Routing、Architecture Gate 等研究分类必须先给出行业/论文/官方工程依据，再明确说明它们是本项目的研究抽象，不得暗示为行业标准；
+12. 最终报告关键结论尽可能在正文就地给出可点击参考编号 [Rxx]，并维护统一参考文献索引。
 
 
 ## 20. 安全可信无人智算扩展
