@@ -19,3 +19,4 @@ REQ017,SWaP,max_compute_power,unconfirmed,W,GAP,product requirement,architecture
 REQ018,SWaP,max_compute_mass,unconfirmed,g,GAP,product requirement,architecture/mission endurance,freeze mass budget
 REQ019,SWaP,max_compute_volume,unconfirmed,mm3_or_envelope,GAP,product requirement,mechanical architecture,freeze envelope
 REQ020,W7,VLM_required,on_demand_or_no,boolean_or_mode,UNFROZEN,mission-value decision,memory / isolation,only enable if concrete mission value exists
+REQ021,W3,perception_topology,unconfirmed,enum,GAP,algorithm architecture,"model-call rate / tensor path / NPU-GPU budget","freeze PER_VIEW vs FUSED_MULTI_VIEW vs MIXED"

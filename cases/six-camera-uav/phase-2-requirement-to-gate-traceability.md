@@ -1,6 +1,6 @@
 # 六摄像头 UAV：Requirement → Architecture Gate Traceability Matrix
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 基础 Composition：C2 Visual Autonomy
 - 目的：把每个架构 Gate 的 Candidate / Unverified / Requirement-missing 追溯到具体需求变量、事实锚点与未来验证项
@@ -55,6 +55,7 @@
 | R22 | FCU responsibilities / interface deadline | Partial | B/E/G | 已确定原则上独立 FCU，但接口与 deadline 未冻结 |
 | R23 | VLM 是否是正式任务 | Decision-pending | C/D/E/F/G | 不能提前为 W7 预留刚性资源 |
 | R24 | target OS/ROS/model operator constraints | Partial | D/G | 决定 SDK/算子/集成风险，需随算法冻结 |
+| R25 | perception topology: PER_VIEW / FUSED_MULTI_VIEW / MIXED | **Requirement-missing** | C/D/E/G | 决定 model call rate、input view rate、preprocess 与 memory/tensor 结构 |
 
 ---
 
@@ -212,6 +213,7 @@ R24 OS/ROS/SDK
 - R04 actual FPS；
 - R07 N_detection；
 - R08 detection model/input/precision；
+- R25 perception topology；
 - R09 detection rate；
 - R10 N_vio/topology；
 - R11 N_depth/method；

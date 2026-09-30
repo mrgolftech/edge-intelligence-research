@@ -23,3 +23,4 @@ R21,mission duration/energy budget,system,,REQUIREMENT_MISSING,GAP,F,NO,mission 
 R22,FCU responsibilities/interface deadline,W9,"external FCU principle",PARTIAL,PROJECT,B|E|G,YES,system architecture freeze,"RT boundary principle known; exact interface/deadline pending"
 R23,VLM/W7 formal mission,W7,"optional",DECISION_PENDING,PROJECT,C|D|E|F|G,NO,mission value decision,"Do not reserve hard requirement before task value is proven"
 R24,target OS/ROS/operator constraints,system,"Linux/ROS path expected",PARTIAL,PROJECT|REF,D|G,NO,algorithm/software baseline freeze,"Must follow target model and productization needs"
+R25,perception topology,W3,,REQUIREMENT_MISSING,GAP,C|D|E|G,YES,algorithm architecture definition,"PER_VIEW vs FUSED_MULTI_VIEW changes model-call-rate and memory/data-flow equations"

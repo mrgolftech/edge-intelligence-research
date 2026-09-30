@@ -1,6 +1,6 @@
 # 六摄像头 UAV：Phase 2 Validation Plan
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 目的：把 Architecture Gate 的 GAP 转成可执行、可复现的验证项
 - 当前约束：暂时无实机测试条件；因此本文件同时区分“公开证据可关闭”和“必须后续实测”的项
@@ -58,7 +58,7 @@ L8 degraded / fallback
 
 ### 输入
 
-R04 / R07-R17 / R19-R24。
+R04 / R07-R17 / R19-R25。
 
 ### 输出
 
@@ -66,7 +66,8 @@ Project Nominal：
 
 ```text
 Camera mode
-N_detection / Hz / model
+perception topology
+N_detection/views / Hz / model
 N_vio
 N_depth
 map/planner
@@ -120,6 +121,7 @@ A/C/D/E/F/G。
 
 先固定：
 
+- perception topology；
 - same model；
 - same input；
 - same precision；
@@ -137,7 +139,7 @@ A/C/D/E/F/G。
 - power。
 
 作用：
-- 绑定 R08/R09；
+- 绑定 R08/R09/R25；
 - 建立 ServiceTime；
 - 用于后续 `Demand_engine` 计算。
 
