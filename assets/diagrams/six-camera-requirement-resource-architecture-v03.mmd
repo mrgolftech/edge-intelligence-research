@@ -1,0 +1,13 @@
+flowchart LR
+    R1["需求<br/>6 Camera<br/>分辨率/FPS/同步<br/>速度/探测距离<br/>功耗/尺寸/重量"] --> W
+    W["Workload Routing<br/>C采集 / V定位 / P逐路感知<br/>F多视图融合 / D深度 / R录像"] --> X
+    X["Workload<br/>W1采集视频<br/>W2 VIO/SLAM<br/>W3感知/深度<br/>W4地图<br/>W6规划<br/>W9控制监督"] --> Q
+    Q["资源<br/>Camera/ISP/VPU<br/>CPU/GPU/NPU<br/>DDR容量/带宽<br/>同步/PCIe/网络<br/>P99 Frame Age<br/>SWaP"] --> A
+    A{"架构 Gate"} --> A1["Integrated SoC<br/>RK3588 类"]
+    A --> A2["GPU SoM<br/>Jetson Orin 类"]
+    A --> A3["Robotics SoC<br/>IQ-9075 类"]
+    A --> A4["Host + Accelerator<br/>RK3588 + M.2 AI"]
+    A1 --> B["统一 Benchmark<br/>6-Cam + VIO + Detection + Depth + Planner"]
+    A2 --> B
+    A3 --> B
+    A4 --> B
