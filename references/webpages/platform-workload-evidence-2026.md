@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.5
+- 状态：v0.6
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -482,9 +482,29 @@
   - 社区 issue 存在旧 SDK 下多线程隔离与多核 scaling 的问题报告；
   - 这些不是官方确认的当前缺陷，只用于定义后续验证项。
 
+### E34 — M50/xh2 官方多线程多-stream推理示例
+- 类型：REF
+- 来源：后摩智能官方 GitHub `houmo-ai/postmo-modelzoo`
+- URL：https://github.com/houmo-ai/postmo-modelzoo/tree/release_xh2_v1.3.0/apis/inferences/resnet50_multistreams
+- 已确认：
+  - 官方示例名称为 `Resnet50 Multistreams Example`；
+  - Python 示例支持多线程、多 stream；
+  - C++ 示例支持多设备、多线程、多 stream；
+  - 可通过 `create_weight_manager` 共享模型内存；
+  - 每个线程使用 1 个 stream；
+  - 默认 1 device / 4 threads / 10 samples；
+  - 日志显示 4 个线程同时加载 `resnet50_xh2_b1_1roi_1core_O2.hmm` 并在同一个 xh2 device 上执行；
+  - backend 使用 `Xh2HalBackend`。
+- 支撑：M50-compatible xh2 不仅有单模型性能数据，还存在官方多线程多-stream runtime 实现路径。
+- 限制：
+  - 文档没有给标准化 aggregate throughput / P95 / P99 / power；
+  - 输入是单张样本队列，不是多路视频 capture pipeline；
+  - 不应从日志时间戳自行推导成官方 FPS；
+  - 不能等价为 LQ50 + RK3588 的多 Camera 系统 Benchmark。
+
 ## 11. 关键结论
 
 1. **有完整自主系统案例的平台，不代表每个 workload 都在同一处理器上执行。** Skydio X10、Journey 6M 等只能证明系统级组合成立，必须保留任务分区未知这一限制。
-2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 有视觉案例/benchmark；M50 现已有官方 xh2 模型级 YOLO benchmark，BX50 有系统级多路视频路线；但 LQ50 板级 + host 的多流端到端性能仍缺公开实测。
+2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 有视觉案例/benchmark；M50 现已有 xh2 YOLO 模型级 benchmark 与官方多线程多-stream runtime reference，BX50 有系统级多路视频路线；但 LQ50 板级 + host 的多 Camera/PCIe/总功耗仍缺公开实测。
 3. **公开 benchmark 必须记录 host。** Metis 官方 YOLO benchmark 使用 i9-13900K；若换成 RK3588/ARM host，端到端性能必须重新测试。
 4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** Skydio X10 可作为六物理相机系统案例锚点；IQ-9075 的 16-stream partner benchmark 可作为视频+AI并发锚点，但其输入是文件流而非 16 路物理 camera。RK3588 虽有三核 NPU 官方调度 API，也不能把单模型 FPS 按核心数线性放大。

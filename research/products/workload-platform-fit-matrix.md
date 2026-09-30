@@ -1,6 +1,6 @@
 # Workload → Compute Resource → Platform 适配矩阵
 
-- 状态：v0.5
+- 状态：v0.6
 - 日期：2026-09-30
 - 目标：建立基于公开案例、论文、官方 benchmark 和硬件事实的端侧平台适配分析
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -37,7 +37,7 @@
 
 ## 3. 证据驱动平台矩阵
 
-标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E33。
+标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E34。
 
 | 平台 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 当前工程边界 |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -49,7 +49,7 @@
 | Black Sesame A2000 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC+DEMO E11/E21 | GAP | SPEC E11/E21 | 2026 官方已披露 200–1000 TOPS 家族、VLA/world-model 与 Qwen VLM 演示；仍缺公开可复现 benchmark |
 | Axelera Metis M.2 | HOST依赖 E14 | GAP | CASE+BENCH E12/E13 | GAP | CASE E13 | GAP | SPEC(实验性 LLM) E14 | GAP | GAP | 强项证据集中在视觉推理；W1 解码/预处理及 W2/W6/W9 依赖 host |
 | Hailo-8 / Hailo-10H | HOST依赖 | CASE(系统) E15/E16 | CASE+BENCH(vendor) E15/E16/E22 | GAP | INFER | GAP | SPEC+BENCH(vendor) E17/E22 | GAP | GAP | Hailo-8 有真实视觉案例，Hailo-10H 有视觉/GenAI 厂商量级数据；都不能替代主控/飞控 |
-| Houmo M50 / LQ50 M.2 | HOST依赖 E18/E26 | GAP | SPEC(system)+VENDOR_BENCH(M50) E26/E32 | GAP | GAP | GAP | SPEC+VENDOR_BENCH E18/E19 | GAP | GAP | M50 已有官方 xh2 YOLO 模型级 latency/accuracy/throughput；但 LQ50 板卡 + host 的 PCIe/video 多流端到端性能仍是 GAP |
+| Houmo M50 / LQ50 M.2 | HOST依赖 E18/E26 | GAP | SPEC(system)+REF(multistream)+VENDOR_BENCH(M50) E26/E32/E34 | GAP | GAP | GAP | SPEC+VENDOR_BENCH E18/E19 | GAP | GAP | M50 已有 xh2 YOLO 模型级 benchmark 和官方多线程多-stream runtime 路径；LQ50 板卡 + host 的 Camera/PCIe/总功耗端到端性能仍是 GAP |
 
 ## 4. 按体系结构得到的工程判断
 

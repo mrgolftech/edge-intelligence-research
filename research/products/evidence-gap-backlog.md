@@ -34,7 +34,8 @@
 - W7 大模型证据明确；
 - BX50 已证明 RK3588 host + M50 可作为多路视频分析系统；
 - 后摩官方 Model Zoo 已给出 M50-compatible xh2 的 YOLOv5s/YOLO11m accuracy、inference latency、end-to-end latency 与 throughput；
-- **剩余 GAP 已从“有没有视觉性能”收敛为“LQ50 板卡 + host 的多流端到端性能”。**
+- 官方 `resnet50_multistreams` 还提供单设备/多设备、多线程、多 stream runtime 示例（默认 1 device / 4 threads，每线程 1 stream），证明并发软件路径存在；
+- **剩余 GAP 已从“有没有视觉性能/并发路径”进一步收敛为“LQ50 板卡 + host + Camera/video/PCIe 的多流端到端性能、功耗和热稳态”。**
 
 可接受证据：
 - 同一 YOLO 模型的 input/precision/FPS；

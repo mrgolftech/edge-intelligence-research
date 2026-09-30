@@ -90,3 +90,41 @@ BX50 是完整整机：
 仍不能写：**LQ50 在六路 camera / RK3588 host 下能达到上述吞吐。**
 
 YOLO 页面没有给出具体 LQ50 SKU、core frequency、板卡/系统功耗、Camera/codec/PCIe/host preprocessing。throughput 也是多线程压力测试，不是六路视频端到端 FPS。
+
+
+## 6. 官方多线程多-stream runtime 示例
+
+官方路径：
+https://github.com/houmo-ai/postmo-modelzoo/tree/release_xh2_v1.3.0/apis/inferences/resnet50_multistreams
+
+`Resnet50 Multistreams Example` 明确用于展示：
+- Python：多线程、多 stream；
+- C++：多设备、多线程、多 stream；
+- `create_weight_manager` 共享模型内存；
+- 每个线程使用 1 个 stream；
+- 每个设备可配置相同数量的线程。
+
+默认参数：
+- device count = 1；
+- threads = 4；
+- samples = 10。
+
+示例日志显示：
+- 4 个线程同时在 device 0 上加载 `resnet50_xh2_b1_1roi_1core_O2.hmm`；
+- backend 为 `Xh2HalBackend`；
+- C++ 示例中 10 个 samples 被 4 个线程竞争消费并完成推理。
+
+### 工程意义
+
+这进一步证明：
+> **M50-compatible xh2 runtime 具备官方多线程、多 stream 的软件实现路径。**
+
+但这仍属于 REF，不是 Benchmark，因为文档没有给出：
+- 标准化 aggregate throughput；
+- P95/P99；
+- device power；
+- PCIe host 负载；
+- Camera/video decode；
+- 多路物理传感器输入。
+
+因此不能从日志时间戳自行算出一个“官方 FPS”，也不能用它证明 LQ50 的六路视频能力。
