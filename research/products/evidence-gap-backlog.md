@@ -93,7 +93,7 @@
 
 仍需公开证据：
 - 6+ physical CSI/GMSL cameras；
-- hardware timestamp / synchronization；
+- per-frame timestamp propagation 已由 Qualcomm 官方源码确认；仍需 multi-camera hardware synchronization / trigger；
 - drop/jitter；
 - camera → zero-copy → QNN inference；
 - VIO/visual SLAM 与多 camera detection 并发；

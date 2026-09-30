@@ -8,6 +8,26 @@ Qualcomm 官方 qrb_ros_camera：https://github.com/qualcomm-qrb-ros/qrb_ros_cam
 
 IQ-9075 EVK 支持 CSI/GMSL、concurrent multiple streams、ROS2 composable node 和 DMA-BUF zero-copy。默认示例 1920×1080@30，并演示第二 stream 1080×720@60。这里属于 REF，不是最大 Camera 吞吐 Benchmark。
 
+### 1.1 Per-frame timestamp 已确认，但 multi-camera hardware sync 未确认
+
+源码证据：
+- `qrb_camera/src/qmmf_frame.cpp`：`CameraFrame.timestamp` 取自底层 camera buffer timestamp；
+- `qrb_ros_camera/src/camera_node.cpp`：初始化 `time_offset_`，并将 `frame->timestamp + time_offset_` 写入 ROS `header.stamp`；
+- CameraNode 同时用该 timestamp 计算 FPS 与采集到发布的平均 latency。
+
+这说明 IQ-9075 的 W1 Camera pipeline 已经具备可用于 ROS 时序处理的 per-frame timestamp 传播机制。
+
+但是当前官方仓库搜索没有发现明确的 multi-camera synchronization / external trigger API。因此当前结论必须严格写成：
+
+> **单帧时间戳传递：已确认；多物理 Camera 硬件同步：未确认。**
+
+后续六摄像头验证仍需测：
+- 同一 trigger 下各 Camera exposure/start-of-frame offset；
+- timestamp skew；
+- frame sequence alignment；
+- 长时间 drift；
+- dropped frame 后的重新对齐行为。
+
 ## 2. W2/W6：官方 SLAM / Nav2 路径
 qrb_ros_amr_service：https://github.com/qualcomm-qrb-ros/qrb_ros_amr_service
 
@@ -47,7 +67,7 @@ IQ-9075 EVK 支持示例包含 YOLOv8 detection、segmentation、pose、Depth An
 公开证据已经能证明多流视频+DNN、ROS2 camera/zero-copy、SLAM/Nav2、实时 EtherCAT 都有真实实现路径。
 
 仍不能证明：
-1. 6 个物理 Camera 的同步、drop/jitter；
+1. 6 个物理 Camera 的硬件同步、timestamp skew、drop/jitter（per-frame timestamp 传播已确认，但同步机制未确认）；
 2. Camera→ISP→DMA-BUF→QNN 的六路端到端性能；
 3. VIO/visual SLAM 定量性能；
 4. W1+W2+W3+W6 全并发；

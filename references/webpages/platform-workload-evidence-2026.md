@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.7
+- 状态：v0.8
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -572,6 +572,22 @@
 - 限制：
   - “3 sources / 15 FPS”是配置指导，不是标准化性能 benchmark；
   - 未给统一 model/FPS/system-power 数据。
+
+### E39 — IQ-9075 Camera timestamp propagation
+- 类型：REF
+- 来源：Qualcomm 官方 GitHub `qrb_ros_camera` 源码
+- URL：https://github.com/qualcomm-qrb-ros/qrb_ros_camera/blob/main/qrb_ros_camera/src/camera_node.cpp
+- URL：https://github.com/qualcomm-qrb-ros/qrb_ros_camera/blob/main/qrb_camera/src/qmmf_frame.cpp
+- 已确认：
+  - 底层 `CameraFrame.timestamp` 直接取自 camera buffer timestamp；
+  - ROS CameraNode 初始化时计算 system time 与 ROS time 的 `time_offset_`；
+  - 发布消息时使用 `frame->timestamp + time_offset_` 写入 ROS `header.stamp`；
+  - 同一 timestamp 还被用于计算 frame FPS 与 camera-to-publish latency。
+- 支撑：IQ-9075 Camera pipeline 已确认存在 per-frame source timestamp → ROS timestamp 的传递路径。
+- 限制：
+  - 在该官方仓库中未发现明确的 multi-camera hardware synchronization / trigger API；
+  - per-frame timestamp propagation 不等价于多 Camera 同曝光/同触发；
+  - timestamp 的底层时钟源与跨 sensor 对齐精度仍需 Camera Service/CamX 文档或实测确认。
 
 ## 11. 关键结论
 

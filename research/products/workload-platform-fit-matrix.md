@@ -1,6 +1,6 @@
 # Workload → Compute Resource → Platform 适配矩阵
 
-- 状态：v0.7
+- 状态：v0.8
 - 日期：2026-09-30
 - 目标：建立基于公开案例、论文、官方 benchmark 和硬件事实的端侧平台适配分析
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -37,13 +37,13 @@
 
 ## 3. 证据驱动平台矩阵
 
-标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E38。
+标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E39。
 
 | 平台 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 当前工程边界 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | NVIDIA Jetson Orin | SPEC+BENCH E01/E02/E35 | CASE+PAPER+BENCH E03/E04/E05/E35 | CASE+BENCH E02/E03/E35 | CASE+PAPER+BENCH E03/E05/E35 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | Nova Carter 已有物理3/4-camera live graph：VSLAM、DNN stereo depth、Nvblox；仍缺六摄像头+YOLO同构并发、功耗/热和硬实时飞控证据 |
 | Qualcomm Flight RB5 | REF E07 | REF E07 | REF E07 | REF(深度/SLAM) E07 | REF E07 | REF E07 | GAP | REF E07 | GAP | 典型 UAV companion/reference platform；飞控 W9 边界需单独设计 |
-| Qualcomm IQ-9075 | SPEC+REF+PARTNER_BENCH E08/E27/E29/E30 | REF E28/E31 | REF+PARTNER_BENCH E29/E30/E31 | REF(2D mapping/depth) E28/E31 | REF E31 | REF(Nav2) E28/E31 | SPEC+BENCH(vendor) E08 | INFER | SPEC+PARTNER_BENCH E08/E25 | W1/W3 已有多流可复现实测，W2/W4/W5/W6 有官方 ROS2 reference；仍缺物理多 camera 同步、VIO/SLAM latency 与完整自主栈全并发 benchmark |
+| Qualcomm IQ-9075 | SPEC+REF+PARTNER_BENCH E08/E27/E29/E30/E39 | REF E28/E31 | REF+PARTNER_BENCH E29/E30/E31 | REF(2D mapping/depth) E28/E31 | REF E31 | REF(Nav2) E28/E31 | SPEC+BENCH(vendor) E08 | INFER | SPEC+PARTNER_BENCH E08/E25 | W1 已确认 per-frame timestamp→ROS stamp 传播；仍缺 multi-camera hardware trigger/sync、VIO/SLAM latency 与完整自主栈全并发 benchmark |
 | Rockchip RK3588 | SPEC E20 | PAPER(system) E24 | SPEC+REF+BENCH E20/E23/E33 | PAPER(system) E24 | INFER | INFER | GAP | GAP | INFER | W3 已有单模型 benchmark 与官方多 context/三核调度路径；仍无证据支持按核心数线性推算，多摄像头+SLAM+DNN 并发继续为 GAP |
 | Horizon Journey 6M | CASE(system) E10 | CASE(system) E10 | CASE+SPEC E09/E10 | CASE+SPEC E09/E10 | CASE(system) E10 | CASE+SPEC E09/E10 | GAP | GAP | SPEC(系统安全架构) E09 | 量产车端证据强，但与 UAV 的 SWaP、接口、软件生态不可直接等同 |
 | Black Sesame A2000 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC+DEMO E11/E21 | GAP | SPEC E11/E21 | 2026 官方已披露 200–1000 TOPS 家族、VLA/world-model 与 Qwen VLM 演示；仍缺公开可复现 benchmark |
