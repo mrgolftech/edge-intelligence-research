@@ -1,6 +1,6 @@
 # Workload → Compute Resource → Platform 适配矩阵
 
-- 状态：v0.6
+- 状态：v0.7
 - 日期：2026-09-30
 - 目标：建立基于公开案例、论文、官方 benchmark 和硬件事实的端侧平台适配分析
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -37,18 +37,18 @@
 
 ## 3. 证据驱动平台矩阵
 
-标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E34。
+标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E38。
 
 | 平台 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 当前工程边界 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| NVIDIA Jetson Orin | SPEC+BENCH E01/E02 | CASE+PAPER E03/E04/E05 | CASE+BENCH E02/E03 | CASE+PAPER E03/E05 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | 公开证据最完整的是多传感器机器人计算；安全飞控/硬实时控制不应默认放在 Orin 上 |
+| NVIDIA Jetson Orin | SPEC+BENCH E01/E02/E35 | CASE+PAPER+BENCH E03/E04/E05/E35 | CASE+BENCH E02/E03/E35 | CASE+PAPER+BENCH E03/E05/E35 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | Nova Carter 已有物理3/4-camera live graph：VSLAM、DNN stereo depth、Nvblox；仍缺六摄像头+YOLO同构并发、功耗/热和硬实时飞控证据 |
 | Qualcomm Flight RB5 | REF E07 | REF E07 | REF E07 | REF(深度/SLAM) E07 | REF E07 | REF E07 | GAP | REF E07 | GAP | 典型 UAV companion/reference platform；飞控 W9 边界需单独设计 |
 | Qualcomm IQ-9075 | SPEC+REF+PARTNER_BENCH E08/E27/E29/E30 | REF E28/E31 | REF+PARTNER_BENCH E29/E30/E31 | REF(2D mapping/depth) E28/E31 | REF E31 | REF(Nav2) E28/E31 | SPEC+BENCH(vendor) E08 | INFER | SPEC+PARTNER_BENCH E08/E25 | W1/W3 已有多流可复现实测，W2/W4/W5/W6 有官方 ROS2 reference；仍缺物理多 camera 同步、VIO/SLAM latency 与完整自主栈全并发 benchmark |
 | Rockchip RK3588 | SPEC E20 | PAPER(system) E24 | SPEC+REF+BENCH E20/E23/E33 | PAPER(system) E24 | INFER | INFER | GAP | GAP | INFER | W3 已有单模型 benchmark 与官方多 context/三核调度路径；仍无证据支持按核心数线性推算，多摄像头+SLAM+DNN 并发继续为 GAP |
 | Horizon Journey 6M | CASE(system) E10 | CASE(system) E10 | CASE+SPEC E09/E10 | CASE+SPEC E09/E10 | CASE(system) E10 | CASE+SPEC E09/E10 | GAP | GAP | SPEC(系统安全架构) E09 | 量产车端证据强，但与 UAV 的 SWaP、接口、软件生态不可直接等同 |
 | Black Sesame A2000 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC+DEMO E11/E21 | GAP | SPEC E11/E21 | 2026 官方已披露 200–1000 TOPS 家族、VLA/world-model 与 Qwen VLM 演示；仍缺公开可复现 benchmark |
-| Axelera Metis M.2 | HOST依赖 E14 | GAP | CASE+BENCH E12/E13 | GAP | CASE E13 | GAP | SPEC(实验性 LLM) E14 | GAP | GAP | 强项证据集中在视觉推理；W1 解码/预处理及 W2/W6/W9 依赖 host |
-| Hailo-8 / Hailo-10H | HOST依赖 | CASE(系统) E15/E16 | CASE+BENCH(vendor) E15/E16/E22 | GAP | INFER | GAP | SPEC+BENCH(vendor) E17/E22 | GAP | GAP | Hailo-8 有真实视觉案例，Hailo-10H 有视觉/GenAI 厂商量级数据；都不能替代主控/飞控 |
+| Axelera Metis M.2 | HOST+REF E14/E36 | GAP | CASE+BENCH+VENDOR_BENCH E12/E13/E37 | GAP | CASE E13 | GAP | SPEC(实验性 LLM) E14 | GAP | GAP | ARM Host 已官方验证（含RK3588/RPi5/Orin），NanoPC-T6 有厂商团队性能锚点；W1/W2/W6/W9 与总功耗仍取决于 Host |
+| Hailo-8 / Hailo-10H | HOST+REF E38 | CASE(system) E15/E16 | CASE+REF+VENDOR_BENCH E15/E16/E22/E38 | GAP | INFER | GAP | SPEC+REF+VENDOR_BENCH E17/E22/E38 | GAP | GAP | Raspberry Pi 5 已有官方 Camera/Multisource/GenAI 集成路径；多源配置指导不是标准Benchmark，SLAM/规划和总系统功耗仍由Host架构决定 |
 | Houmo M50 / LQ50 M.2 | HOST依赖 E18/E26 | GAP | SPEC(system)+REF(multistream)+VENDOR_BENCH(M50) E26/E32/E34 | GAP | GAP | GAP | SPEC+VENDOR_BENCH E18/E19 | GAP | GAP | M50 已有 xh2 YOLO 模型级 benchmark 和官方多线程多-stream runtime 路径；LQ50 板卡 + host 的 Camera/PCIe/总功耗端到端性能仍是 GAP |
 
 ## 4. 按体系结构得到的工程判断

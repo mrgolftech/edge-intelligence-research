@@ -201,6 +201,8 @@ scripts/
 
 不得按 TOPS 单指标排名。
 
+对于 M.2/PCIe 独立加速器，**Host 是一等平台变量**：必须记录 Host SoC/CPU/GPU/VPU、PCIe、预处理、DDR、总功耗和热状态；不得只记录加速卡 TOPS/FPS。
+
 ## 14. Benchmark
 
 目标：
@@ -246,16 +248,18 @@ scripts/
 - 公共 benchmark 基线；
 - sensor payload / model memory calculation data；
 - 代表平台事实底座；
-- **证据驱动 workload → resource → platform 适配矩阵 v0.1**；
+- **证据驱动 workload → resource → platform 适配矩阵 v0.7**；
 - **平台 workload 证据索引（Jetson/Qualcomm/RK3588/Journey6/A2000/Metis/Hailo/LQ50）**；
 - 六摄像头 workload model；
 - **结构化平台事实表 data/product-specs/platform-facts.csv**；
 - **结构化公开 Benchmark 表 data/benchmarks/public-platform-benchmarks.csv**；
-- **平台证据缺口 Backlog 与自动校验脚本**。
+- **平台证据缺口 Backlog 与自动校验脚本**；
+- **Nova Carter 物理多相机 W1+W2+W3(depth)+W4 Live Graph Benchmark**；
+- **Metis/Hailo/M50 的 ARM Host + Accelerator 证据链与架构分析**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；
-2. 按 evidence-gap-backlog 补 RK3588、IQ-9075、LQ50 的 W2/W3 可量化证据；
+2. 按 evidence-gap-backlog 补六摄像头同构多 workload 并发、IQ-9075 物理多 Camera/VIO，以及 RK3588+独立 Accelerator 的端到端证据；
 3. 六摄像头 Case 冻结 W1 参数并完成第一轮推导；
 4. 分别建立一体 SoC 与 Host+Accelerator Benchmark；
 5. 用统一测试条件和实测逐步替换 INFER/GAP；

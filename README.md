@@ -88,8 +88,11 @@
 - [IQ-9075 ROS2 自主栈与多流视觉证据](references/benchmarks/iq9075-multistream-robotics-2026.md)
 - [RK3588 官方 DNN Benchmark 与 SLAM 论文证据](references/benchmarks/rk3588-public-evidence-2026.md)
 - [IQ-9075 实时控制证据](references/benchmarks/iq9075-realtime-control-2026.md)
+- [Jetson/Nova 物理多相机 Perceptor Benchmark](references/benchmarks/jetson-nova-multicamera-perceptor-2026.md)
+- [ARM Host + Accelerator 公开基线](references/benchmarks/arm-host-accelerator-evidence-2026.md)
 
 ### 平台与适配
+- [Host + Accelerator 架构分析](research/architecture/host-accelerator-edge-architecture.md)
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
@@ -133,13 +136,15 @@
 7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**
 8. IQ-9075 已从“规格候选”进入“官方 ROS2 Reference + 可复现多流 Partner Benchmark”阶段：YOLOv10n INT8 的 1/4/9/16 路 1080p30 视频实测已公开，但这些主要是文件流，不能冒充物理多 Camera 同步测试。
 9. M50 已有官方 xh2 YOLOv5s/YOLO11m 模型级 latency/accuracy/throughput 数据；LQ50 板卡 + Host 的多流视频、PCIe 和总功耗仍需单独证据。
+10. Nova Carter 已有物理多相机 Live Graph Benchmark，可把 Jetson 的证据从“单节点/整机案例”推进到 W1+W2+W3(depth)+W4 组合 workload；但仍不能等同六摄像头+YOLO。
+11. Metis/Hailo/M50 均已证明 ARM Host 路线真实存在；因此独立 Accelerator 评估必须把 Host CPU/VPU/DDR、PCIe、预处理和总系统功耗作为一等指标。
 
 ## 下一阶段
 
 第一版“场景 → workload → 平台证据”链路已经贯通。下一阶段从“是否有证据”进一步进入“多少资源、在什么条件下能跑”：
 
 1. 继续补全结构化平台事实表中的“未确认”字段，不跨 SKU 猜参数；
-2. 按 evidence-gap-backlog 优先补 RK3588 的 W1+W2+W3 并发、IQ-9075 的物理多 Camera/VIO、LQ50 的板级多流端到端数据；
+2. 按 evidence-gap-backlog 优先补六摄像头同构 W1+W2+W3 并发、IQ-9075 物理多 Camera/VIO，以及 RK3588+Metis/Hailo/LQ50 的同 Host 端到端数据；
 3. 将 Jetson/Metis/Hailo/LQ50/IQ-9075 的公开 benchmark 进一步补齐 precision、software、power 条件；
 4. 冻结六摄像头 Case 的 W1 输入参数；
 5. 分别设计“一体 SoC”和“Host + AI Accelerator”两条实验路径；

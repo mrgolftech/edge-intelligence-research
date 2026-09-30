@@ -1,7 +1,7 @@
 # 代表性端侧计算平台事实底座
 
 - 日期：2026-09-30
-- 状态：v0.3
+- 状态：v0.4
 - 目的：记录代表性平台的官方事实、产品形态和证据边界，不用于简单 TOPS 排名
 - 适配分析：[`workload-platform-fit-matrix.md`](workload-platform-fit-matrix.md)
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -113,7 +113,7 @@ Innodisk iQ-Studio 使用 YOLOv10n INT8、640×640、1080p30 H.264：
 - 完整 JetPack / CUDA / TensorRT / Isaac ROS 软件栈
 
 **公开案例/benchmark**
-- Isaac ROS 提供 AGX Orin 的 Stereo Disparity、DNN、视频编解码等 benchmark。
+- Isaac ROS 提供 AGX Orin 的单节点/Graph benchmark；release-3.2 还提供 Nova Carter 物理多相机 Live Graph：4×1200p Multicam VSLAM 30.1 FPS、3×1200p Perceptor 中 Visual Odometry 30.0 FPS / Nvblox ESDF 9.45 FPS。
 - Skydio X10 使用 Jetson Orin + 6 路导航相机，支持 GPS-denied navigation、obstacle avoidance、tracking 和机上 2D/3D mapping。
 - 2024–2026 论文已有 Jetson AGX Orin / Orin Nano 上的 VINS、ORB-SLAM3 和 LLM 实测。
 
@@ -199,7 +199,7 @@ Skydio 等整机案例没有公开每个模块的精确处理器分区；不能�
 DroneStar 搜救无人机使用 Metis M.2，在机上运行光学/热成像的 detection + tracking。
 
 **工程意义**
-证明 Host + Accelerator 可以用于 UAV，但评估必须包含 host、PCIe、视频解码和总功耗。
+证明 Host + Accelerator 可以用于 UAV。Axelera 2026 官方 ARM Host 页面还验证了 Firefly ITX-3588J、Orange Pi 5 Plus、NanoPC-T6（RK3588）、Raspberry Pi 5、Jetson Orin Nano/NX；因此 ARM Host 可行性已确认，但评估仍必须包含 host、PCIe、视频解码和总功耗。
 
 来源：
 - https://axelera.ai/metis-aipu-benchmarks
@@ -220,6 +220,9 @@ DroneStar 搜救无人机使用 Metis M.2，在机上运行光学/热成像的 d
 - 典型 2.5W
 - 视觉 + Generative AI
 - on-device LLM/VLM
+
+**ARM Host / 多流 Reference**
+Raspberry Pi 5 官方将 Hailo-8L/8/10H 集成到 AI HAT 与 camera stack；Hailo Apps 的 multisource pipeline 支持 USB/RTSP/file 多源并行 decode/scale 后送入 accelerator。官方对 RPi 的配置指导为 up to 3 sources optimal、15 FPS、默认 640×640；这是 REF，不是统一 Benchmark。
 
 **工程意义**
 Hailo-8 的现实证据集中在 W3；Hailo-10H 将路线扩展到 W7。两者都不应被视为完整机器人主控或安全飞控。

@@ -1,6 +1,6 @@
 # 公开平台 Benchmark 结构化基线（2026-09）
 
-- 状态：v0.2
+- 状态：v0.3
 - 日期：2026-09-30
 - 数据表：`data/benchmarks/public-platform-benchmarks.csv`
 - 目的：把“厂商/论文说跑得快”拆成可比较的测试条件，防止只摘 FPS/TOPS 数字。
@@ -38,6 +38,24 @@
 来源：
 https://nvidia-isaac-ros.github.io/performance/index.html
 
+### NVIDIA Nova Carter / Isaac Perceptor Live Graph
+
+Isaac ROS release-3.2 提供比单节点更接近真实机器人 workload 的 Live Graph：
+
+- 4 Hawk Cameras 1200p Data Recorder：22.4 FPS/stream avg，0 dropped frames avg；
+- 4 Hawk Cameras 1200p Multicam VSLAM：30.1 FPS；
+- 3 Hawk Cameras DNN Stereo：Full ESS 30.2 FPS，Light ESS 15.2 FPS avg；
+- 3 Hawk Cameras Perceptor：Visual Odometry 30.0 FPS，Nvblox ESDF 9.45 FPS，Mesh 2.63 FPS。
+
+官方方法说明这些 FPS 是 input node → graph → output node 的 maximum sustained framerate，并要求 dropped frames <5%；5 次运行去掉最大/最小后平均。
+
+这使 Jetson AGX Orin 首次在本项目中拥有明确的 **物理多相机 W1+W2+W3(depth)+W4 整图 Benchmark**。
+
+但 release-3.2 是固定历史软件基线，且没有系统功耗/DDR数据；不可直接外推当前 release-5.x 或六摄像头 YOLO。
+
+来源：
+https://nvidia-isaac-ros.github.io/v/release-3.2/performance/index.html
+
 ### Axelera Metis / Voyager
 
 官方 benchmark 页面明确披露：
@@ -72,6 +90,31 @@ Average E2E FPS/channel：1路 29.46；4路 29.47；9路 28.41；16路 15.90。C
 官方 M50-only 示例与 Xh2HalBackend 建立 M50↔xh2 的兼容证据，因此可作为 M50 芯片级 VENDOR_BENCH；不能解释为 LQ50+host 的多流视频系统性能。
 
 来源：https://github.com/houmo-ai/postmo-modelzoo
+
+### Axelera Metis / RK3588 ARM Host
+
+Axelera 官方已把 Firefly ITX-3588J、Orange Pi 5 Plus、NanoPC-T6（RK3588）、Raspberry Pi 5、Jetson Orin Nano/NX 列为 validated ARM hosts。
+
+Axelera Team 的 NanoPC-T6 / Voyager SDK 1.5.2 公开量级：
+- YOLOv8n ~450 FPS (host)，61ms OpenCL latency；
+- YOLOv8s ~360 FPS (host)，77ms OpenCL latency；
+- LPRNet 6084 FPS raw / 611 FPS end-to-end。
+
+这组数据标记为 `VENDOR_BENCH`，因为 exact card SKU、input、precision、power 条件未完整公开；不能与 i9 官方页面直接横比。
+
+来源：
+https://axelera.ai/systems/arm-host
+https://community.axelera.ai/the-axelera-forum-52/nanopc-t6-now-working-with-metis-setup-guide-available-1178
+
+### Hailo / Raspberry Pi 5
+
+Raspberry Pi 官方已将 Hailo-8/8L/10H 作为 AI HAT 集成到 RPi5 camera stack。Hailo 官方 multisource application 可并行处理 USB/RTSP/file 多源；在 Raspberry Pi 上给出“up to three sources are optimal”、15 FPS、640×640 的应用指导。
+
+这里当前只标 `REF`，不录为统一性能 Benchmark，因为没有同一模型下的标准化 E2E FPS / system power。
+
+来源：
+https://www.raspberrypi.com/documentation/accessories/ai-hat-plus.html
+https://github.com/hailo-ai/hailo-apps/tree/main/hailo_apps/python/pipeline_apps/multisource
 
 ## 3. 当前只能作为厂商量级锚点的数据
 

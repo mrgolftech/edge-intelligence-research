@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.6
+- 状态：v0.7
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -502,9 +502,80 @@
   - 不应从日志时间戳自行推导成官方 FPS；
   - 不能等价为 LQ50 + RK3588 的多 Camera 系统 Benchmark。
 
+### E35 — Nova Carter / Isaac Perceptor 物理多相机 Live Graph
+- 类型：BENCH + CASE
+- 来源：NVIDIA Isaac ROS 官方文档，release-3.2
+- URL：https://nvidia-isaac-ros.github.io/v/release-3.2/performance/index.html
+- URL：https://nvidia-isaac-ros.github.io/v/release-3.1/robots/nova_carter/index.html
+- 已确认：
+  - Nova Carter 使用 Jetson AGX Orin；
+  - 4× Hawk stereo camera 1920×1200@60，4× Owl fisheye 1920×1200@120；
+  - hardware timestamp/PTP，sensor acquisition <10μs；all-camera capture within 100μs；
+  - 4 Hawk 1200p Data Recorder：22.4 FPS/stream avg，0 drops avg；
+  - 4 Hawk 1200p Multicam VSLAM：30.1 FPS；
+  - 3 Hawk 1200p DNN Stereo：Full ESS 30.2 FPS；Light ESS 15.2 FPS avg；
+  - 3 Hawk Perceptor：Visual Odometry 30.0 FPS，Nvblox ESDF 9.45 FPS，Mesh 2.63 FPS。
+- Benchmark 方法：
+  - input node → graph → output node；
+  - 自动寻找 dropped frames <5% 下 maximum sustained framerate；
+  - 5 次运行去掉最大/最小后平均。
+- 支撑：Jetson AGX Orin 的 W1+W2+W3(depth)+W4 已有物理多相机整图定量证据。
+- 限制：
+  - 软件固定为 release-3.2，不代表当前 latest；
+  - 不是六摄像头；
+  - W3 是 stereo depth，不是 YOLO detection；
+  - 性能表未给 total power / DDR / CPU/GPU utilization。
+
+### E36 — Axelera Metis 官方 ARM Host 验证
+- 类型：SPEC + REF
+- 来源：Axelera AI 官方
+- URL：https://axelera.ai/systems/arm-host
+- URL：https://github.com/axelera-ai-hub/voyager-sdk/blob/latest/RELEASE_NOTES.md
+- 已确认：
+  - 官方 validated ARM hosts 包含 Firefly ITX-3588J、Orange Pi 5 Plus、NanoPC-T6（RK3588）、Raspberry Pi 5、Jetson Orin Nano/NX；
+  - Voyager SDK v1.8 runtime 支持 Arm64 与 Yocto embedded target；
+  - `axzoo benchmark` 可输出 latency distribution、device-vs-host split、throughput、host CPU、peak memory。
+- 支撑：Metis 的低功耗 ARM Host 路线从工程推断升级为官方验证。
+- 限制：Host compatibility 不等于这些 Host 上都有与 i9 同条件的性能数据。
+
+### E37 — NanoPC-T6(RK3588)+Metis 厂商团队 Benchmark
+- 类型：VENDOR_BENCH
+- 来源：Axelera Team 官方 Community，2025-12-17
+- URL：https://community.axelera.ai/the-axelera-forum-52/nanopc-t6-now-working-with-metis-setup-guide-available-1178
+- 已确认/厂商团队发布：
+  - Voyager SDK 1.5.2；
+  - YOLOv8n ~450 FPS (host)，61ms latency (OpenCL)；
+  - YOLOv8s ~360 FPS (host)，77ms latency (OpenCL)；
+  - MobileNetV2 ~3100 FPS (host)，ResNet50 ~1600 FPS (host)；
+  - LPRNet 6084 FPS raw / 611 FPS end-to-end；
+  - RK3588 default device tree 需扩大 PCIe non-prefetchable memory window。
+- 支撑：Metis 在 RK3588 低功耗 Host 上已有厂商团队性能量级数据。
+- 限制：
+  - exact Metis SKU、input、precision、system power 不完整；
+  - “host FPS / OpenCL latency”口径不得自行转换；
+  - 不与 i9 benchmark 或 Jetson graph 直接数值排序。
+
+### E38 — Hailo + Raspberry Pi 5 / Multisource
+- 类型：REF + SPEC
+- 来源：Raspberry Pi 官方 + Hailo 官方 GitHub
+- URL：https://www.raspberrypi.com/documentation/accessories/ai-hat-plus.html
+- URL：https://www.raspberrypi.com/documentation/computers/ai.html
+- URL：https://github.com/hailo-ai/hailo-apps/tree/main/hailo_apps/python/pipeline_apps/multisource
+- 已确认：
+  - Raspberry Pi 5 官方支持 Hailo-8L/8/10H AI HAT；
+  - AI HAT+ 2 = Hailo-10H 40 TOPS INT4 + 8GB onboard memory；
+  - camera framework 可将视觉 AI workload offload 到 Hailo；
+  - Hailo multisource 支持 USB/RTSP/file，多流并行 decode/scale 后进入 accelerator；
+  - Hailo 文档对 Raspberry Pi 建议 up to 3 sources optimal、15 FPS、默认 640×640；
+  - benchmark/intensive workload 官方建议散热，避免 thermal slowdown。
+- 支撑：Hailo 的低功耗 ARM Host + 多流视觉路径有官方系统 Reference。
+- 限制：
+  - “3 sources / 15 FPS”是配置指导，不是标准化性能 benchmark；
+  - 未给统一 model/FPS/system-power 数据。
+
 ## 11. 关键结论
 
 1. **有完整自主系统案例的平台，不代表每个 workload 都在同一处理器上执行。** Skydio X10、Journey 6M 等只能证明系统级组合成立，必须保留任务分区未知这一限制。
 2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 有视觉案例/benchmark；M50 现已有 xh2 YOLO 模型级 benchmark 与官方多线程多-stream runtime reference，BX50 有系统级多路视频路线；但 LQ50 板级 + host 的多 Camera/PCIe/总功耗仍缺公开实测。
-3. **公开 benchmark 必须记录 host。** Metis 官方 YOLO benchmark 使用 i9-13900K；若换成 RK3588/ARM host，端到端性能必须重新测试。
-4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** Skydio X10 可作为六物理相机系统案例锚点；IQ-9075 的 16-stream partner benchmark 可作为视频+AI并发锚点，但其输入是文件流而非 16 路物理 camera。RK3588 虽有三核 NPU 官方调度 API，也不能把单模型 FPS 按核心数线性放大。
+3. **公开 benchmark 必须记录 host。** Metis 已官方验证 RK3588/RPi5/Orin 等 ARM Host，并有 NanoPC-T6 厂商团队数据，但与 i9 页面测试条件并不一致；Host 仍是独立变量，不能消掉。
+4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** Nova Carter 已提供物理多 Camera + VSLAM + DNN Depth + Mapping 的整图 benchmark，这是比单模型更强的参考；但它仍不是六摄像头+YOLO。本项目必须重新冻结 sensor/model/deadline 后复测。

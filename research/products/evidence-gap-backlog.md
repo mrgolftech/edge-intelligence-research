@@ -49,15 +49,18 @@
 ### G03 — Jetson Orin: 多 workload 并发
 当前：
 - 单节点和系统案例证据丰富；
-- 缺少与六摄像头 Case 完全同构的并发数据。
+- Nova Carter / Isaac ROS release-3.2 已给出物理多相机 Live Graph：4×1200p VSLAM 30.1 FPS，3×1200p Perceptor 中 VO 30 FPS / ESDF 9.45 FPS；
+- 这已经证明 W1+W2+W3(depth)+W4 的整图系统路径；
+- **仍缺** 与本项目六摄像头 + YOLO detection + VIO/SLAM 完全同构的并发、功耗和热数据。
 
 实验目标：
-- W1 only
-- W1+W3
+- 6-camera W1 only
+- W1+YOLO W3
 - W1+W2+W3
+- W1+W2+W3+W6
 - 30/60/120 min thermal steady state
 
-重点不是再证明“Orin能跑AI”，而是找系统边界。
+重点从“Orin能不能跑多任务”转为“在本项目 workload 下边界在哪里”。
 
 ## P1：新一代候选平台
 
@@ -101,26 +104,38 @@
 ## P2：Host + Accelerator 路线
 
 ### G06 — Metis on low-power ARM Host
-当前官方 YOLO benchmark host 为 Intel Core i9-13900K。
+当前：
+- i9-13900K 官方 YOLO benchmark 已有；
+- Axelera 官方 ARM Host 页面已验证 Firefly ITX-3588J / Orange Pi 5 Plus / NanoPC-T6（RK3588）、RPi5、Jetson Orin Nano/NX；
+- Axelera Team 已发布 NanoPC-T6 + Metis / SDK1.5.2 的 YOLOv8n/v8s 性能量级；
+- RK3588 Host 需要关注 PCIe non-prefetchable memory window / device-tree 配置。
 
-需要：
-- ARM64 host
-- same model/input
-- PCIe Gen3 x4
-- end-to-end FPS
-- host CPU usage
-- system power
+剩余需要：
+- exact Metis SKU
+- same model/input/precision
+- PCIe Gen3 x4 effective traffic
+- end-to-end FPS / P95/P99
+- host CPU/DDR usage
+- accelerator-only + total system power
+- multi-camera decode/preprocess
 
-这是判断其是否适合无人装备的关键数据。
+ARM Host “能运行”已确认，下一步是测系统代价。
 
 ### G07 — Hailo on robotics Host
-需要把 Bluewhite/Astrial 等案例进一步拆成：
+当前：
+- Raspberry Pi 5 + Hailo-8L/8/10H 已有官方产品与 camera-stack integration；
+- Hailo Apps multisource 支持 USB/RTSP/file 多源并行 pipeline；
+- 官方对 RPi 给出 up to 3 sources optimal、15 FPS、640×640 的应用指导；
+- 这些属于 REF，不是标准化性能 Benchmark。
+
+仍需：
 - exact Hailo SKU
-- host
-- model
-- input
-- latency/FPS
+- same model/input/precision
+- live camera count
+- E2E latency/FPS
+- host CPU/DDR
 - system power
+- 与 SLAM/VIO 同时运行的资源冲突
 
 ### G08 — Accelerator 与 Host 数据搬运
 Metis/Hailo/LQ50统一测试：
