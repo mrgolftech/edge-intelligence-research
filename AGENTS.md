@@ -89,7 +89,24 @@ D_reaction = speed × T_reaction
 
 必须区分 **update rate、单模块 compute latency、Frame Age、closed-loop response**。
 
-### 5.2 Multi-Camera Perception Topology 规则
+### 5.2 Camera Routing Set 规则
+
+多 Camera 系统先定义：
+
+```text
+C = physical capture cameras
+V = VIO/SLAM camera subset
+P = PER_VIEW perception subset
+F = FUSED_MULTI_VIEW camera subset
+D = depth/stereo subset
+R = recording subset
+```
+
+这些集合可以重叠。禁止把 `N_capture` 自动等同 `N_detection/N_vio/N_depth/N_record`。
+
+对 fan-out 的 source-frame MB/s 估算若采用“一次完整 frame read / consumer”，必须标记为 **analysis equivalent**，不得写成实测 DDR/PCIe bandwidth。
+
+### 5.3 Multi-Camera Perception Topology 规则
 
 多 Camera W3 必须先区分 `PER_VIEW / FUSED_MULTI_VIEW / MIXED`。
 
@@ -99,7 +116,7 @@ D_reaction = speed × T_reaction
 
 禁止把“6 Camera 输入”自动解释为“每个周期 6 次独立 inference”。
 
-### 5.3 Service Demand 规则
+### 5.4 Service Demand 规则
 
 对 C2 等多 workload 并发系统，优先按 compute engine 分别建立：
 
@@ -357,6 +374,7 @@ scripts/
 - **PX4/EGO/FASTER 证据锚定的避障闭环时延预算与计算脚本**；
 - **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**；
 - **C2 Visual Autonomy 可量化资源包络：pixel/image-plane/buffer、W3 service demand、W2/W4/W6 独立预算、Frame Age→reaction distance**；
+- **六摄 Camera→Workload Routing + PER_VIEW/FUSED topology envelope：显式区分 model-call rate、input-view rate 与 image fan-out**；
 - **六摄像头 Requirement → Gate Traceability：R01–R24 需求变量绑定 Gate、证据状态、阻塞项与关闭方法**；
 - **Candidate Architecture Resource Map：四条候选路线的 workload placement、memory domain、data path、shared resource 与 bottleneck hypothesis**；
 - **V01–V12 Validation Matrix：从 Requirement Freeze、W1/W3 到 full C2、FCU闭环、DDR/PCIe、热稳态与降级验证**；

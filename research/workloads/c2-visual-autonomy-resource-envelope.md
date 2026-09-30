@@ -1,6 +1,6 @@
 # C2 Visual Autonomy：可量化资源包络与 Gate 输入模型
 
-- 状态：v0.2
+- 状态：v0.3
 - 日期：2026-09-30
 - 对象：C2 Visual Autonomy
 - 对应 workload：W1 + W2 + W3 + W4 + W6 + W9（可选 W5）
@@ -155,21 +155,42 @@ BW_DDR = f(copy_count, zero_copy, model, map, codec)
 
 ---
 
-## 4. W3：先计算 invocation rate，再绑定 Benchmark
+## 4. W3：先冻结 topology，再计算 invocation / input-view rate
+
+### PER_VIEW
 
 ```text
-InferenceRate_total =
-Σ(N_detection_i × DetectionHz_i)
+ModelCallRate =
+Σ(N_view_i × PerViewHz_i)
 ```
 
-例如：
+### FUSED_MULTI_VIEW
 
 ```text
-4 cameras × 15 Hz = 60 inference/s
-6 cameras × 20 Hz = 120 inference/s
+ModelCallRate =
+Σ(FusedUpdateHz_i)
+
+InputViewRate =
+Σ(N_views_per_call_i × FusedUpdateHz_i)
 ```
 
-以上只是算式示例，不代表项目需求。
+### MIXED
+
+按 branch 分别计算后，再映射到 compute engine / memory / queue。
+
+例如同样六路、20Hz：
+
+```text
+PER_VIEW 6×20:
+120 model calls/s
+120 input views/s
+
+FUSED 6 views/call @20Hz:
+20 model calls/s
+120 input views/s
+```
+
+所以 Camera 数不能机械转换成 inference/s。
 
 ### 4.1 Service Demand
 
@@ -489,3 +510,16 @@ Requirement Variable
 重点形成一张 **C2 Requirement-to-Gate Traceability Matrix**。
 
 这张矩阵会把“还缺什么需求”与“为什么无法判平台”一一对应，作为后续方案收敛和最终报告第 4–7 章的骨架。
+
+
+---
+
+## 11. 六摄像头 topology-specific envelope
+
+六摄像头 Case 已增加：
+
+- `cases/six-camera-uav/phase-2-camera-workload-routing.md`
+- `research/workloads/six-camera-perception-topology-envelope.md`
+- `data/calculations/six-camera-perception-topology-envelope.csv`
+
+后续 C2 W3 预算不再使用单一“六路检测”描述，而至少区分 PER_VIEW 与 FUSED_MULTI_VIEW。

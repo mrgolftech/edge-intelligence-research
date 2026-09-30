@@ -213,3 +213,35 @@ PX4 当前 Collision Prevention 公开资料可作为事实锚点：`CP_DELAY` �
 - `../../data/calculations/six-camera-architecture-gates.csv`：机器可读 Gate 数据。
 
 当前四条路线均保留为候选/待验证，不做平台排名。
+
+
+---
+
+## Phase 2 Camera → Workload Routing
+
+新增：
+
+- `phase-2-camera-workload-routing.md`
+- `../../research/workloads/six-camera-perception-topology-envelope.md`
+- `../../data/calculations/six-camera-camera-workload-routing.csv`
+- `../../data/calculations/six-camera-perception-topology-envelope.csv`
+- `../../scripts/calc_six_camera_perception_topology_envelope.py`
+
+核心变化：
+
+```text
+N_capture = 6
+≠
+N_vio
+≠
+N_depth
+≠
+N_perception
+```
+
+W3 继续区分：
+- PER_VIEW；
+- FUSED_MULTI_VIEW；
+- MIXED。
+
+后续平台分析至少保留 P20/P30 与 F20/F30 两类 topology envelope，不能用“六路检测”一个条目覆盖。

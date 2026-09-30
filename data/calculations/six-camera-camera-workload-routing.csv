@@ -1,0 +1,9 @@
+route_id,workload,input_set,project_cardinality,benchmark_cardinality,rate_basis,project_status,evidence_basis,consumer_or_output,notes
+RT-W1,W1 Capture,"C={C0..C5}",6,6,"R04 actual FPS; benchmark 20/30Hz",CONFIRMED_COUNT_RATE_PENDING,"project six-camera fact + observed downstream mode","shared image buffers","six-stream mode/FPS still unconfirmed"
+RT-W2,W2 VIO/SLAM,"V subset C",R10,"2 views first","20Hz reference baseline",PENDING,"EuRoC/TUM stereo; Nova multicamera VSLAM","pose/state","camera IDs and mono/stereo topology not frozen"
+RT-W3-P,W3 PER_VIEW,"P subset C",R07,"2/4/6 views","10/20/30Hz test grid",PENDING,"per-view detector deployment pattern + public YOLO benchmarks","detections/tracks","model calls scale with view count"
+RT-W3-F,W3 FUSED_MULTI_VIEW,"F subset C",R07,"6 views/call analysis profile","20/30Hz analysis",PENDING,"BEVFormer multi-camera fused-perception architecture","unified perception/BEV representation","one model call consumes multiple views; not equivalent to per-view YOLO"
+RT-W4-D,W4 Depth,"D subset C",R11,"1 valid stereo pair first","20/30Hz analysis",PENDING,"Hawk/Nova stereo depth references","depth/point cloud","requires valid physical baseline/calibration"
+RT-W4-M,W4 Local Map,"depth/state outputs","R12","no direct camera cardinality","map update TBD",PENDING,"Nvblox/local mapping references","local occupancy/ESDF/world state","do not count Camera again if consuming derived depth/state"
+RT-W6,W6 Planning,"map/state","R13","deadline-driven","project deadline TBD",PENDING,"EGO/PX4 planning and closed-loop evidence","trajectory/setpoint","no direct Camera stream"
+RT-W9,W9 Control,"planner/setpoint","R22","external FCU baseline","RT control loop",PARTIAL,"project architecture + PX4 reference","actuator/vehicle response","Linux AI compute does not replace hard RT control baseline"
