@@ -507,3 +507,49 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 4. 六摄 Case 单独作为方法验证；
 5. 工程建议必须标明 FACT / VENDOR / INFER / GAP；
 6. 若报告写作发现证据缺口，只按具体结论回补资料，不重新开启泛产品搜索。
+
+
+## 20. 安全可信无人智算扩展
+
+最终报告和后续平台研究新增一条横向主线：
+
+```text
+Mission + Threat Model
+→ AI/RT Workload + Trust/Security Requirement
+→ Compute Resource + Security Resource
+→ Compute Architecture + Trust Architecture
+→ Platform + Crypto/Root-of-Trust
+→ Verification / Lifecycle / Fleet Policy
+```
+
+安全可信能力不是 W10，也不是新的自主等级。后续所有面向无人装备的产品/平台评价，除原有七类 Architecture Gate 外，还应按证据检查：
+
+- SG-A Root of Trust
+- SG-B Boot Integrity
+- SG-C Key & Identity
+- SG-D Runtime Isolation
+- SG-E Remote Attestation
+- SG-F AI Artifact Trust
+- SG-G Communication / Access Control
+- SG-H Physical Capture
+- SG-I Lifecycle / Secure Update / Recovery
+- SG-J Domestic Crypto
+
+状态继续使用 Confirmed / Candidate / GAP / Constraint，不得加权成总分。
+
+特别禁止：
+- 因为 SoC 支持 TrustZone 就推断产品支持完整 TEE 方案；
+- 因为有 TEE 就推断 NPU/GPU 模型处于 confidential execution；
+- 因为有 TPM/SE 就推断整机已实现 remote attestation；
+- 跨 SKU 继承同厂商安全能力；
+- 把 Secure Boot 等同 Measured Boot / Remote Attestation；
+- 把 MAVLink Signing 当成 payload encryption；
+- 把 ROS2/DDS Security 当成 OS-level sandbox/MAC；
+- 把“AI 模型文件已加密”写成“模型运行态已保护”。
+
+当前基线：
+- `research/architecture/secure-trusted-edge-intelligence-platform.md`
+- `references/webpages/secure-edge-intelligence-evidence-2026.md`
+- `data/product-specs/security-trust-capability-matrix-2026.csv`
+
+后续报告应把“安全可信”作为无人装备产品差异化方向之一，从需求、架构、产品和六摄 Case 全链路展开，而不是只在结论中附带描述。
