@@ -1,4 +1,4 @@
-# 六摄像头 UAV：候选架构 Gate Matrix v0.2
+# 六摄像头 UAV：候选架构 Gate Matrix v0.3
 
 - 日期：2026-09-30
 - 基础 workload：C2 Visual Autonomy
@@ -314,3 +314,23 @@ Gate Matrix 的 Requirement-missing / Unverified 不再作为孤立状态维护�
 - 只有 Requirement 与对应证据均满足时，才能提升为 `Confirmed-fit`。
 
 这样避免把“需求不知道”和“平台能力没验证”混成同一种不确定性。
+
+
+---
+
+## 12. Candidate Architecture Resource Map / Validation
+
+Gate Matrix 已与以下资产联动：
+
+- `cases/six-camera-uav/phase-2-candidate-architecture-resource-map.md`
+- `data/calculations/six-camera-candidate-architecture-resource-map.csv`
+- `cases/six-camera-uav/phase-2-validation-plan.md`
+- `data/benchmarks/six-camera-validation-matrix.csv`
+
+新增规则：
+
+1. Integrated SoC/SoM 重点验证 shared memory / compute concurrency；
+2. Host+Accelerator 除 Host 资源外，必须额外拆 `T_H2D / T_accel_queue / T_D2H`；
+3. W1/W2/W4/W6 仍由 Host 承担时，不允许因为 W3 accelerator TOPS 高而提升整个 Gate D/E；
+4. Gate E 的最终关闭必须来自与 Project Nominal 同构的 P95/P99 / Frame Age 数据；
+5. Gate F 的关闭必须使用 full-system steady-state power/thermal，而不是 accelerator-only TDP。

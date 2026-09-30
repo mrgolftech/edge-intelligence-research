@@ -183,3 +183,24 @@ Metis/Hailo/LQ50统一测试：
 - CASE 不自动升级为 BENCH
 
 同一平台可以同时拥有多种证据，结论只使用与对应 workload 直接相关的那部分。
+
+
+---
+
+## 与 Phase 2 Validation Matrix 的映射
+
+本 Backlog 继续保留“证据搜索/负证据”职责；六摄像头 Case 的统一验证入口已转到：
+
+- `cases/six-camera-uav/phase-2-validation-plan.md`
+- `data/benchmarks/six-camera-validation-matrix.csv`
+
+对应关系：
+
+- G01 RK3588 W1+W2+W3 → V04/V05/V06/V08/V09
+- G02/G08 M50/LQ50 Host+Accelerator → V04/V08/V09
+- G03 Jetson concurrency → V05/V06/V09
+- G04/G09 IQ-9075 physical Camera/VIO → V02/V05/V06
+- G06 Metis → V04/V08/V09
+- G07 Hailo → V04/V08/V09
+
+这样避免“证据继续搜索”和“未来工程实测”两套任务重复维护。

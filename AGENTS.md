@@ -348,6 +348,8 @@ scripts/
 - **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**；
 - **C2 Visual Autonomy 可量化资源包络：pixel/image-plane/buffer、W3 service demand、W2/W4/W6 独立预算、Frame Age→reaction distance**；
 - **六摄像头 Requirement → Gate Traceability：R01–R24 需求变量绑定 Gate、证据状态、阻塞项与关闭方法**；
+- **Candidate Architecture Resource Map：四条候选路线的 workload placement、memory domain、data path、shared resource 与 bottleneck hypothesis**；
+- **V01–V12 Validation Matrix：从 Requirement Freeze、W1/W3 到 full C2、FCU闭环、DDR/PCIe、热稳态与降级验证**；
 - **闭环时延→平台阶段映射与 pipeline latency evidence 表**；
 - **Isaac ROS 5.0 / Jetson Orin 固定版本时延锚点**；
 - **时延 GAP 审计：记录“方法存在但数字缺失”、指标边界与下一步复现路径**。
