@@ -1,6 +1,6 @@
 # Workload → Compute Resource → Platform 适配矩阵
 
-- 状态：v0.3
+- 状态：v0.4
 - 日期：2026-09-30
 - 目标：建立基于公开案例、论文、官方 benchmark 和硬件事实的端侧平台适配分析
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -37,19 +37,19 @@
 
 ## 3. 证据驱动平台矩阵
 
-标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E26。
+标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E32。
 
 | 平台 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 当前工程边界 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | NVIDIA Jetson Orin | SPEC+BENCH E01/E02 | CASE+PAPER E03/E04/E05 | CASE+BENCH E02/E03 | CASE+PAPER E03/E05 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | 公开证据最完整的是多传感器机器人计算；安全飞控/硬实时控制不应默认放在 Orin 上 |
 | Qualcomm Flight RB5 | REF E07 | REF E07 | REF E07 | REF(深度/SLAM) E07 | REF E07 | REF E07 | GAP | REF E07 | GAP | 典型 UAV companion/reference platform；飞控 W9 边界需单独设计 |
-| Qualcomm IQ-9075 | SPEC E08 | INFER | SPEC E08 | INFER | INFER | INFER | SPEC+BENCH(vendor) E08 | INFER | SPEC+PARTNER_BENCH E08/E25 | 已有 EtherCAT 实时控制量化证据；但 W2/W4/W6 仍缺统一机器人 benchmark，W9 也不能直接等价为飞控认证 |
+| Qualcomm IQ-9075 | SPEC+REF+PARTNER_BENCH E08/E27/E29/E30 | REF E28/E31 | REF+PARTNER_BENCH E29/E30/E31 | REF(2D mapping/depth) E28/E31 | REF E31 | REF(Nav2) E28/E31 | SPEC+BENCH(vendor) E08 | INFER | SPEC+PARTNER_BENCH E08/E25 | W1/W3 已有多流可复现实测，W2/W4/W5/W6 有官方 ROS2 reference；仍缺物理多 camera 同步、VIO/SLAM latency 与完整自主栈全并发 benchmark |
 | Rockchip RK3588 | SPEC E20 | PAPER(system) E24 | SPEC+BENCH E20/E23 | PAPER(system) E24 | INFER | INFER | GAP | GAP | INFER | W3 已有官方单核 NPU 定量 benchmark，W2/W4 有同行评审系统证据；多摄像头+SLAM+DNN 并发仍是 GAP |
 | Horizon Journey 6M | CASE(system) E10 | CASE(system) E10 | CASE+SPEC E09/E10 | CASE+SPEC E09/E10 | CASE(system) E10 | CASE+SPEC E09/E10 | GAP | GAP | SPEC(系统安全架构) E09 | 量产车端证据强，但与 UAV 的 SWaP、接口、软件生态不可直接等同 |
 | Black Sesame A2000 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC+DEMO E11/E21 | GAP | SPEC E11/E21 | 2026 官方已披露 200–1000 TOPS 家族、VLA/world-model 与 Qwen VLM 演示；仍缺公开可复现 benchmark |
 | Axelera Metis M.2 | HOST依赖 E14 | GAP | CASE+BENCH E12/E13 | GAP | CASE E13 | GAP | SPEC(实验性 LLM) E14 | GAP | GAP | 强项证据集中在视觉推理；W1 解码/预处理及 W2/W6/W9 依赖 host |
 | Hailo-8 / Hailo-10H | HOST依赖 | CASE(系统) E15/E16 | CASE+BENCH(vendor) E15/E16/E22 | GAP | INFER | GAP | SPEC+BENCH(vendor) E17/E22 | GAP | GAP | Hailo-8 有真实视觉案例，Hailo-10H 有视觉/GenAI 厂商量级数据；都不能替代主控/飞控 |
-| Houmo M50 / LQ50 M.2 | HOST依赖 E18/E26 | GAP | SPEC(system via BX50) E26；LQ50 direct BENCH GAP | GAP | GAP | GAP | SPEC+vendor benchmark E18/E19 | GAP | GAP | M50 已有 RK3588+M50 的 32 路视频系统路线，但没有公开模型/FPS/latency，不能把 BX50 结论直接外推到 LQ50 |
+| Houmo M50 / LQ50 M.2 | HOST依赖 E18/E26 | GAP | SPEC(system)+VENDOR_BENCH(M50) E26/E32 | GAP | GAP | GAP | SPEC+VENDOR_BENCH E18/E19 | GAP | GAP | M50 已有官方 xh2 YOLO 模型级 latency/accuracy/throughput；但 LQ50 板卡 + host 的 PCIe/video 多流端到端性能仍是 GAP |
 
 ## 4. 按体系结构得到的工程判断
 
@@ -130,9 +130,9 @@ Skydio X10 是当前最有价值的锚点之一：
 ## 6. 当前证据缺口
 
 1. **RK3588**：W3 单模型官方 benchmark 与 W2/W4 论文系统证据已补齐；仍需要 ORB-SLAM3/VIO + multi-camera + YOLO 并发数据。
-2. **Houmo LQ50**：已确认 M50+RK3588 的 BX50 支持多路视频分析路线；仍需要 LQ50/W3 的模型、输入、FPS、host 和端到端 pipeline 数据。
+2. **Houmo LQ50**：M50 已有官方 YOLOv5s/YOLO11m xh2 模型级 benchmark；仍需要 LQ50 板卡 + host 的 PCIe/video/multi-stream 端到端数据与板级功耗。
 3. **Black Sesame A2000**：需要公开 benchmark 或量产 workload 的可量化数据。
-4. **Qualcomm IQ-9075**：W9 EtherCAT 实时控制已有 partner benchmark；仍需要 ROS2/VIO/SLAM/多路视觉实测。
+4. **Qualcomm IQ-9075**：W1/W3 已有 1/4/9/16 stream partner benchmark，W2/W6 有官方 SLAM/Nav2 reference，W9 有 EtherCAT partner benchmark；主要缺物理多 camera 同步、VIO/SLAM 定量性能和完整自主栈并发。
 5. **Hailo/Metis**：需要换用低功耗 ARM host 后重复端到端性能与功耗测试。
 6. **所有平台**：需要在 30/60/120 min 稳态下测温度、降频和性能漂移。
 

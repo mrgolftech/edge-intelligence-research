@@ -56,3 +56,37 @@ BX50 是完整整机：
 所以当前矩阵应写：
 - M50 W3：SPEC(system via BX50)
 - LQ50 direct W3 benchmark：GAP
+
+
+## 4. 官方 Model Zoo 已补齐 M50 模型级 W3 证据
+
+官方仓库：https://github.com/houmo-ai/postmo-modelzoo
+
+### 4.1 xh2 与 M50
+- MiniCPM-o 示例写明“部署到后摩 M50 芯片设备上”；
+- 同文明确“本例只适用于 xh2”；
+- Qwen3 Pipeline 把 `ndevice` 描述为 M50 device nums；
+- 运行日志使用 `Xh2HalBackend`。
+
+因此 xh2 是 M50 的官方执行 target 之一。
+
+### 4.2 YOLOv5s
+- input 640×640；COCO2017 val 5000；ncore=1；
+- xh2 mAP50-95 0.355790；
+- inference avg 6.668ms；
+- E2E avg 9.715ms，P99 9.834ms；
+- 4-thread throughput 410.350 qps。
+
+### 4.3 YOLO11m
+- input 640×640；COCO2017 val 5000；ncore=1；
+- xh2 mAP50-95 0.489875；
+- inference avg 17.069ms；
+- E2E avg 19.917ms，P99 20.207ms；
+- 4-thread throughput 199.962 qps。
+
+## 5. 更新后的证据边界
+可以写：**M50 对 W3 已有官方模型级定量 benchmark。**
+
+仍不能写：**LQ50 在六路 camera / RK3588 host 下能达到上述吞吐。**
+
+YOLO 页面没有给出具体 LQ50 SKU、core frequency、板卡/系统功耗、Camera/codec/PCIe/host preprocessing。throughput 也是多线程压力测试，不是六路视频端到端 FPS。

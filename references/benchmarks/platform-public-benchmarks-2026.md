@@ -1,6 +1,6 @@
 # 公开平台 Benchmark 结构化基线（2026-09）
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 数据表：`data/benchmarks/public-platform-benchmarks.csv`
 - 目的：把“厂商/论文说跑得快”拆成可比较的测试条件，防止只摘 FPS/TOPS 数字。
@@ -52,6 +52,27 @@ https://nvidia-isaac-ros.github.io/performance/index.html
 来源：
 https://axelera.ai/metis-aipu-benchmarks
 
+### Qualcomm IQ-9075 / Innodisk iQ-Studio 多流
+
+条件：EXMP-Q911/IQ-9075、YOLOv10n INT8 640×640、1080p30 H.264、TFLite/QNN 2.32、8 cores、180s warm-up + 300s measurement。
+
+Average E2E FPS/channel：1路 29.46；4路 29.47；9路 28.41；16路 15.90。CPU load 同时从 24.2% 上升到 99.8%。
+
+这说明多流系统瓶颈可能在 decode/pre-post/orchestration/CPU，而不是 NPU peak TOPS。输入是文件流，因此不能当作 16 路物理 Camera benchmark。
+
+来源：https://github.com/InnoIPA/iQ-Studio/tree/main/benchmarks/iqs-streampipe
+
+### Houmo M50-compatible xh2 / Model Zoo
+
+后摩官方 Model Zoo：
+- YOLOv5s 640×640：Inference 6.668ms；E2E 9.715ms；P99 9.834ms；4-thread 410.350 qps。
+- YOLO11m 640×640：Inference 17.069ms；E2E 19.917ms；P99 20.207ms；4-thread 199.962 qps。
+- 两者均提供 COCO2017 精度和 ncore=1 配置。
+
+官方 M50-only 示例与 Xh2HalBackend 建立 M50↔xh2 的兼容证据，因此可作为 M50 芯片级 VENDOR_BENCH；不能解释为 LQ50+host 的多流视频系统性能。
+
+来源：https://github.com/houmo-ai/postmo-modelzoo
+
 ## 3. 当前只能作为厂商量级锚点的数据
 
 ### Qualcomm IQ-9075
@@ -82,11 +103,9 @@ https://www.qualcomm.com/internet-of-things/products/iq9-series/iq-9075
 来源：
 https://hailo.ai/company-overview/newsroom/news/hailo-announces-general-availability-of-hailo-10h-edge-ai-accelerator-with-generative-ai-capabilities/
 
-### Houmo M50 / LQ50
+### Houmo M50 / LQ50 的 LLM 数据
 
-后摩官方公开 7B/8B 模型 25+ tokens/s，并给出 M50/LQ50 的功耗和内存规格。
-
-但模型名、量化、上下文、Host、TTFT 未完整披露，因此只标 `VENDOR_BENCH`。
+7B/8B 25+ tokens/s 因模型名、量化、上下文、Host、TTFT 条件不完整，仍只作为 LLM 的 `VENDOR_BENCH` 量级锚点。注意这与上面的 YOLO Model Zoo 视觉数据是两类证据。
 
 来源：
 https://www.houmoai.com/1/35/NewsDetails.html

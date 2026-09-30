@@ -84,6 +84,10 @@
 - [nuScenes / Waymo](references/benchmarks/nuscenes-waymo.md)
 - [Nav2 MPPI](references/benchmarks/nav2-mppi.md)
 - [OpenVLA / LIBERO](references/benchmarks/vla-libero.md)
+- [公开平台 Benchmark 结构化基线](references/benchmarks/platform-public-benchmarks-2026.md)
+- [IQ-9075 ROS2 自主栈与多流视觉证据](references/benchmarks/iq9075-multistream-robotics-2026.md)
+- [RK3588 官方 DNN Benchmark 与 SLAM 论文证据](references/benchmarks/rk3588-public-evidence-2026.md)
+- [IQ-9075 实时控制证据](references/benchmarks/iq9075-realtime-control-2026.md)
 
 ### 平台与适配
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
@@ -126,14 +130,16 @@
 4. 大模型进入机器人端侧已有真实产品和研究依据，但不能作为所有无人装备的默认需求。
 5. 端侧与边缘/云协同将长期并存。
 6. 公开 workload 已可用 EuRoC/TUM-VI、MLPerf、nuScenes/Waymo、Nav2 MPPI、OpenVLA/LIBERO 建立第一版跨平台基准。
-7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**\n8. 平台公开 Benchmark 已开始结构化，当前可以确认：Jetson Isaac ROS、Rockchip RKNN Model Zoo 与 Metis 视觉数据具有量化条件；IQ-9075 的实时 EtherCAT 控制已有 partner benchmark；Hailo-10H、LQ50 的 GenAI 数据仍需保留厂商量级锚点属性。
+7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**
+8. IQ-9075 已从“规格候选”进入“官方 ROS2 Reference + 可复现多流 Partner Benchmark”阶段：YOLOv10n INT8 的 1/4/9/16 路 1080p30 视频实测已公开，但这些主要是文件流，不能冒充物理多 Camera 同步测试。
+9. M50 已有官方 xh2 YOLOv5s/YOLO11m 模型级 latency/accuracy/throughput 数据；LQ50 板卡 + Host 的多流视频、PCIe 和总功耗仍需单独证据。
 
 ## 下一阶段
 
 第一版“场景 → workload → 平台证据”链路已经贯通。下一阶段从“是否有证据”进一步进入“多少资源、在什么条件下能跑”：
 
 1. 继续补全结构化平台事实表中的“未确认”字段，不跨 SKU 猜参数；
-2. 按 evidence-gap-backlog 优先补 RK3588、IQ-9075、LQ50 的 W2/W3 数据；
+2. 按 evidence-gap-backlog 优先补 RK3588 的 W1+W2+W3 并发、IQ-9075 的物理多 Camera/VIO、LQ50 的板级多流端到端数据；
 3. 将 Jetson/Metis/Hailo/LQ50/IQ-9075 的公开 benchmark 进一步补齐 precision、software、power 条件；
 4. 冻结六摄像头 Case 的 W1 输入参数；
 5. 分别设计“一体 SoC”和“Host + AI Accelerator”两条实验路径；

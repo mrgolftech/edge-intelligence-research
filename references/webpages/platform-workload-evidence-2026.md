@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.3
+- 状态：v0.4
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -117,8 +117,8 @@
   - Ubuntu / Qualcomm Linux
   - 官方产品页给出 Llama 2 7B up to 22 tokens/s，并称平台可运行 13B 参数模型
   - 目标应用明确包含 Robotics、AMR、Drones
-- 支撑：W1/W3/W7/W9 的结构性能力；W2/W4/W6 需要后续系统 benchmark。
-- 限制：截至本轮尚未收集到与 Jetson Isaac ROS 同口径的公开机器人 benchmark。
+- 支撑：W1/W3/W7/W9 的结构性能力；后续 E27–E31 已补官方 ROS2 Reference 与多流 partner benchmark。
+- 限制：W2/W6 已有官方功能路径，但 VIO/SLAM/navigation 的定量 latency/CPU/power 仍缺公开统一 benchmark。
 
 ## 4. 地平线 Journey 6
 
@@ -382,9 +382,91 @@
   - 这是 BX50 整机资料，不能直接等价为任意 LQ50 + 任意 host 的 W3 性能；
   - 因此 LQ50 直接 W3 benchmark 仍然是 GAP。
 
+### E27 — QRB ROS Camera on IQ-9075
+- 类型：REF
+- 来源：Qualcomm 官方 GitHub
+- URL：https://github.com/qualcomm-qrb-ros/qrb_ros_camera
+- 已确认：
+  - Supported target 明确为 Dragonwing IQ-9075 EVK；
+  - 支持 CSI 与 GMSL camera、concurrent multiple streams；
+  - 支持 ROS 2 composable node；
+  - qrb_ros_transport 通过 Linux DMA-BUF 提供 zero-copy image transport；
+  - 默认示例为 1920×1080@30，并演示第二路 1080×720@60 stream。
+- 支撑：IQ-9075 W1 的 ROS2 camera pipeline、zero-copy 与多 stream 官方实现路径。
+- 限制：示例参数不是平台最大 camera throughput benchmark，也没有证明 6/16 个物理 camera 的同步采集稳定性。
+
+### E28 — QRB ROS AMR Service on IQ-9075
+- 类型：REF
+- 来源：Qualcomm 官方 GitHub
+- URL：https://github.com/qualcomm-qrb-ros/qrb_ros_amr_service
+- 已确认：
+  - Supported target 明确为 Dragonwing IQ-9075 EVK；
+  - P2P navigation、path following、mapping service；
+  - 2D LiDAR SLAM 提供 mapping/localization；
+  - Nav2 提供 P2P navigation；
+  - ROS Jazzy / Qualcomm Ubuntu 路径公开。
+- 支撑：IQ-9075 W2 与 W6 从“架构推断”升级为官方机器人 Reference。
+- 限制：没有公开 ATE/RPE、SLAM Hz、planner latency、CPU/NPU/DDR、功耗；2D LiDAR SLAM/Nav2 不等价于 UAV VIO。
+
+### E29 — Innodisk iQS-Streampipe / IQ-9075 多流视觉
+- 类型：PARTNER_BENCH
+- 来源：Innodisk 官方 GitHub iQ-Studio
+- URL：https://github.com/InnoIPA/iQ-Studio/tree/main/benchmarks/iqs-streampipe
+- 测试条件：
+  - EXMP-Q911（IQ-9075）；8 CPU cores，Normal power plan；
+  - NPU + TFLite / QNN 2.32；
+  - YOLOv10n INT8，2.3M parameters，640×640；
+  - 1080p@30 H.264；1 / 4 / 9 / 16 channels；
+  - warm-up 180s，measurement 300s。
+- 公开结果（average E2E FPS/channel）：
+  - 1 stream：29.46 FPS，CPU 24.2%；
+  - 4 streams：29.47 FPS，CPU 51.0%；
+  - 9 streams：28.41 FPS，CPU 93.6%；
+  - 16 streams：15.90 FPS，CPU 99.8%。
+- 支撑：IQ-9075 的 W1(video pipeline)+W3(DNN) 多流并发有公开可复现实测。
+- 工程观察：9→16 streams 时 CPU 接近饱和，per-channel FPS 显著下降，说明系统瓶颈不能只看 NPU TOPS。
+- 限制：是 H.264 文件流，不是 16 路物理 CSI/GMSL camera；不测试多 camera 时间同步，也不包含 SLAM/Nav2 并发。
+
+### E30 — Innodisk InnoPPE 10-stream / IQ-9075 EVK
+- 类型：PARTNER_BENCH
+- 来源：Innodisk 官方 GitHub iQ-Studio
+- URL：https://github.com/InnoIPA/iQ-Studio/blob/main/benchmarks/innoppe/README.md
+- 测试条件：IQ-9075 EVK，YOLOv10n INT8/QNN，10×1080p@30，1 路 UVC MJPEG + 9 路本地 H.264。
+- 结果图：25.0 FPS（UVC channel）、CPU 99.6%、memory 14.6%、accelerator 67.2%。
+- 支撑：比纯文件流更接近真实 sensor+video+AI pipeline。
+- 限制：只有 1 路 live camera；FPS 只测 UVC channel；硬件表中的 20W 不能直接当成严格墙上功耗实测。
+
+### E31 — QRB ROS Samples / IQ-9075
+- 类型：REF
+- 来源：Qualcomm 官方 GitHub
+- URL：https://github.com/qualcomm-qrb-ros/qrb_ros_samples
+- 已确认：IQ-9075 EVK 可运行 YOLOv8 detection、segmentation、pose、depth estimation；Robotics samples 包含 2D LiDAR SLAM、Navigation2、Follow Me（detect/track/follow）。
+- 支撑：W2/W3/W4/W5/W6 的官方软件 Reference。
+- 限制：sample 支持矩阵不是性能 benchmark，simulation sample 不能当作物理机器人实测。
+
+### E32 — 后摩官方 Model Zoo：M50/xh2 与 YOLO
+- 类型：VENDOR_BENCH
+- 来源：后摩智能官方 GitHub `houmo-ai/postmo-modelzoo`
+- URL：https://github.com/houmo-ai/postmo-modelzoo
+- 已确认 M50 ↔ xh2 证据链：
+  - MiniCPM-o 示例明确写“部署到后摩 M50 芯片设备上”，并同时写“本例只适用于 xh2”；
+  - Qwen3 Pipeline 参数明确写 `ndevice` 为 M50 device 数，运行日志使用 `Xh2HalBackend`。
+- YOLOv5s xh2：
+  - input 640×640，COCO2017 val 5000，build ncore=1；
+  - xh2 mAP50-95 0.355790；
+  - inference avg 6.668 ms；E2E avg 9.715 ms，P99 9.834 ms；
+  - 4-thread throughput 410.350 qps。
+- YOLO11m xh2：
+  - input 640×640，COCO2017 val 5000，ncore=1；
+  - xh2 mAP50-95 0.489875；
+  - inference avg 17.069 ms；E2E avg 19.917 ms，P99 20.207 ms；
+  - 4-thread throughput 199.962 qps。
+- 支撑：M50 W3 已有官方模型级定量证据。
+- 限制：YOLO README 没有写具体 LQ50 SKU、M50 core frequency、板级功耗；throughput 是多线程测试；不能外推 LQ50+host 的 PCIe/video/multi-camera 端到端性能。
+
 ## 11. 关键结论
 
 1. **有完整自主系统案例的平台，不代表每个 workload 都在同一处理器上执行。** Skydio X10、Journey 6M 等只能证明系统级组合成立，必须保留任务分区未知这一限制。
-2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 已有直接视觉证据；M50/BX50 已有系统级多路视频路线，但 LQ50 直接视觉 benchmark 仍缺失。W1/W2/W6/W9 不能因为“TOPS 足够”就自动判定适配。
+2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 有视觉案例/benchmark；M50 现已有官方 xh2 模型级 YOLO benchmark，BX50 有系统级多路视频路线；但 LQ50 板级 + host 的多流端到端性能仍缺公开实测。
 3. **公开 benchmark 必须记录 host。** Metis 官方 YOLO benchmark 使用 i9-13900K；若换成 RK3588/ARM host，端到端性能必须重新测试。
-4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** 可把 Skydio X10 的“6 路导航相机 + Jetson Orin”作为案例锚点，但仍需按本项目分辨率、帧率、同步、算法、功耗重新建模。
+4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** Skydio X10 可作为六物理相机系统案例锚点；IQ-9075 的 16-stream partner benchmark 可作为视频+AI并发锚点，但其输入是文件流而非 16 路物理 camera。两类证据不能混用。

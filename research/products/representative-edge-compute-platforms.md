@@ -1,7 +1,7 @@
 # 代表性端侧计算平台事实底座
 
 - 日期：2026-09-30
-- 状态：v0.2
+- 状态：v0.3
 - 目的：记录代表性平台的官方事实、产品形态和证据边界，不用于简单 TOPS 排名
 - 适配分析：[`workload-platform-fit-matrix.md`](workload-platform-fit-matrix.md)
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -28,16 +28,21 @@
 - 4× Cortex-A76 + 4× Cortex-A55
 - Mali-G610 MC4
 - triple-core NPU，6 TOPS
-- dual ISP，多路 MIPI CSI
+- dual ISP、多路 MIPI CSI
 - 8K H.265/H.264 video codec
 - PCIe、SATA、双 GbE 等
 
+**公开 Benchmark / 论文**
+- Rockchip 官方 RKNN Model Zoo：RK3588 single-core NPU、INT8、640×640 下，YOLOv8n 73.5 FPS、YOLO11n 60.0 FPS；默认只统计 model inference。
+- Sensors 2026 的 ROIV-SLAM 在 RK3588 上运行 RGB-D 30Hz + IMU 200Hz + 2D LiDAR 12Hz + wheel odometry 的融合 SLAM。
+
 **证据边界**
-官方资料证明 W1/W3 的硬件基础，但本轮没有找到条件完整、可与 Orin/Metis 等同口径比较的自主导航系统 benchmark。W2/W4/W6 暂不从 6 TOPS 推断。
+单模型 DNN 与 SLAM 系统均已有证据，但“多路 camera + SLAM + DNN + planning”并发仍无高可信公开 benchmark。
 
 来源：
 - https://www.rock-chips.com/a/en/products/RK35_Series/2022/0926/1660.html
-- https://www.rock-chips.com/a/en/download/index.html
+- https://github.com/airockchip/rknn_model_zoo
+- https://doi.org/10.3390/s26134053
 
 ### Qualcomm Flight RB5 / Robotics RB5
 
@@ -61,27 +66,40 @@
 
 ### Qualcomm Dragonwing IQ-9075
 
-**形态**：新一代工业/机器人异构 SoC / EVK
+**形态**：工业/机器人异构 SoC / EVK
 
 **官方已确认**
-- 100 dense TOPS variant
-- 最高 36GB LPDDR5，inline ECC
+- 50 / 100 dense INT8 TOPS
+- 最高 36GB LPDDR5 inline ECC
 - 最多 16 concurrent cameras
-- 8-core Kryo CPU + GPU + NPU
+- 8-core Kryo + Adreno GPU + dual Hexagon Tensor Processor
 - 4-core real-time MCU subsystem
-- Ubuntu / Qualcomm Linux
-- 官方面向 Robotics、AMR、Drones
-- 官方称可运行 13B 模型；EVK 页面有约 12 tokens/s 示例
+- 2.5GbE TSN、CAN-FD、PCIe
+
+**官方机器人软件证据**
+- QRB ROS Camera：CSI/GMSL、多 stream、DMA-BUF zero-copy、ROS Jazzy。
+- QRB ROS AMR Service：2D LiDAR SLAM、mapping/localization、Nav2 P2P、path following。
+- QRB ROS Samples：YOLOv8 detection、segmentation、pose、depth、Follow Me、SLAM、Navigation2。
+
+**公开 Partner Benchmark**
+Innodisk iQ-Studio 使用 YOLOv10n INT8、640×640、1080p30 H.264：
+- 1 stream：29.46 E2E FPS/channel
+- 4 streams：29.47
+- 9 streams：28.41
+- 16 streams：15.90
+- CPU 从 24.2% 上升到 99.8%
 
 **工程意义**
-与 RB5 相比，IQ-9075 更值得作为 2026 后续机器人/无人平台候选跟踪；它同时覆盖多摄像头、AI、较大内存和实时子系统。
+多流边缘感知的真实边界会受到 CPU/解码/调度影响，不能由 100 TOPS 单独解释。
 
 **证据边界**
-尚缺公开的 VIO/SLAM/ROS2 端到端机器人 benchmark。
+16-stream benchmark 主要是 H.264 文件流，不是 16 路物理 CSI/GMSL camera；六摄像头同步、VIO/visual SLAM 与完整自主栈并发仍未验证。
 
 来源：
 - https://www.qualcomm.com/internet-of-things/products/iq9-series/iq-9075
-- https://www.qualcomm.com/developer/hardware/qualcomm-iq-9075-evaluation-kit-evk
+- https://github.com/qualcomm-qrb-ros/qrb_ros_camera
+- https://github.com/qualcomm-qrb-ros/qrb_ros_amr_service
+- https://github.com/InnoIPA/iQ-Studio/tree/main/benchmarks/iqs-streampipe
 
 ### NVIDIA Jetson Orin
 
@@ -215,35 +233,26 @@ Hailo-8 的现实证据集中在 W3；Hailo-10H 将路线扩展到 W7。两者�
 
 **形态**：M.2 独立 AI Accelerator
 
-**官方已确认**
-后摩开发者文档当前明确列出 LQ50-24GB：
-- 1× M50，2 个 IPU 核
-- 最高 160 TOPS
-- 最高 100 TFLOPS @ bFP16
-- 24GB LPDDR5/LPDDR5X
-- 153.6 GB/s
-- PCIe Gen4 ×4
-- 22×80 mm
-- 典型功耗 13W
+**官方硬件事实**
+LQ50-24GB：1×M50 / 2 IPU cores、160 TOPS INT8、100 TFLOPS@bFP16、24GB LPDDR5/LPDDR5X、153.6GB/s、PCIe Gen4×4、典型13W。
 
-M50 产品页还给出：
-- INT8/INT16/FP16/FP32/bFP16/bFP24
-- 最大 48GB LPDDR5
-- 典型芯片功耗 10W
+**官方 Model Zoo 证据**
+后摩官方 `postmo-modelzoo` 中，MiniCPM-o 明确“部署到 M50”且“只适用于 xh2”；Qwen3 Pipeline 也以 M50 为 device 并使用 Xh2HalBackend。由此 xh2 至少明确包含 M50 target。
 
-**厂商展示**
-2025 WAIC 材料给出 7B/8B 模型 25+ tokens/s，并把 M50/LQ50 定位于端边大模型、机器人等场景。
+M50-compatible xh2 参考：
+- YOLOv5s 640×640：Inference 6.668ms；E2E 9.715ms / P99 9.834ms；4-thread 410.350 qps；mAP50-95 0.355790。
+- YOLO11m 640×640：Inference 17.069ms；E2E 19.917ms / P99 20.207ms；4-thread 199.962 qps；mAP50-95 0.489875。
 
-**工程意义**
-LQ50 已不能再只依据 Firefly 二手材料描述；官方资料已足够确认其硬件规格和 W7 路线。
+**系统级证据**
+BX50 = RK3588 host + M50，厂商称支持 32 路视频分析。
 
 **证据边界**
-当前尚缺公开、条件完整的 W3 视觉 benchmark，以及无人机 W2/W3/W6 端到端案例。160 TOPS 不构成这些 workload 的适配证明。
+YOLO 页未写具体 LQ50 SKU、M50 core frequency、板级功耗；BX50 也未公开 32 路视频的分辨率/FPS/模型。因此 M50 W3 可升级为 VENDOR_BENCH，但 LQ50+host 多流视频/PCIe/total power 仍需证据。
 
 来源：
 - https://developer.houmoai.com/hmdoc/m50/hardware-manuals/latest/product-manuals/lq50-m.2/LQ50_M.2_guidelines/intro/index.html
-- https://houmoai.com/60/ProductType.html
-- https://www.houmoai.com/1/40/NewsDetails.html
+- https://github.com/houmo-ai/postmo-modelzoo
+- https://www.houmoai.com/58/10/Product.html
 
 ## 3. 当前产业观察
 
@@ -254,7 +263,7 @@ LQ50 已不能再只依据 Firefly 二手材料描述；官方资料已足够确
 Skydio X10、Flight RB5、Journey 6M 等都指向 W1–W6 的组合，而不是单一 DNN inference。
 
 ### 事实 3：独立加速器公开证据目前主要集中在 W3/W7
-Metis/Hailo 已有真实视觉案例；LQ50 目前官方证据更偏大模型。W2/W6/W9 要看 host 和完整系统。
+Metis/Hailo 已有真实视觉案例；M50 也已有官方 YOLO 模型级 benchmark，但独立 accelerator 的 W1/W2/W6/W9 仍取决于 host 和完整系统。
 
 ### 事实 4：大模型端侧化已经是产品事实，但不是所有无人平台的必需项
 Jetson、IQ-9075、Hailo-10H、M50/A2000 都在公开支持 LLM/VLM/Multi-Modal/E2E，但是否投入 UAV 仍需按任务价值和 SWaP-C 判断。

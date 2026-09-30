@@ -28,9 +28,9 @@
 ### G02 — LQ50: W3 视觉推理与 Host 开销
 当前：
 - W7 大模型证据明确；
-- 后摩官方 BX50 已证明 RK3588 host + M50 可作为多路视频分析系统，厂商称支持 32 路视频分析；
-- 但没有公开 codec / 分辨率 / FPS / 模型 / precision / latency；
-- 因此 **LQ50 direct W3 BENCH 仍为 GAP**。
+- BX50 已证明 RK3588 host + M50 可作为多路视频分析系统；
+- 后摩官方 Model Zoo 已给出 M50-compatible xh2 的 YOLOv5s/YOLO11m accuracy、inference latency、end-to-end latency 与 throughput；
+- **剩余 GAP 已从“有没有视觉性能”收敛为“LQ50 板卡 + host 的多流端到端性能”。**
 
 可接受证据：
 - 同一 YOLO 模型的 input/precision/FPS；
@@ -59,9 +59,11 @@
 ### G04 — Qualcomm IQ-9075: Robotics workload benchmark
 当前：
 - 100 dense TOPS、16 camera、36GB ECC、real-time subsystem、LLM 数据已有官方证据；
-- acontis 已在 IQ-9075 上完成 EtherCAT partner benchmark：1 ms target cycle、约100 μs round-trip、<8 μs jitter（7 slaves / 512-byte process data）；
-- W9 的实时通信基础已从 SPEC 升级为 PARTNER_BENCH；
-- 仍缺 ROS2/VIO/SLAM/多路 detection 的公开统一测试。
+- Qualcomm 官方 QRB ROS Camera：CSI/GMSL、多 stream、DMA-BUF zero-copy；
+- Qualcomm 官方 AMR Service：2D LiDAR SLAM、mapping/localization、Nav2；
+- Innodisk iQ-Studio：YOLOv10n INT8 + 1080p30 H.264 的 1/4/9/16 stream 可复现 benchmark，9 streams 28.41 E2E FPS/channel，16 streams 15.90；
+- acontis EtherCAT：1 ms target cycle、约100 μs round-trip、<8 μs jitter；
+- 当前缺口转为 **物理多 camera 同步、VIO/视觉 SLAM 定量数据、SLAM+AI+planning 全并发性能**。
 
 目标：
 - 搜索 Qualcomm/partner robotics reference implementation；
@@ -76,6 +78,20 @@
 规则：
 - 量产/展会演示证明产品路线存在；
 - 不从“1000 TOPS”反推 UAV/robot workload 适配。
+
+### G09 — IQ-9075 physical multi-camera / VIO
+
+已有多 stream benchmark 主要由 H.264 文件流构成，InnoPPE 只有 1 路 live UVC camera。
+
+仍需公开证据：
+- 6+ physical CSI/GMSL cameras；
+- hardware timestamp / synchronization；
+- drop/jitter；
+- camera → zero-copy → QNN inference；
+- VIO/visual SLAM 与多 camera detection 并发；
+- DDR/CPU/NPU/power。
+
+在这些证据出现前，16-stream video benchmark 不得写成“16-camera autonomous perception benchmark”。
 
 ## P2：Host + Accelerator 路线
 
