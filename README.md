@@ -139,6 +139,7 @@
 - [Workload composition resource envelope](data/calculations/workload-composition-resource-envelope.csv)
 - [C2 Visual Autonomy reference/sensitivity envelope](data/calculations/c2-visual-autonomy-reference-envelope.csv)
 - [Six-camera Requirement → Gate traceability](data/calculations/six-camera-requirement-gate-traceability.csv)
+- [Six-camera Requirement Profile v0.2](data/calculations/six-camera-requirement-profile-v02.csv)
 - [Six-camera candidate architecture resource map](data/calculations/six-camera-candidate-architecture-resource-map.csv)
 - [Six-camera validation matrix](data/benchmarks/six-camera-validation-matrix.csv)
 
@@ -148,6 +149,7 @@
 - [六摄像头参考工作负载档位](research/workloads/six-camera-reference-load-profiles.md)
 - [六摄像头避障闭环时延预算](research/workloads/avoidance-latency-budget.md)
 - [六摄像头 Phase 2 Requirement Card](cases/six-camera-uav/phase-2-requirement-card.md)
+- [六摄像头 Project Nominal Requirement Profile v0.2](cases/six-camera-uav/phase-2-requirement-profile-v0.2.md)
 - [六摄像头需求状态表](data/calculations/six-camera-requirement-status.csv)
 - [六摄像头 Phase 2 Workload Composition](cases/six-camera-uav/phase-2-workload-compositions.md)
 - [六摄像头 Architecture Gate Matrix](cases/six-camera-uav/phase-2-architecture-gate-matrix.md)

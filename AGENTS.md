@@ -89,7 +89,17 @@ D_reaction = speed × T_reaction
 
 必须区分 **update rate、单模块 compute latency、Frame Age、closed-loop response**。
 
-### 5.2 Service Demand 规则
+### 5.2 Multi-Camera Perception Topology 规则
+
+多 Camera W3 必须先区分 `PER_VIEW / FUSED_MULTI_VIEW / MIXED`。
+
+- PER_VIEW：可使用 `N_view × Hz` 计算 model calls/s；
+- FUSED_MULTI_VIEW：一次 model call 可消费多个 views，必须分别记录 `views/call`、`model calls/s` 与 `input view rate`；
+- MIXED：按 branch 分别预算。
+
+禁止把“6 Camera 输入”自动解释为“每个周期 6 次独立 inference”。
+
+### 5.3 Service Demand 规则
 
 对 C2 等多 workload 并发系统，优先按 compute engine 分别建立：
 
