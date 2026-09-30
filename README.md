@@ -221,12 +221,24 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 
 Phase 3 已进入正式报告编制阶段：
 
-- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.2（当前版）](reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md)
+- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.3（当前版，证据强化）](reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md)
+- [v0.2 可读性增强版](reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md)
 - [v0.1 初稿](reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md)
-- [最终调研报告 Evidence Map](reports/drafts/final-report-evidence-map.md)
+- [最终调研报告 Evidence Map v0.3](reports/drafts/final-report-evidence-map-v0.3.md)
+- [最终调研报告参考文献索引 v0.3](references/final-report-reference-index-v0.3.md)
 
 报告主线：
 
 > **应用场景 → 功能栈 → Workload → 系统资源 → 计算架构 → 产品形态 → 安全可信 → 六摄 Case → 产品研发建议**
 
 后续正文迭代优先围绕现有证据收敛，不再泛化扩充产品 SKU；发现会影响架构判断的证据缺口时再定向补证。
+
+
+### v0.3 新增报告资产
+
+- [方法论与证据链 Mermaid 图源](assets/diagrams/final-report-methodology-evidence-chain-v03.mmd)
+- [W1–W9 Workload Mermaid 图源](assets/diagrams/final-report-workload-map-v03.mmd)
+- [安全可信三平面 Mermaid 图源](assets/diagrams/secure-trusted-three-plane-v03.mmd)
+- [六摄需求—资源—架构 Mermaid 图源](assets/diagrams/six-camera-requirement-resource-architecture-v03.mmd)
+- [产品形态对比数据](data/product-specs/final-report-product-form-comparison-v03.csv)
+- [六摄需求→Workload→资源→架构数据](data/calculations/six-camera-requirement-workload-resource-architecture-v03.csv)
