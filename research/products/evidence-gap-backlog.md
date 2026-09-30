@@ -11,7 +11,8 @@
 - W1 有官方规格基础；
 - W3 已有 Rockchip 官方 RKNN Model Zoo 单核 NPU benchmark：YOLOv8n INT8 640×640 为 73.5 FPS，YOLO11n 为 60.0 FPS；
 - W2/W4 已有 2026 Sensors 论文在 RK3588 上运行多传感器 SLAM 的系统证据；
-- **仍缺** 可复现的 VIO/SLAM + 多路视频 + detection 并发数据。
+- Rockchip 官方 API 已确认 `rknn_dup_context` 与三核 `core_mask` 调度路径，官方 `rknn_benchmark` 可指定 1/2/3 核；
+- **仍缺** 可复现的 VIO/SLAM + 多路视频 + detection 并发数据，且不得按核心数线性外推吞吐。
 
 可接受证据：
 1. 官方/论文/开源项目，明确板卡、算法、输入、FPS、软件版本；
@@ -24,6 +25,9 @@
 - CPU/GPU/NPU/DDR
 - dropped frame / latency
 - board power / temperature
+- RKNN Toolkit / librknnrt / RKNPU driver / model-zoo revision / core_mask
+
+注意：Rockchip 官方 Model Zoo 明确说明旧 RKNPU SDK 可能导致性能或结果错误，因此 SDK/driver version 必须冻结。社区多线程 issue 仅作为风险信号，不作为当前缺陷结论。
 
 ### G02 — LQ50: W3 视觉推理与 Host 开销
 当前：

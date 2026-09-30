@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.4
+- 状态：v0.5
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -464,9 +464,27 @@
 - 支撑：M50 W3 已有官方模型级定量证据。
 - 限制：YOLO README 没有写具体 LQ50 SKU、M50 core frequency、板级功耗；throughput 是多线程测试；不能外推 LQ50+host 的 PCIe/video/multi-camera 端到端性能。
 
+### E33 — RK3588 RKNN 多核/并发实现路径
+- 类型：REF
+- 来源：Rockchip 官方 RKNPU2 / RKNN-Toolkit2
+- URL：https://github.com/airockchip/rknpu2/blob/master/runtime/RK3588/Linux/librknn_api/include/rknn_api.h
+- URL：https://github.com/airockchip/rknn-toolkit2/blob/master/rknpu2/examples/rknn_benchmark/README.md
+- 已确认：
+  - RKNN API 提供 `rknn_dup_context`；
+  - `rknn_set_core_mask` 可选择 RK3588 的 NPU core 0/1/2 或组合；
+  - 官方 `rknn_benchmark` 接受 core_mask，可测试 1/2/3 核组合。
+- 支撑：RK3588 W3 多 context / 多 NPU core 调度具有官方软件路径。
+- 限制：
+  - API/工具支持不是多路视频或多模型并发性能 Benchmark；
+  - 不允许按 3 个 NPU core 线性推算 3× throughput；
+  - 官方 Model Zoo 明确要求匹配最新 RKNPU SDK，否则 performance/results 可能错误，版本必须冻结。
+- 风险信号：
+  - 社区 issue 存在旧 SDK 下多线程隔离与多核 scaling 的问题报告；
+  - 这些不是官方确认的当前缺陷，只用于定义后续验证项。
+
 ## 11. 关键结论
 
 1. **有完整自主系统案例的平台，不代表每个 workload 都在同一处理器上执行。** Skydio X10、Journey 6M 等只能证明系统级组合成立，必须保留任务分区未知这一限制。
 2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 有视觉案例/benchmark；M50 现已有官方 xh2 模型级 YOLO benchmark，BX50 有系统级多路视频路线；但 LQ50 板级 + host 的多流端到端性能仍缺公开实测。
 3. **公开 benchmark 必须记录 host。** Metis 官方 YOLO benchmark 使用 i9-13900K；若换成 RK3588/ARM host，端到端性能必须重新测试。
-4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** Skydio X10 可作为六物理相机系统案例锚点；IQ-9075 的 16-stream partner benchmark 可作为视频+AI并发锚点，但其输入是文件流而非 16 路物理 camera。两类证据不能混用。
+4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** Skydio X10 可作为六物理相机系统案例锚点；IQ-9075 的 16-stream partner benchmark 可作为视频+AI并发锚点，但其输入是文件流而非 16 路物理 camera。RK3588 虽有三核 NPU 官方调度 API，也不能把单模型 FPS 按核心数线性放大。
