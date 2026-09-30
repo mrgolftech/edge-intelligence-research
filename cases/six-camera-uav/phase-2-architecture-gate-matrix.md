@@ -1,4 +1,4 @@
-# 六摄像头 UAV：候选架构 Gate Matrix v0.1
+# 六摄像头 UAV：候选架构 Gate Matrix v0.2
 
 - 日期：2026-09-30
 - 基础 workload：C2 Visual Autonomy
@@ -295,3 +295,22 @@ Host 软件 + Accelerator SDK 双栈：
    - concurrent P99。
 
 因此下一步应优先冻结 Requirement，而不是增加候选芯片。
+
+
+---
+
+## 11. Gate 状态的 Requirement 追踪
+
+Gate Matrix 的 Requirement-missing / Unverified 不再作为孤立状态维护。
+
+配套：
+- `cases/six-camera-uav/phase-2-requirement-to-gate-traceability.md`
+- `data/calculations/six-camera-requirement-gate-traceability.csv`
+
+规则：
+- Requirement 未冻结：优先标 `Requirement-missing`；
+- Requirement 已冻结但公开/实测证据不足：标 `Unverified`；
+- 已确认结构性限制：标 `Constraint`；
+- 只有 Requirement 与对应证据均满足时，才能提升为 `Confirmed-fit`。
+
+这样避免把“需求不知道”和“平台能力没验证”混成同一种不确定性。

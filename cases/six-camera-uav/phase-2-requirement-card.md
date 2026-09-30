@@ -1,6 +1,6 @@
 # 六摄像头无人平台：Phase 2 Requirement Card
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 性质：需求基线 + 待冻结项
 - 原则：已确认事实与工程场景变量分开
@@ -277,3 +277,21 @@ Requirement Card
 ```
 
 只有走完这一链，才进入产品配置建议。
+
+
+---
+
+## 9. Requirement → Gate Traceability
+
+本 Requirement Card 已建立配套追踪矩阵：
+
+- `cases/six-camera-uav/phase-2-requirement-to-gate-traceability.md`
+- `data/calculations/six-camera-requirement-gate-traceability.csv`
+
+当前 R04/R07-R11/R15-R20 等变量仍会阻塞架构收敛。
+
+后续每冻结一个 Requirement，应同步更新：
+1. Requirement Card；
+2. traceability CSV；
+3. Architecture Gate Matrix；
+4. 对应 Benchmark/validation gap。
