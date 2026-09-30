@@ -99,6 +99,8 @@
 - [Host + Accelerator 架构分析](research/architecture/host-accelerator-edge-architecture.md)
 - [闭环时延 → 平台架构映射](research/architecture/closed-loop-latency-platform-mapping.md)
 - [时延复现实验入口](research/architecture/latency-reproduction-methods.md)
+- [需求驱动架构选型方法](research/architecture/requirements-to-architecture-selection.md)
+- [系统资源预算模型](research/workloads/system-resource-budget-model.md)
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
@@ -137,6 +139,8 @@
 - [六摄像头工作负载模型](research/workloads/six-camera-workload-model.md)
 - [六摄像头参考工作负载档位](research/workloads/six-camera-reference-load-profiles.md)
 - [六摄像头避障闭环时延预算](research/workloads/avoidance-latency-budget.md)
+- [六摄像头 Phase 2 Requirement Card](cases/six-camera-uav/phase-2-requirement-card.md)
+- [六摄像头需求状态表](data/calculations/six-camera-requirement-status.csv)
 
 ## 当前研究判断
 
@@ -156,16 +160,22 @@
 14. 已建立闭环时延→平台阶段映射，并开始用固定软件版本记录 graph/component latency；Isaac ROS 5.0 已成为当前 Orin 时延基线，历史 Nova 3.2 继续用于物理多相机整图证据。
 15. 已建立“负证据/GAP 审计”：IQ-9075 已确认官方 benchmark 方法但尚无公开 Camera/NN 数字；Metis double buffering 明确以帧延迟换吞吐；Hailo hw-only latency 不等于 live Frame Age；M50 bandwidth_perf 内部带宽不等于 PCIe；RK3588 定义冲突的社区 E2E 数字不进入主基线。
 
-## 下一阶段
+## 当前阶段：Phase 2 — Requirement & Architecture Synthesis
 
-第一版“场景 → workload → 平台证据”链路已经贯通。下一阶段从“是否有证据”进一步进入“多少资源、在什么条件下能跑”：
+Phase 1 的“场景 → workload → 平台证据”链路已经贯通，公开资料继续深挖的边际收益开始下降。项目现在转入：
 
-1. 继续补全结构化平台事实表中的“未确认”字段，不跨 SKU 猜参数；
-2. 按 evidence-gap-backlog 优先补六摄像头同构 W1+W2+W3 并发、IQ-9075 物理多 Camera/VIO，以及 RK3588+Metis/Hailo/LQ50 的同 Host 端到端数据；
-3. 将 Jetson/Metis/Hailo/LQ50/IQ-9075 的公开 benchmark 进一步补齐 precision、software、power 条件；
-4. 冻结六摄像头 Case 的实际 FPS/六路 mode 一致性，以及 flight speed / usable detection range / vehicle response；
-5. 分别设计“一体 SoC”和“Host + AI Accelerator”两条实验路径；
-6. 运行 scripts/validate_evidence_tables.py 保持证据字段完整；
-7. 逐步用可复现实测替换矩阵中的 INFER/GAP。
+> **需求参数卡 → workload composition → 资源预算 → closed-loop deadline → architecture gates → candidate platform → validation plan**
+
+公开资料检索不停止，但由“主线任务”改为“阻塞项按需补证”。
+
+当前优先：
+
+1. 用 Requirement Vector 描述典型无人装备任务，不再先选芯片；
+2. 建立 W1–W9 到 CPU/GPU/NPU/DDR/I/O/latency/SWaP 的资源预算方法；
+3. 用 Sensor I/O、实时隔离、Memory/DDR、Compute、Concurrency、SWaP、Software 七个 Gate 做架构筛查；
+4. 六摄像头 Case 优先冻结 N_capture / N_detection / N_vio / N_depth / N_record、FPS、速度、探测距离和功耗边界；
+5. 分别形成 Integrated SoC/SoM 与 Host+Accelerator 两条候选架构，不做 TOPS 排名；
+6. 只有当某个 GAP 阻塞具体架构判断时，继续联网补证；
+7. 后续有硬件条件时，再按统一 Benchmark 用实测替换 INFER/GAP。
 
 研究和提交规范以 [AGENTS.md](AGENTS.md) 为准。

@@ -46,6 +46,10 @@ TABLES = {
         "fps_scenario", "six_stream_pixel_rate_mp_s",
         "six_stream_memory_payload_MBps", "status", "notes"
     ],
+    ROOT / "data/calculations/six-camera-requirement-status.csv": [
+        "requirement_id", "category", "parameter", "current_value",
+        "unit", "status", "evidence_basis", "decision_impact", "next_action"
+    ],
 }
 
 ALLOWED_EVIDENCE_TOKENS = {

@@ -1,0 +1,21 @@
+requirement_id,category,parameter,current_value,unit,status,evidence_basis,decision_impact,next_action
+REQ001,W1,N_capture,6,cameras,CONFIRMED,project case fact,Camera I/O / ISP / DDR,fixed
+REQ002,W1,downstream_width,1072,pixels,OBSERVED,single-stream downstream observation,pixel rate / buffers,confirm all six streams
+REQ003,W1,downstream_height,1280,pixels,OBSERVED,single-stream downstream observation,pixel rate / buffers,confirm all six streams
+REQ004,W1,downstream_format,NV12,format,OBSERVED,single-stream downstream observation,image-plane traffic,confirm path and RAW relation
+REQ005,W1,actual_fps,unconfirmed,fps,GAP,not frozen,pixel rate / latency / DDR,freeze actual sensor/media mode
+REQ006,W1,six_stream_mode_consistency,unconfirmed,boolean,GAP,not frozen,W1 aggregate load,confirm driver/media graph
+REQ007,W1,N_record,unconfirmed,streams,GAP,product requirement,VPU / storage / DDR,freeze recording requirement
+REQ008,W3,N_detection,unconfirmed,streams,GAP,algorithm requirement,inference rate / NPU,define perception coverage
+REQ009,W3,detection_model,unconfirmed,model,GAP,algorithm requirement,latency / accuracy / SDK,choose baseline model
+REQ010,W2,N_vio,unconfirmed,streams,GAP,navigation architecture,CPU/GPU/sync,define VIO topology
+REQ011,W3,N_depth,unconfirmed,streams,GAP,avoidance architecture,GPU/NPU/DDR,define stereo/depth topology
+REQ012,W2,sync_error_budget,unconfirmed,us_or_ms,GAP,algorithm requirement,VIO/depth quality,derive from chosen algorithm
+REQ013,W6,max_flight_speed,unconfirmed,m/s,GAP,mission requirement,closed-loop deadline,freeze mission envelope
+REQ014,W6,usable_detection_range,unconfirmed,m,GAP,sensor/algorithm requirement,closed-loop deadline,freeze obstacle scenario
+REQ015,W9,keepout_distance,unconfirmed,m,GAP,safety requirement,closed-loop deadline,freeze geometry/safety margin
+REQ016,W9,vehicle_response,unconfirmed,ms,GAP,vehicle dynamics,closed-loop deadline,derive from flight-control/airframe evidence or future test
+REQ017,SWaP,max_compute_power,unconfirmed,W,GAP,product requirement,architecture/thermal,freeze power budget
+REQ018,SWaP,max_compute_mass,unconfirmed,g,GAP,product requirement,architecture/mission endurance,freeze mass budget
+REQ019,SWaP,max_compute_volume,unconfirmed,mm3_or_envelope,GAP,product requirement,mechanical architecture,freeze envelope
+REQ020,W7,VLM_required,on_demand_or_no,boolean_or_mode,UNFROZEN,mission-value decision,memory / isolation,only enable if concrete mission value exists

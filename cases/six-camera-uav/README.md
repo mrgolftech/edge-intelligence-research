@@ -188,3 +188,15 @@ PX4 当前 Collision Prevention 公开资料可作为事实锚点：`CP_DELAY` �
 | Stage D | 高级认知 | 待测 | 待测 | 待测 | 待测 | 待测 | 待研究 |
 
 该表将随着真实测试逐步替换“待测/待研究”。
+
+
+## Phase 2 Requirement Card
+
+本 Case 已进入“需求→资源→架构”阶段。
+
+当前需求状态与候选架构见：
+- `phase-2-requirement-card.md`
+- `../../data/calculations/six-camera-requirement-status.csv`
+
+后续不再以“继续搜更多平台”为主线，优先冻结：
+`N_detection / N_vio / N_depth / N_record / FPS / flight speed / detection range / SWaP`。

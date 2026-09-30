@@ -162,6 +162,20 @@ TOPS 只是一个指标。必须同时关注 CPU、GPU、NPU/AI ASIC、精度、
 
 机器可读审计：`data/benchmarks/latency-gap-audit.csv`。
 
+### 7.5 证据搜索停止条件
+
+当满足以下条件时，单个问题应从“继续搜索”转为“记录 GAP 并进入架构分析”：
+- 已查官方产品页/文档；
+- 已查官方 GitHub/SDK；
+- 已查论文或可靠 Partner Benchmark；
+- 只剩社区口径冲突或无法复现的数字；
+- 已确认厂商只公开方法、未公开目标 numeric result。
+
+停止搜索不是把 GAP 当作已解决，而是：
+> 保留变量、记录阻塞影响、给出未来复现路径。
+
+Phase 2 中只有当 GAP 会改变某个 architecture gate 的结论时才重新触发深挖。
+
 当前证据索引：
 - references/webpages/platform-workload-evidence-2026.md
 - research/products/workload-platform-fit-matrix.md
@@ -335,3 +349,33 @@ scripts/
 6. 运行 scripts/validate_evidence_tables.py 检查证据字段；
 7. 分析 E2E/VLM/VLA/World Model 的增量资源需求；
 8. 形成需求驱动的平台选型方法。
+
+
+## 18. Phase 2：需求与架构综合
+
+当前研究已从大规模资料搜集转入 Requirement & Architecture Synthesis。
+
+主线：
+```text
+Requirement Vector
+→ workload composition
+→ resource budget
+→ latency budget
+→ architecture gates
+→ candidate platform
+→ validation plan
+```
+
+Phase 2 必须：
+- 先冻结任务参数，再谈平台；
+- 用 W1–W9 分解资源，不用总 TOPS；
+- 区分 Integrated SoC/SoM、Host+Accelerator、Real-Time Controller+Companion、Edge-Cloud；
+- 用 Sensor I/O、Real-Time、Memory/DDR、Compute、Concurrency、SWaP、Software 七类 Gate；
+- 平台输出 Confirmed-fit / Candidate / Unverified / Constraint / Not-applicable，而不是总分/排行榜；
+- 对六摄像头 Case 维护独立 Requirement Card。
+
+Phase 2 基线：
+- `research/architecture/requirements-to-architecture-selection.md`
+- `research/workloads/system-resource-budget-model.md`
+- `cases/six-camera-uav/phase-2-requirement-card.md`
+- `data/calculations/six-camera-requirement-status.csv`
