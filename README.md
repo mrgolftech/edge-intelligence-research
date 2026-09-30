@@ -107,10 +107,13 @@
 - [C2 Visual Autonomy 可量化资源包络](research/workloads/c2-visual-autonomy-resource-envelope.md)
 - [六摄像头 PER_VIEW vs FUSED perception envelope](research/workloads/six-camera-perception-topology-envelope.md)
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
+- [2026 现成端侧计算产品/解决方案 Landscape](research/products/commercial-product-landscape-2026.md)
+- [无人装备现成产品架构映射](research/products/unmanned-edge-solution-shortlist.md)
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
 - [机器可读适配矩阵](data/product-specs/workload-platform-evidence.csv)
 - [六摄 topology→platform evidence](data/product-specs/six-camera-topology-platform-evidence.csv)
+- [Commercial product/solution landscape 2026](data/product-specs/commercial-product-landscape-2026.csv)
 
 ## 应用—工作负载基线
 
@@ -185,11 +188,11 @@
 17. 六摄像头 Case 已归入 C2 Visual Autonomy，并建立 Nominal/Peak/Fallback 工况与第一版 Architecture Gate Matrix；当前共同最大未决项是多 workload 并发 P95/P99 / Frame Age，而不是 TOPS。
 18. C2 已从“资源结构描述”推进到“可量化资源包络”：W1 用 pixel/image-plane/buffer 建模，W3 用 invocation/service demand 建模，W2/W4/W6 独立预算，并用 PX4 的 sensor+vehicle delay 事实锚点把 Frame Age 映射到闭环反应距离。
 
-## 当前阶段：Phase 2 — Requirement & Architecture Synthesis
+## 当前阶段：Phase 3 — Product Landscape Complete / Final Report Preparation
 
-Phase 1 的“场景 → workload → 平台证据”链路已经贯通，公开资料继续深挖的边际收益开始下降。项目现在转入：
+Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事实底座。产品层已有足够代表性覆盖，项目现在转入最终报告组织：
 
-> **需求参数卡 → workload composition → 资源预算 → closed-loop deadline → architecture gates → candidate platform → validation plan**
+> **事实底稿 → 章节证据映射 → 产品/方案对照 → 六摄 Case → 工程建议 → 最终调研报告**
 
 公开资料检索不停止，但由“主线任务”改为“阻塞项按需补证”。
 

@@ -1,6 +1,6 @@
 # 端侧计算平台产品数据模型
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-29
 - 用途：统一后续芯片、SOM、开发板、加速卡和整机平台的调研口径
 
@@ -36,11 +36,15 @@
 | vendor | 厂商 |
 | product_name | 产品名称 |
 | product_type | 芯片/SOM/开发板/加速卡/整机 |
+| productization_stage | prototype / reference / production / commercial product / ecosystem |
 | base_chip | 核心芯片 |
 | release_date | 发布时间 |
 | lifecycle | 在售/量产/开发中/EOL/未确认 |
 | region | 厂商/供应链区域 |
 | domestic_status | 国产化说明 |
+| architecture_class | integrated / host+accelerator / rugged computer / adaptive compute 等 |
+| host_dependency | 是否需要外部 Host；若需要必须明确 Host 责任 |
+| procurement_status | 在售/询价/in stock/active/未确认，记录获取日期 |
 
 ### 计算
 
@@ -193,3 +197,40 @@
 ## 5. 下一步
 
 后续建立正式 CSV/JSON 数据表时，以本 schema 为字段基线；如调研中发现字段不足，先更新本文件再扩展数据集。
+
+
+---
+
+## 6. 产品化层补充规则（v0.2）
+
+同一芯片至少允许拆成多条产品记录，例如：
+
+```text
+IQ-9075 SoC
+→ IQ-9075 EVK
+→ SECO COM Express IQ9
+→ Innodisk EXMP-Q911
+```
+
+它们不能因为 base chip 相同就合并，因为：
+- Camera connector 不同；
+- form factor 不同；
+- power/thermal 不同；
+- lifecycle 不同；
+- production readiness 不同。
+
+### 6.1 产品冲突字段
+
+当官方/合作伙伴页面冲突：
+- 不自行选择“更合理”的值；
+- 记录 conflict；
+- 优先保留原厂 SKU 数据；
+- 系统厂商页面数据必须绑定具体系统配置。
+
+示例：
+- Firefly AIBOX PRO 页面“LQ50 48GB”与 Houmo current LQ50-24GB official guide 冲突；
+- Hailo-10H 产品网页与 ET brief 的 typical power 口径不同。
+
+### 6.2 产品调研停止条件
+
+不追求收全市场 SKU。当每类主架构都有代表性产品且足以支撑报告/架构判断时，停止横向扩张，转入报告和验证。

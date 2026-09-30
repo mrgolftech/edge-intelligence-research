@@ -317,6 +317,33 @@ scripts/
 
 对于 M.2/PCIe 独立加速器，**Host 是一等平台变量**：必须记录 Host SoC/CPU/GPU/VPU、PCIe、预处理、DDR、总功耗和热状态；不得只记录加速卡 TOPS/FPS。
 
+### 13.1 产品化层规则
+
+产品调研必须区分：
+- Dev Kit / EVK；
+- Production SoM/Core；
+- Carrier/Development Board；
+- M.2/PCIe/MXM Accelerator；
+- Robotics/Industrial Computer；
+- Heterogeneous Edge Box；
+- Edge Server；
+- Solution Ecosystem。
+
+同一 base chip 的不同产品不能合并。
+
+系统厂商与芯片原厂参数冲突时：
+- 记录冲突；
+- 不猜测；
+- 原厂数据用于具体原厂 SKU；
+- 系统厂商数据只能用于其系统配置。
+
+产品 Landscape 已完成第一版：
+- `research/products/commercial-product-landscape-2026.md`
+- `data/product-specs/commercial-product-landscape-2026.csv`
+- `research/products/unmanned-edge-solution-shortlist.md`
+
+当产品覆盖已足以支撑最终报告，不再为了“收全型号”继续扩 SKU。
+
 ## 14. Benchmark
 
 目标：
@@ -380,7 +407,8 @@ scripts/
 - **V01–V12 Validation Matrix：从 Requirement Freeze、W1/W3 到 full C2、FCU闭环、DDR/PCIe、热稳态与降级验证**；
 - **闭环时延→平台阶段映射与 pipeline latency evidence 表**；
 - **Isaac ROS 5.0 / Jetson Orin 固定版本时延锚点**；
-- **时延 GAP 审计：记录“方法存在但数字缺失”、指标边界与下一步复现路径**。
+- **时延 GAP 审计：记录“方法存在但数字缺失”、指标边界与下一步复现路径**；
+- **现成产品/解决方案 Landscape：Dev Kit、SoM/Core、加速卡、工业/机器人整机、Host+Accelerator Box 已覆盖，含国内外代表路线**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；
@@ -466,3 +494,16 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 
 六摄像头当前 Gate Matrix：
 `cases/six-camera-uav/phase-2-architecture-gate-matrix.md`
+
+
+## 19. Phase 3：最终报告准备
+
+产品层代表性调研已达到停止扩张条件。
+
+后续默认主线：
+1. 建立 final report evidence map；
+2. 按“应用 → workload → resource → architecture → product → case”组织报告；
+3. 产品章节不按厂商逐家罗列；
+4. 六摄 Case 单独作为方法验证；
+5. 工程建议必须标明 FACT / VENDOR / INFER / GAP；
+6. 若报告写作发现证据缺口，只按具体结论回补资料，不重新开启泛产品搜索。
