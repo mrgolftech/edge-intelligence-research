@@ -215,3 +215,17 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 7. 后续有硬件条件时，再按统一 Benchmark 用实测替换 INFER/GAP。
 
 研究和提交规范以 [AGENTS.md](AGENTS.md) 为准。
+
+
+## 最终报告
+
+Phase 3 已进入正式报告编制阶段：
+
+- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.1](reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md)
+- [最终调研报告 Evidence Map](reports/drafts/final-report-evidence-map.md)
+
+报告主线：
+
+> **应用场景 → 功能栈 → Workload → 系统资源 → 计算架构 → 产品形态 → 安全可信 → 六摄 Case → 产品研发建议**
+
+后续正文迭代优先围绕现有证据收敛，不再泛化扩充产品 SKU；发现会影响架构判断的证据缺口时再定向补证。
