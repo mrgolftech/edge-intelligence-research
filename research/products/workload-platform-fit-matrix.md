@@ -15,6 +15,7 @@
 - 有条件明确的 benchmark（BENCH）；
 - 有官方 reference design（REF）；
 - 有官方规格/SDK 支持（SPEC）；
+- 有公开演示但条件不足以复现（DEMO）；
 - 只有架构推导时明确标记 INFER；
 - 证据不足标记 GAP。
 

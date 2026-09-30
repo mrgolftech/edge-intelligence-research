@@ -96,6 +96,11 @@ TOPS 只是一个指标。必须同时关注 CPU、GPU、NPU/AI ASIC、精度、
 - 忽略 benchmark 的 host、软件版本、精度、输入和功耗条件；
 - 把独立 M.2/PCIe accelerator 与完整 SoC/SoM 当成同一种系统资源。
 
+### 7.2 Benchmark 横向比较门槛
+只有 model、input、precision、batch/stream mode、host、software version、power condition 等关键条件足够一致时，才允许做定量横向比较。条件不一致时只能并列记录，不得形成快慢排序。
+
+厂商 Benchmark 必须标明来源属性；缺 host/context/quantization 等关键条件时，即使有 FPS 或 tokens/s，也只作为量级锚点。
+
 当前证据索引：
 - references/webpages/platform-workload-evidence-2026.md
 - research/products/workload-platform-fit-matrix.md
@@ -243,7 +248,10 @@ scripts/
 - 代表平台事实底座；
 - **证据驱动 workload → resource → platform 适配矩阵 v0.1**；
 - **平台 workload 证据索引（Jetson/Qualcomm/RK3588/Journey6/A2000/Metis/Hailo/LQ50）**；
-- 六摄像头 workload model；\n- **结构化平台事实表 data/product-specs/platform-facts.csv**；\n- **结构化公开 Benchmark 表 data/benchmarks/public-platform-benchmarks.csv**；\n- **平台证据缺口 Backlog 与自动校验脚本**。
+- 六摄像头 workload model；
+- **结构化平台事实表 data/product-specs/platform-facts.csv**；
+- **结构化公开 Benchmark 表 data/benchmarks/public-platform-benchmarks.csv**；
+- **平台证据缺口 Backlog 与自动校验脚本**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；
