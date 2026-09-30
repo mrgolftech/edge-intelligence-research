@@ -131,6 +131,14 @@ TOPS 只是一个指标。必须同时关注 CPU、GPU、NPU/AI ASIC、精度、
 
 厂商 Benchmark 必须标明来源属性；缺 host/context/quantization 等关键条件时，即使有 FPS 或 tokens/s，也只作为量级锚点。
 
+### 7.3 Benchmark 必须固定版本化 URL
+
+对于会随软件 release 更新的官方性能页：
+- 优先保存 `/v/release-X.Y/` URL；
+- 记录 software version / release date / access date；
+- 禁止把从旧页面摘出的固定数字长期绑定到 `latest` URL；
+- 新 release 与旧 release 的数字不得拼成一次端到端 pipeline。
+
 当前证据索引：
 - references/webpages/platform-workload-evidence-2026.md
 - research/products/workload-platform-fit-matrix.md
@@ -280,7 +288,7 @@ scripts/
 - 公共 benchmark 基线；
 - sensor payload / model memory calculation data；
 - 代表平台事实底座；
-- **证据驱动 workload → resource → platform 适配矩阵 v0.8**；
+- **证据驱动 workload → resource → platform 适配矩阵 v0.9**；
 - **平台 workload 证据索引（Jetson/Qualcomm/RK3588/Journey6/A2000/Metis/Hailo/LQ50）**；
 - 六摄像头 workload model；
 - **结构化平台事实表 data/product-specs/platform-facts.csv**；
@@ -290,7 +298,9 @@ scripts/
 - **Metis/Hailo/M50 的 ARM Host + Accelerator 证据链与架构分析**；
 - **六摄像头公开参考负载档位（EuRoC/TUM-VI/nuScenes/Nova），含可复现计算 CSV/脚本**；
 - **PX4/EGO/FASTER 证据锚定的避障闭环时延预算与计算脚本**；
-- **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**。
+- **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**；
+- **闭环时延→平台阶段映射与 pipeline latency evidence 表**；
+- **Isaac ROS 5.0 / Jetson Orin 固定版本时延锚点**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；

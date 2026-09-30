@@ -1,6 +1,6 @@
 # 六摄像头 UAV：避障闭环时延预算与空间裕量模型
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 目标：把“需要多少 FPS / 多低 latency”转换为由飞行速度、探测距离、控制响应和算法链共同约束的参数化问题
 - 原则：公开系统参数只作为事实锚点；本项目目标值必须由实际任务与飞行器动力学冻结
@@ -171,6 +171,32 @@ D_brake_ideal = v² / (2a)
 因此：
 > `v²/(2a)` 只能用于早期算术筛查，产品决策必须使用实机日志或经过验证的车辆动力学模型。
 
+## 3.3 反解平台最大允许 Pipeline Budget
+
+如果已知任务的：
+- `D_detect` 有效探测距离；
+- `D_keepout`；
+- `D_maneuver` 实测/验证转向或制动距离；
+- `v`；
+- `f_sensor`；
+- `T_vehicle`；
+
+则：
+
+```text
+T_pipeline,max =
+(D_detect - D_keepout - D_maneuver) / v
+- 1/f_sensor
+- T_vehicle
+```
+
+如果 `T_pipeline,max <= 0`，说明在该筛查模型下即使计算平台零延迟也无正预算；这时不能靠增加 TOPS 解决。
+
+脚本 `calc_avoidance_latency_budget.py` 已支持：
+- `--measured-maneuver-distance-m`：优先使用实测/验证的机动距离；
+- `--effective-decel-mps2`：仅用于理想匀减速敏感性筛查；
+- 自动输出 `max_pipeline_ms` 与 `pipeline_budget_feasible`。
+
 ## 4. 更新频率的空间含义
 
 下面仅计算“一个 update period 内的前进距离”：
@@ -288,6 +314,12 @@ t8  vehicle response begins
 平均 FPS 只能作为辅助指标。
 
 ## 8. 对平台适配矩阵的影响
+
+阶段时延公开证据已结构化到：
+`data/benchmarks/pipeline-latency-evidence.csv`
+
+架构映射见：
+`research/architecture/closed-loop-latency-platform-mapping.md`
 
 这一模型并不直接判定哪个平台“最好”，而是把后续判断变成：
 

@@ -1,6 +1,6 @@
 # Workload → Compute Resource → Platform 适配矩阵
 
-- 状态：v0.8
+- 状态：v0.9
 - 日期：2026-09-30
 - 目标：建立基于公开案例、论文、官方 benchmark 和硬件事实的端侧平台适配分析
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -37,11 +37,11 @@
 
 ## 3. 证据驱动平台矩阵
 
-标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E39。
+标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E39；闭环时延阶段证据另见 `data/benchmarks/pipeline-latency-evidence.csv`。
 
 | 平台 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 当前工程边界 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| NVIDIA Jetson Orin | SPEC+BENCH E01/E02/E35 | CASE+PAPER+BENCH E03/E04/E05/E35 | CASE+BENCH E02/E03/E35 | CASE+PAPER+BENCH E03/E05/E35 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | Nova Carter 已有物理3/4-camera live graph：VSLAM、DNN stereo depth、Nvblox；仍缺六摄像头+YOLO同构并发、功耗/热和硬实时飞控证据 |
+| NVIDIA Jetson Orin | SPEC+BENCH E01/E02/E35 | CASE+PAPER+BENCH E03/E04/E05/E35 | CASE+BENCH E02/E03/E35 | CASE+PAPER+BENCH E03/E05/E35 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | Nova 3.2 提供物理多camera整图；Isaac ROS 5.0 提供当前Orin W3/W4 graph/component latency；仍缺六摄像头同构闭环P99、功耗/热和硬实时飞控 |
 | Qualcomm Flight RB5 | REF E07 | REF E07 | REF E07 | REF(深度/SLAM) E07 | REF E07 | REF E07 | GAP | REF E07 | GAP | 典型 UAV companion/reference platform；飞控 W9 边界需单独设计 |
 | Qualcomm IQ-9075 | SPEC+REF+PARTNER_BENCH E08/E27/E29/E30/E39 | REF E28/E31 | REF+PARTNER_BENCH E29/E30/E31 | REF(2D mapping/depth) E28/E31 | REF E31 | REF(Nav2) E28/E31 | SPEC+BENCH(vendor) E08 | INFER | SPEC+PARTNER_BENCH E08/E25 | W1 已确认 per-frame timestamp→ROS stamp 传播；仍缺 multi-camera hardware trigger/sync、VIO/SLAM latency 与完整自主栈全并发 benchmark |
 | Rockchip RK3588 | SPEC E20 | PAPER(system) E24 | SPEC+REF+BENCH E20/E23/E33 | PAPER(system) E24 | INFER | INFER | GAP | GAP | INFER | W3 已有单模型 benchmark 与官方多 context/三核调度路径；仍无证据支持按核心数线性推算，多摄像头+SLAM+DNN 并发继续为 GAP |
@@ -138,7 +138,7 @@ Skydio X10 是当前最有价值的锚点之一：
 
 ## 7. 下一步
 
-优先把矩阵从“证据存在性”推进到“可量化适配”：
+优先把矩阵从“证据存在性”推进到“deadline 可量化适配”：
 
 1. 为 Jetson Orin、RK3588、IQ-9075、Metis、Hailo、LQ50 建立统一 product facts；
 2. 将公开 benchmark 按 model/input/precision/host/software/power 条件结构化；

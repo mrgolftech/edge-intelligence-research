@@ -1,7 +1,7 @@
 # 低功耗 ARM Host + AI Accelerator：公开证据与工程边界
 
 - 日期：2026-09-30
-- 状态：v0.1
+- 状态：v0.2
 - 目的：回答独立 M.2/PCIe AI accelerator 在无人装备中“Host 到底承担什么”，并记录 Metis、Hailo、M50 的公开 ARM Host 路径。
 
 ## 1. 核心架构
@@ -170,3 +170,31 @@ https://github.com/hailo-ai/hailo-apps/tree/main/hailo_apps/python/pipeline_apps
 3. **ARM Host 可用 ≠ ARM Host 性能足够。** 仍需统一模型、视频输入、功耗和并发条件下复测。
 4. 对六摄像头无人平台，若采用独立 accelerator，真正需要比较的是：
    **Host 视频/SLAM能力 + 数据搬运 + Accelerator DNN性能 + 总功耗/热**。
+
+
+## 7. Host+Accelerator 对闭环时延预算的新增项
+
+闭环模型见：
+`research/architecture/closed-loop-latency-platform-mapping.md`
+
+对独立 accelerator，需要在传统 `T_perception` 内继续拆：
+
+```text
+T_perception =
+T_host_preprocess
++ T_H2D
++ T_accel_queue
++ T_inference
++ T_D2H
++ T_host_postprocess
+```
+
+所以单模型 inference/P99 只覆盖其中一部分。
+
+当前公开证据：
+- M50/xh2 已有模型 E2E P99；
+- Metis+RK3588 有厂商团队 OpenCL latency；
+- Hailo/RPi5 有多源 Reference，但缺统一 P99。
+
+下一步真正有判别力的是：
+**same Host + same Camera input + same model + same Frame Age instrumentation**。

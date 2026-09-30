@@ -22,6 +22,10 @@ TABLES = {
         "model_or_node", "input", "host", "throughput", "source_url",
         "evidence_status", "limitations"
     ],
+    ROOT / "data/benchmarks/pipeline-latency-evidence.csv": [
+        "latency_id", "platform", "architecture", "stage", "workload",
+        "metric", "host", "evidence_status", "source_url", "limitations"
+    ],
     ROOT / "data/calculations/six-camera-reference-profiles.csv": [
         "profile_id", "basis", "equivalent_camera_count", "width", "height",
         "fps", "pixel_rate_mp_s", "bpp_scenario", "payload_gbps",

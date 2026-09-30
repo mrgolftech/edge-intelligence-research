@@ -92,9 +92,11 @@
 - [IQ-9075 实时控制证据](references/benchmarks/iq9075-realtime-control-2026.md)
 - [Jetson/Nova 物理多相机 Perceptor Benchmark](references/benchmarks/jetson-nova-multicamera-perceptor-2026.md)
 - [ARM Host + Accelerator 公开基线](references/benchmarks/arm-host-accelerator-evidence-2026.md)
+- [Isaac ROS 5.0 / Orin 时延锚点](references/benchmarks/isaac-ros-5.0-latency-anchors.md)
 
 ### 平台与适配
 - [Host + Accelerator 架构分析](research/architecture/host-accelerator-edge-architecture.md)
+- [闭环时延 → 平台架构映射](research/architecture/closed-loop-latency-platform-mapping.md)
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
@@ -125,6 +127,7 @@
 - [Six-camera reference profiles](data/calculations/six-camera-reference-profiles.csv)
 - [Avoidance timing fact anchors](data/calculations/avoidance-timing-fact-anchors.csv)
 - [Observed 1072×1280 NV12 sensitivity](data/calculations/six-camera-observed-mode-sensitivity.csv)
+- [Pipeline latency evidence](data/benchmarks/pipeline-latency-evidence.csv)
 
 ## 工程 Case
 - [六摄像头无人平台](cases/six-camera-uav/README.md)
@@ -147,6 +150,7 @@
 11. Metis/Hailo/M50 均已证明 ARM Host 路线真实存在；因此独立 Accelerator 评估必须把 Host CPU/VPU/DDR、PCIe、预处理和总系统功耗作为一等指标。
 12. 六摄像头 W1 已建立证据锚定的参考档位：六路等效公开参考约 43–829 MP/s，说明 Camera 数量相同也可能相差近一个数量级以上；分辨率/FPS/数据路径必须先于 TOPS 冻结。
 13. 避障实时性已改为参数化闭环预算：速度、有效探测距离、sensor/frame age、vehicle tracking delay、acceleration/jerk 和 keep-out distance共同决定 deadline；禁止用单模型 FPS 或 planner latency 代替端到端时延。
+14. 已建立闭环时延→平台阶段映射，并开始用固定软件版本记录 graph/component latency；Isaac ROS 5.0 已成为当前 Orin 时延基线，历史 Nova 3.2 继续用于物理多相机整图证据。
 
 ## 下一阶段
 

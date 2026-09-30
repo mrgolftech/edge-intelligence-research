@@ -48,6 +48,7 @@
 
 ### G03 — Jetson Orin: 多 workload 并发
 当前：
+- Isaac ROS 5.0 已补固定版本 AGX Orin graph latency：DetectNet 15ms、RT-DETR 13ms、DNN Stereo Full 17ms；Nvblox TSDF/ESDF 有 core timing；
 - 单节点和系统案例证据丰富；
 - Nova Carter / Isaac ROS release-3.2 已给出物理多相机 Live Graph：4×1200p VSLAM 30.1 FPS，3×1200p Perceptor 中 VO 30 FPS / ESDF 9.45 FPS；
 - 这已经证明 W1+W2+W3(depth)+W4 的整图系统路径；
@@ -138,13 +139,16 @@ ARM Host “能运行”已确认，下一步是测系统代价。
 - 与 SLAM/VIO 同时运行的资源冲突
 
 ### G08 — Accelerator 与 Host 数据搬运
+闭环时延映射已经明确 Host+Accelerator 需要单独记录 H2D/accelerator queue/D2H。
+
 Metis/Hailo/LQ50统一测试：
 - host decode
 - resize/color conversion
 - H2D/D2H copy
 - inference
 - post-process
-- end-to-end
+- end-to-end / Frame Age P50/P95/P99
+- deadline miss
 - zero-copy feasibility
 
 ## 证据升级规则

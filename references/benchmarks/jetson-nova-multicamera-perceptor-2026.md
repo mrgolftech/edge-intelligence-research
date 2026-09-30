@@ -92,3 +92,34 @@ https://nvidia-isaac-ros.github.io/v/release-3.1/reference_workflows/isaac_perce
 
 不可用于：
 > **推出六摄像头 YOLO+SLAM 需要多少 TOPS，或宣称任何平台优于另一平台。**
+
+
+## 7. 2026-09-30 补充：Isaac ROS 5.0 当前 Orin 时延锚点
+
+Isaac ROS 5.0.0 已于 2026-09-21 发布，Jetson Orin / JetPack 7.2 仍在官方支持矩阵。
+
+固定版本性能：
+- Stereo Disparity Node 1080p：124 FPS，8.6ms @30Hz；
+- Stereo Disparity Graph 1080p：117 FPS，9.3ms @30Hz；
+- DNN Stereo Full 576p：66.5 FPS，17ms @30Hz；
+- DetectNet 544p：73.5 FPS，15ms @30Hz；
+- RT-DETR 720p：87.3 FPS，13ms @30Hz。
+
+Nvblox AGX Orin core：
+- TSDF：0.5–0.8ms（dataset dependent）；
+- ESDF：1.5–1.7ms。
+
+5.0 Visual SLAM / Nvblox Camera requirements：
+- ≥30Hz target image rate；
+- frame jitter ±2ms；
+- stereo 内图像 offset ±100μs；
+- 跨 stereo camera 图像 offset ±100μs。
+
+详细见：
+`references/benchmarks/isaac-ros-5.0-latency-anchors.md`
+
+### 版本使用规则
+
+release-3.2 与 5.0 不拼成一个“端到端总延迟”：
+- 3.2 用来证明 Nova 物理多相机系统路径；
+- 5.0 用来提供当前 Orin 固定版本 graph/component latency。

@@ -1,6 +1,6 @@
 # 公开平台 Benchmark 结构化基线（2026-09）
 
-- 状态：v0.3
+- 状态：v0.4
 - 日期：2026-09-30
 - 数据表：`data/benchmarks/public-platform-benchmarks.csv`
 - 目的：把“厂商/论文说跑得快”拆成可比较的测试条件，防止只摘 FPS/TOPS 数字。
@@ -22,21 +22,42 @@
 
 缺失的字段写“未注明”，不能自行补齐。
 
+## 2.1 Benchmark URL 版本固定规则
+
+对于会随 release 更新的官方 benchmark：
+- 优先引用 `/v/release-X.Y/`；
+- 记录 release date / software version；
+- `latest` 只用于发现新版本，不能作为固定历史数字的唯一追溯 URL。
+
 ## 2. 当前最可用的定量证据
 
-### NVIDIA Jetson AGX Orin / Isaac ROS
+### NVIDIA Jetson AGX Orin / Isaac ROS 5.0
 
-当前 Isaac ROS Performance Summary 给出同一页面下的多种视觉节点与图级结果。第一版抽取：
+本轮将旧的 unversioned `latest` 引用改为固定版本：
+- Isaac ROS **5.0.0**
+- release date：2026-09-21
+- Jetson Orin / JetPack 7.2
 
-- Stereo Disparity Node, 1080p: 124 FPS, 8.6 ms @ 30 Hz
-- AprilTag Node, 720p: 189 FPS, 5.3 ms @ 30 Hz
-- DetectNet Object Detection Graph, 544p: 73.5 FPS, 15 ms @ 30 Hz
-- RT-DETR Object Detection Graph, 720p: 87.3 FPS, 13 ms @ 30 Hz
+原因：unversioned performance 页面会随版本更新，固定数字若继续引用 `latest` URL 会失去可复现性。
 
-这些数据可以用于建立 Jetson 自身的视觉 workload 量级，但不能直接代表“六摄像头 + SLAM + detection”并发能力。
+5.0 AGX Orin：
+- Stereo Disparity Node 1080p：124 FPS，8.6 ms @30Hz；
+- DetectNet Graph 544p：73.5 FPS，15 ms @30Hz；
+- RT-DETR SyntheticaDETR Graph 720p：87.3 FPS，13 ms @30Hz；
+- DNN Stereo Full 576p：66.5 FPS，17 ms @30Hz；
+- DNN Stereo Light 288p：75.5 FPS，24 ms @30Hz。
+
+官方说明：throughput 为 input node→pipeline→output node；latency 来自同一 benchmark 的独立 30Hz trial。它不是 P99。
+
+Nvblox 5.0 / AGX Orin：
+- Replica 0.05m：TSDF 0.8ms，ESDF 1.7ms；
+- Redwood 0.05m：TSDF 0.5ms，ESDF 1.5ms。
+
+这些是 core component timing，不是完整 ROS mapping graph latency。
 
 来源：
-https://nvidia-isaac-ros.github.io/performance/index.html
+https://nvidia-isaac-ros.github.io/v/release-5.0/performance/index.html
+https://nvidia-isaac-ros.github.io/v/release-5.0/repositories_and_packages/isaac_ros_nvblox/index.html
 
 ### NVIDIA Nova Carter / Isaac Perceptor Live Graph
 
