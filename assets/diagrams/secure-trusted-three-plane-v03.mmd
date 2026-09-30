@@ -1,0 +1,15 @@
+flowchart TB
+    G["地面/集群可信服务<br/>CA / KMS / Verifier / Policy / OTA"] --> T
+    subgraph NODE["安全可信无人智能计算节点"]
+      direction TB
+      T["Trust Plane 可信平面<br/>RoT / TEE / TPM-TCM / SE<br/>设备身份 / 密钥 / 度量 / 远程证明<br/>模型验证 / 安全存储 / 安全升级"]
+      C["Compute Plane 计算平面<br/>CPU / GPU / NPU / ISP / VPU<br/>ROS2 / VIO / SLAM / DNN / VLM / Planner"]
+      R["Real-Time Plane 实时控制平面<br/>FCU / MCU / RTOS / Safety Supervisor"]
+      T --> C
+      T --> R
+      C <--> R
+    end
+    S["Camera / LiDAR / Radar / IMU"] --> C
+    R --> V["Vehicle / Actuator"]
+    C --> R
+    NODE --> L["安全通信 / 任务网络 / Fleet"]
