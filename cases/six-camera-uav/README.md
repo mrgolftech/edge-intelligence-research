@@ -245,3 +245,18 @@ W3 继续区分：
 - MIXED。
 
 后续平台分析至少保留 P20/P30 与 F20/F30 两类 topology envelope，不能用“六路检测”一个条目覆盖。
+
+
+## Security / Trust 扩展
+
+六摄像头 Case 已增加安全可信横向需求，不改变 C2 workload 定义：
+
+- [Security Threat Model 与 Trust/Data Flow](security-threat-model-and-trust-flow.md)
+- [Security Requirements](../../data/calculations/six-camera-security-requirements.csv)
+- [Trust Plane 实现方案](../../research/architecture/trust-plane-implementation-options.md)
+
+规则：
+- Security 不是 W10；
+- 安全能力与 W1/W2/W3/W4/W6/W9 并发验证；
+- 安全机制不得破坏 FCU/W9 实时与 failsafe；
+- Integrated SoC 与 Host+Accelerator 均需独立检查 Trust Boundary。
