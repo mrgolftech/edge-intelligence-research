@@ -1,6 +1,6 @@
 # 六摄像头 UAV：Phase 2 Workload Composition 与运行工况
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 基础 Composition：**C2 Visual Autonomy**
 - 可选扩展：C4（VLM）/ C5（协同）
@@ -227,3 +227,29 @@ N_detection × detection_hz
 10. compute power / mass / envelope。
 
 在这些输入未冻结前，平台状态最多只能是 Candidate / Unverified，不能是 Confirmed-fit。
+
+
+---
+
+## 6. Resource Envelope Bridge
+
+C2 的 workload 结构现在进一步连接到：
+
+- `research/workloads/c2-visual-autonomy-resource-envelope.md`
+- `data/calculations/c2-visual-autonomy-reference-envelope.csv`
+- `scripts/calc_c2_visual_autonomy_reference_envelope.py`
+
+新增的定量入口：
+
+1. Camera pixel rate；
+2. image-plane rate；
+3. frame queue memory；
+4. W3 invocation/service demand；
+5. W2/W4/W6 独立资源；
+6. Frame Age；
+7. vehicle response；
+8. Architecture Gate。
+
+当前项目 1072×1280 NV12 六路只冻结了 geometry/representation，actual FPS 仍为 GAP。因此 20/30/60 Hz 只作为 sensitivity/stress，不作为 Project Nominal。
+
+Project Nominal 仍必须由 Requirement Card 冻结。

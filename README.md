@@ -103,6 +103,7 @@
 - [系统资源预算模型](research/workloads/system-resource-budget-model.md)
 - [Workload Composition Library](research/workloads/workload-composition-library.md)
 - [Workload Composition 资源包络](research/workloads/workload-composition-resource-envelope.md)
+- [C2 Visual Autonomy 可量化资源包络](research/workloads/c2-visual-autonomy-resource-envelope.md)
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
@@ -136,6 +137,7 @@
 - [Pipeline latency evidence](data/benchmarks/pipeline-latency-evidence.csv)
 - [Latency gap audit](data/benchmarks/latency-gap-audit.csv)
 - [Workload composition resource envelope](data/calculations/workload-composition-resource-envelope.csv)
+- [C2 Visual Autonomy reference/sensitivity envelope](data/calculations/c2-visual-autonomy-reference-envelope.csv)
 
 ## 工程 Case
 - [六摄像头无人平台](cases/six-camera-uav/README.md)
@@ -167,6 +169,7 @@
 15. 已建立“负证据/GAP 审计”：IQ-9075 已确认官方 benchmark 方法但尚无公开 Camera/NN 数字；Metis double buffering 明确以帧延迟换吞吐；Hailo hw-only latency 不等于 live Frame Age；M50 bandwidth_perf 内部带宽不等于 PCIe；RK3588 定义冲突的社区 E2E 数字不进入主基线。
 16. 已建立五类可复用 workload composition：Multi-Camera Analytics、Visual Autonomy、Multi-Sensor Autonomy、Foundation-Model Augmented Robotics、Cooperative Autonomy；它们是 workload 组合而不是能力等级。
 17. 六摄像头 Case 已归入 C2 Visual Autonomy，并建立 Nominal/Peak/Fallback 工况与第一版 Architecture Gate Matrix；当前共同最大未决项是多 workload 并发 P95/P99 / Frame Age，而不是 TOPS。
+18. C2 已从“资源结构描述”推进到“可量化资源包络”：W1 用 pixel/image-plane/buffer 建模，W3 用 invocation/service demand 建模，W2/W4/W6 独立预算，并用 PX4 的 sensor+vehicle delay 事实锚点把 Frame Age 映射到闭环反应距离。
 
 ## 当前阶段：Phase 2 — Requirement & Architecture Synthesis
 

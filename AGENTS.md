@@ -89,6 +89,16 @@ D_reaction = speed × T_reaction
 
 必须区分 **update rate、单模块 compute latency、Frame Age、closed-loop response**。
 
+### 5.2 Service Demand 规则
+
+对 C2 等多 workload 并发系统，优先按 compute engine 分别建立：
+
+```text
+Demand_engine = Σ(InvocationRate_i × measured ServiceTime_i)
+```
+
+该值只用于可行性初筛。Demand < 1 不等于 P99 满足；必须继续验证 batching、pipeline overlap、DDR、queue、thermal 与 runtime scheduling。禁止把不同平台/模型/输入条件的 latency 混合计算。
+
 ## 6. Benchmark 证据规则
 
 第一版公共基线：
@@ -336,6 +346,7 @@ scripts/
 - **六摄像头公开参考负载档位（EuRoC/TUM-VI/nuScenes/Nova），含可复现计算 CSV/脚本**；
 - **PX4/EGO/FASTER 证据锚定的避障闭环时延预算与计算脚本**；
 - **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**；
+- **C2 Visual Autonomy 可量化资源包络：pixel/image-plane/buffer、W3 service demand、W2/W4/W6 独立预算、Frame Age→reaction distance**；
 - **闭环时延→平台阶段映射与 pipeline latency evidence 表**；
 - **Isaac ROS 5.0 / Jetson Orin 固定版本时延锚点**；
 - **时延 GAP 审计：记录“方法存在但数字缺失”、指标边界与下一步复现路径**。
