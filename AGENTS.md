@@ -553,3 +553,22 @@ Mission + Threat Model
 - `data/product-specs/security-trust-capability-matrix-2026.csv`
 
 后续报告应把“安全可信”作为无人装备产品差异化方向之一，从需求、架构、产品和六摄 Case 全链路展开，而不是只在结论中附带描述。
+
+
+### 20.1 Safety 与 Security 必须分开
+
+功能安全（Functional Safety）与网络安全/可信计算（Cybersecurity / Platform Trust）不得混为一类证据。
+
+例如：
+- ISO 26262 / ASIL / lockstep / ECC / watchdog 主要证明随机故障检测、容错和功能安全；
+- Secure Boot / Root of Trust / TEE / key storage / measured boot / remote attestation 解决恶意修改、身份、秘密和平台可信状态。
+
+禁止因为某芯片通过 ASIL-B/ASIL-D 就推断其具备 Secure Boot、TEE、Remote Attestation 或模型保护能力。
+
+对于安全器件还必须区分：
+- 普通商密 SE：密码与密钥保护；
+- TEE：隔离执行；
+- TPM/TCM：度量、sealed key、Quote/Attestation；
+- SoC Secure Boot：启动完整性。
+
+只有公开资料明确支持时才能合并能力。
