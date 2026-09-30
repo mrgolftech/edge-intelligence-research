@@ -379,3 +379,48 @@ Phase 2 基线：
 - `research/workloads/system-resource-budget-model.md`
 - `cases/six-camera-uav/phase-2-requirement-card.md`
 - `data/calculations/six-camera-requirement-status.csv`
+
+
+### 18.1 Workload Composition 不是新等级
+
+Phase 2 使用以下 composition ID 复用资源模型：
+- C1 Multi-Camera Analytics
+- C2 Visual Autonomy
+- C3 Multi-Sensor Autonomy
+- C4 Foundation-Model Augmented Robotics
+- C5 Cooperative Autonomy
+
+C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
+
+每个 composition 后续只允许建立：
+- Reference profile：公开事实；
+- Project Nominal：项目已冻结需求；
+- Stress profile：Benchmark 压力工况。
+
+三者不得混淆。
+
+六摄像头 UAV 当前基础 composition = C2 Visual Autonomy；VLM 或协同时分别增量叠加 C4/C5，不把它们定义成“更高等级”。
+
+### 18.2 Architecture Gate Matrix
+
+平台筛查使用：
+- Sensor/I/O
+- Real-Time Partition
+- Memory/DDR
+- Compute Engine
+- Concurrency/Tail Latency
+- SWaP/Thermal
+- Software/Productization
+
+状态只允许：
+- Confirmed-fit
+- Candidate
+- Unverified
+- Requirement-missing
+- Constraint
+- Not-applicable
+
+禁止把 Gate 状态加权成平台总分或排行榜。
+
+六摄像头当前 Gate Matrix：
+`cases/six-camera-uav/phase-2-architecture-gate-matrix.md`

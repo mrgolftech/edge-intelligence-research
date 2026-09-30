@@ -101,6 +101,8 @@
 - [时延复现实验入口](research/architecture/latency-reproduction-methods.md)
 - [需求驱动架构选型方法](research/architecture/requirements-to-architecture-selection.md)
 - [系统资源预算模型](research/workloads/system-resource-budget-model.md)
+- [Workload Composition Library](research/workloads/workload-composition-library.md)
+- [Workload Composition 资源包络](research/workloads/workload-composition-resource-envelope.md)
 - [代表性端侧计算平台事实底座](research/products/representative-edge-compute-platforms.md)
 - [Workload → Compute Resource → Platform 适配矩阵](research/products/workload-platform-fit-matrix.md)
 - [平台—工作负载适配证据索引](references/webpages/platform-workload-evidence-2026.md)
@@ -133,6 +135,7 @@
 - [Observed 1072×1280 NV12 sensitivity](data/calculations/six-camera-observed-mode-sensitivity.csv)
 - [Pipeline latency evidence](data/benchmarks/pipeline-latency-evidence.csv)
 - [Latency gap audit](data/benchmarks/latency-gap-audit.csv)
+- [Workload composition resource envelope](data/calculations/workload-composition-resource-envelope.csv)
 
 ## 工程 Case
 - [六摄像头无人平台](cases/six-camera-uav/README.md)
@@ -141,6 +144,9 @@
 - [六摄像头避障闭环时延预算](research/workloads/avoidance-latency-budget.md)
 - [六摄像头 Phase 2 Requirement Card](cases/six-camera-uav/phase-2-requirement-card.md)
 - [六摄像头需求状态表](data/calculations/six-camera-requirement-status.csv)
+- [六摄像头 Phase 2 Workload Composition](cases/six-camera-uav/phase-2-workload-compositions.md)
+- [六摄像头 Architecture Gate Matrix](cases/six-camera-uav/phase-2-architecture-gate-matrix.md)
+- [六摄像头 Architecture Gates 数据表](data/calculations/six-camera-architecture-gates.csv)
 
 ## 当前研究判断
 
@@ -159,6 +165,8 @@
 13. 避障实时性已改为参数化闭环预算：速度、有效探测距离、sensor/frame age、vehicle tracking delay、acceleration/jerk 和 keep-out distance共同决定 deadline；禁止用单模型 FPS 或 planner latency 代替端到端时延。
 14. 已建立闭环时延→平台阶段映射，并开始用固定软件版本记录 graph/component latency；Isaac ROS 5.0 已成为当前 Orin 时延基线，历史 Nova 3.2 继续用于物理多相机整图证据。
 15. 已建立“负证据/GAP 审计”：IQ-9075 已确认官方 benchmark 方法但尚无公开 Camera/NN 数字；Metis double buffering 明确以帧延迟换吞吐；Hailo hw-only latency 不等于 live Frame Age；M50 bandwidth_perf 内部带宽不等于 PCIe；RK3588 定义冲突的社区 E2E 数字不进入主基线。
+16. 已建立五类可复用 workload composition：Multi-Camera Analytics、Visual Autonomy、Multi-Sensor Autonomy、Foundation-Model Augmented Robotics、Cooperative Autonomy；它们是 workload 组合而不是能力等级。
+17. 六摄像头 Case 已归入 C2 Visual Autonomy，并建立 Nominal/Peak/Fallback 工况与第一版 Architecture Gate Matrix；当前共同最大未决项是多 workload 并发 P95/P99 / Frame Age，而不是 TOPS。
 
 ## 当前阶段：Phase 2 — Requirement & Architecture Synthesis
 
@@ -170,8 +178,8 @@ Phase 1 的“场景 → workload → 平台证据”链路已经贯通，公开
 
 当前优先：
 
-1. 用 Requirement Vector 描述典型无人装备任务，不再先选芯片；
-2. 建立 W1–W9 到 CPU/GPU/NPU/DDR/I/O/latency/SWaP 的资源预算方法；
+1. 继续扩展 Requirement Vector，但以五类 workload composition 为复用模板，不按厂商/芯片组织需求；
+2. 对每类 composition 建立 Reference / Project Nominal / Stress 三种 profile；
 3. 用 Sensor I/O、实时隔离、Memory/DDR、Compute、Concurrency、SWaP、Software 七个 Gate 做架构筛查；
 4. 六摄像头 Case 优先冻结 N_capture / N_detection / N_vio / N_depth / N_record、FPS、速度、探测距离和功耗边界；
 5. 分别形成 Integrated SoC/SoM 与 Host+Accelerator 两条候选架构，不做 TOPS 排名；

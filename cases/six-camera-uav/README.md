@@ -200,3 +200,16 @@ PX4 当前 Collision Prevention 公开资料可作为事实锚点：`CP_DELAY` �
 
 后续不再以“继续搜更多平台”为主线，优先冻结：
 `N_detection / N_vio / N_depth / N_record / FPS / flight speed / detection range / SWaP`。
+
+
+## Phase 2 Composition / Gate Matrix
+
+当前基础 workload composition：
+**C2 Visual Autonomy = W1 + W2 + W3 + W4 + W6 + W9**
+
+已增加：
+- `phase-2-workload-compositions.md`：Nominal / Peak / Fallback / Optional VLM 工况；
+- `phase-2-architecture-gate-matrix.md`：RK3588、Jetson Orin、IQ-9075、RK3588+Accelerator 的证据状态；
+- `../../data/calculations/six-camera-architecture-gates.csv`：机器可读 Gate 数据。
+
+当前四条路线均保留为候选/待验证，不做平台排名。

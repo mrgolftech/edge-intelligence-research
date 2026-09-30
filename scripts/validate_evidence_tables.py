@@ -50,6 +50,16 @@ TABLES = {
         "requirement_id", "category", "parameter", "current_value",
         "unit", "status", "evidence_basis", "decision_impact", "next_action"
     ],
+    ROOT / "data/calculations/workload-composition-resource-envelope.csv": [
+        "composition_id", "composition_name", "workloads",
+        "representative_scenarios", "primary_latency_metric",
+        "architecture_notes", "evidence_basis"
+    ],
+    ROOT / "data/calculations/six-camera-architecture-gates.csv": [
+        "gate_id", "gate_name", "platform", "status",
+        "evidence_summary", "blocking_requirement_or_gap",
+        "architecture_implication"
+    ],
 }
 
 ALLOWED_EVIDENCE_TOKENS = {
