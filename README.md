@@ -97,6 +97,9 @@
 - [FUSED Multi-View / BEV 平台证据审计](references/benchmarks/fused-multiview-platform-evidence-2026.md)
 
 ### 平台与适配
+- [安全可信型无人装备端侧智能计算平台](research/architecture/secure-trusted-edge-intelligence-platform.md)
+- [安全可信无人智算证据索引 2026](references/webpages/secure-edge-intelligence-evidence-2026.md)
+- [Security/Trust capability matrix](data/product-specs/security-trust-capability-matrix-2026.csv)
 - [Host + Accelerator 架构分析](research/architecture/host-accelerator-edge-architecture.md)
 - [闭环时延 → 平台架构映射](research/architecture/closed-loop-latency-platform-mapping.md)
 - [时延复现实验入口](research/architecture/latency-reproduction-methods.md)
@@ -187,6 +190,8 @@
 16. 已建立五类可复用 workload composition：Multi-Camera Analytics、Visual Autonomy、Multi-Sensor Autonomy、Foundation-Model Augmented Robotics、Cooperative Autonomy；它们是 workload 组合而不是能力等级。
 17. 六摄像头 Case 已归入 C2 Visual Autonomy，并建立 Nominal/Peak/Fallback 工况与第一版 Architecture Gate Matrix；当前共同最大未决项是多 workload 并发 P95/P99 / Frame Age，而不是 TOPS。
 18. C2 已从“资源结构描述”推进到“可量化资源包络”：W1 用 pixel/image-plane/buffer 建模，W3 用 invocation/service demand 建模，W2/W4/W6 独立预算，并用 PX4 的 sensor+vehicle delay 事实锚点把 Frame Age 映射到闭环反应距离。
+19. 已启动安全可信型无人装备端侧智能计算研究：安全能力作为横跨 W1–W9/C1–C5 的 Security/Trust Vector，不定义为新的 workload 或自主等级；平台评估增加 Root of Trust、Boot Integrity、Key/Identity、Runtime Isolation、Attestation、AI Artifact、Communication、Physical Capture、Lifecycle、Domestic Crypto 等 Security Gates。
+20. 当前产品方向假设从“高算力盒子”升级为“Compute + Trust + Security”的安全可信无人智算平台；该假设必须继续通过标准、真实产品、论文与 Benchmark 验证，不能把有 TEE/Secure Boot 直接等同于模型可信执行或整机远程证明。
 
 ## 当前阶段：Phase 3 — Product Landscape Complete / Final Report Preparation
 
