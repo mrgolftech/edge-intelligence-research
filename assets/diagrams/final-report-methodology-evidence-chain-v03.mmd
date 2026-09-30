@@ -1,0 +1,12 @@
+flowchart LR
+    A["应用场景 / Mission"] --> B["行业功能栈依据<br/>PX4 / Nav2 / Autoware / Waymo"]
+    B --> C["本项目 Workload 抽象<br/>W1-W9"]
+    C --> D["资源预算<br/>CPU/GPU/NPU/DDR/ISP/I/O"]
+    D --> E["时延与并发预算<br/>P95/P99 / Frame Age / Deadline"]
+    E --> F["架构 Gate<br/>Sensor / RT / Memory / Compute / SWaP / Software"]
+    F --> G["候选产品形态<br/>SoC/SoM / Host+Accelerator / Robotics Computer"]
+    G --> H["Benchmark / Case 验证"]
+    I["标准/论文/官方文档"] -. 证据约束 .-> B
+    I -. 证据约束 .-> C
+    I -. 证据约束 .-> F
+    J["FACT / CASE / BENCH / PAPER / SPEC / INFER / GAP"] -. 证据状态 .-> H
