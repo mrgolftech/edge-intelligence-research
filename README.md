@@ -126,17 +126,18 @@
 4. 大模型进入机器人端侧已有真实产品和研究依据，但不能作为所有无人装备的默认需求。
 5. 端侧与边缘/云协同将长期并存。
 6. 公开 workload 已可用 EuRoC/TUM-VI、MLPerf、nuScenes/Waymo、Nav2 MPPI、OpenVLA/LIBERO 建立第一版跨平台基准。
-7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**
+7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**\n8. 平台公开 Benchmark 已开始结构化，当前可以确认：Jetson Isaac ROS 与 Metis 视觉数据具有较好的量化条件；IQ-9075、Hailo-10H、LQ50 的 GenAI 数据仍属于厂商量级锚点，条件不完整时禁止横向排序。
 
 ## 下一阶段
 
 第一版“场景 → workload → 平台证据”链路已经贯通。下一阶段从“是否有证据”进一步进入“多少资源、在什么条件下能跑”：
 
-1. 按统一 schema 补全 Jetson Orin、IQ-9075、RK3588、Journey 6、A2000、Metis、Hailo、LQ50 的结构化产品数据；
-2. 将公开 benchmark 的 model/input/precision/host/software/power 条件结构化；
-3. 补 RK3588、IQ-9075、LQ50 的 W2/W3 公开或自测证据；
+1. 继续补全结构化平台事实表中的“未确认”字段，不跨 SKU 猜参数；
+2. 按 evidence-gap-backlog 优先补 RK3588、IQ-9075、LQ50 的 W2/W3 数据；
+3. 将 Jetson/Metis/Hailo/LQ50/IQ-9075 的公开 benchmark 进一步补齐 precision、software、power 条件；
 4. 冻结六摄像头 Case 的 W1 输入参数；
 5. 分别设计“一体 SoC”和“Host + AI Accelerator”两条实验路径；
-6. 逐步用实测替换矩阵中的 INFER/GAP。
+6. 运行 scripts/validate_evidence_tables.py 保持证据字段完整；
+7. 逐步用可复现实测替换矩阵中的 INFER/GAP。
 
 研究和提交规范以 [AGENTS.md](AGENTS.md) 为准。

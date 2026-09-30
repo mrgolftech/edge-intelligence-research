@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -276,7 +276,41 @@
 - 支撑：W1/W3 的一体化 SoC 硬件基础。
 - 限制：本轮尚未找到高可信、条件完整、可与 Orin/Metis 等直接比较的 RK3588 自主导航系统 benchmark，因此 W2/W4/W6 只保留工程验证入口，不给出“已适配”结论。
 
-## 10. 关键结论
+## 10. 2026-09-30 增补证据
+
+### E21 — 华山 A2000 家族 2026 最新官方披露
+- 类型：SPEC + DEMO
+- 来源：黑芝麻智能官方，2026 WNEVC / WAIC
+- URL：https://www.blacksesame.com/zh/list_11/1010.html
+- URL：https://www.blacksesame.com/zh/list_8/994.html
+- 已确认/厂商公开：
+  - A2000N/A2000L/A2000U/A2000X 家族覆盖约 200–1000 TOPS；
+  - 全链路支持 INT4/INT8/FP8/FP16/FP32；
+  - 官方称片上专用高速缓存带宽达到 8TB/s；
+  - 星眸 ISP 支持 4 曝光、150dB HDR、3DNR、RAW 直通 NPU；
+  - 官方明确面向 VLA 与世界模型；
+  - WAIC 2026 展示 Qwen VLM 在 A2000 平台端侧实时交互。
+- 支撑：W3/W4/W7 与车规/物理 AI 平台演进方向。
+- 限制：
+  - 1000 TOPS 是家族最高规格，不能套用到全部 SKU；
+  - “实时交互”是厂商演示，不是公开可复现 benchmark；
+  - 不能直接外推到 UAV 的 SWaP-C 和软件生态。
+
+### E22 — Hailo-10H GenAI / Vision 厂商 Benchmark
+- 类型：BENCH（厂商）
+- 来源：Hailo 官方，2025-07-22
+- URL：https://hailo.ai/company-overview/newsroom/news/hailo-announces-general-availability-of-hailo-10h-edge-ai-accelerator-with-generative-ai-capabilities/
+- 已确认/厂商公开：
+  - 多种 2B 语言模型和 VLM：first-token latency < 1s，>10 tokens/s；
+  - YOLOv11m 可处理 real-time 4K video stream；
+  - 产品典型功耗 2.5W。
+- 支撑：W3/W7 的低功耗 accelerator 路线。
+- 限制：
+  - 未完整披露模型 revision、量化、上下文和精确 FPS；
+  - 2.5W 为产品典型功耗，不能当作每条 benchmark 的独立实测功耗；
+  - 不能据此推断 W2/W6/W9。
+
+## 11. 关键结论
 
 1. **有完整自主系统案例的平台，不代表每个 workload 都在同一处理器上执行。** Skydio X10、Journey 6M 等只能证明系统级组合成立，必须保留任务分区未知这一限制。
 2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo/LQ50 都需要 host；W1/W2/W6/W9 不能因为“TOPS 足够”就自动判定适配。

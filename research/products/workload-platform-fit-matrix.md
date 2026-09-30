@@ -1,6 +1,6 @@
 # Workload → Compute Resource → Platform 适配矩阵
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 目标：建立基于公开案例、论文、官方 benchmark 和硬件事实的端侧平台适配分析
 - 证据索引：[`platform-workload-evidence-2026.md`](../../references/webpages/platform-workload-evidence-2026.md)
@@ -36,18 +36,18 @@
 
 ## 3. 证据驱动平台矩阵
 
-标签含义：CASE / BENCH / REF / SPEC / PAPER / INFER / GAP，详细来源见证据索引 E01–E20。
+标签含义：CASE / BENCH / REF / SPEC / PAPER / DEMO / INFER / GAP，详细来源见证据索引 E01–E22。
 
 | 平台 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 当前工程边界 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | NVIDIA Jetson Orin | SPEC+BENCH E01/E02 | CASE+PAPER E03/E04/E05 | CASE+BENCH E02/E03 | CASE+PAPER E03/E05 | CASE E03 | CASE(system) E03 | PAPER E06 | GAP | GAP | 公开证据最完整的是多传感器机器人计算；安全飞控/硬实时控制不应默认放在 Orin 上 |
 | Qualcomm Flight RB5 | REF E07 | REF E07 | REF E07 | REF(深度/SLAM) E07 | REF E07 | REF E07 | GAP | REF E07 | GAP | 典型 UAV companion/reference platform；飞控 W9 边界需单独设计 |
-| Qualcomm IQ-9075 | SPEC E08 | INFER | SPEC E08 | INFER | INFER | INFER | SPEC E08 | INFER | SPEC E08 | 新一代工业/机器人 SoC，异构资源完整，但需要补真实机器人 benchmark |
+| Qualcomm IQ-9075 | SPEC E08 | INFER | SPEC E08 | INFER | INFER | INFER | SPEC+BENCH(vendor) E08 | INFER | SPEC E08 | 新一代工业/机器人 SoC，异构资源完整；LLM 有官方量级数据，但 W2/W4/W6 仍需真实机器人 benchmark |
 | Rockchip RK3588 | SPEC E20 | INFER | SPEC E20 | INFER | INFER | INFER | GAP | GAP | INFER | 低成本一体 SoC；W2/W4/W6 需以真实算法和并发测试验证，不能由 6 TOPS 外推 |
 | Horizon Journey 6M | CASE(system) E10 | CASE(system) E10 | CASE+SPEC E09/E10 | CASE+SPEC E09/E10 | CASE(system) E10 | CASE+SPEC E09/E10 | GAP | GAP | SPEC(系统安全架构) E09 | 量产车端证据强，但与 UAV 的 SWaP、接口、软件生态不可直接等同 |
-| Black Sesame A2000 | SPEC E11 | INFER | SPEC E11 | SPEC E11 | INFER | SPEC E11 | SPEC E11 | GAP | SPEC E11 | 高阶智驾架构证据明确；缺少本轮可直接复用的公开系统 benchmark |
+| Black Sesame A2000 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC E11/E21 | INFER | SPEC E11/E21 | SPEC+DEMO E11/E21 | GAP | SPEC E11/E21 | 2026 官方已披露 200–1000 TOPS 家族、VLA/world-model 与 Qwen VLM 演示；仍缺公开可复现 benchmark |
 | Axelera Metis M.2 | HOST依赖 E14 | GAP | CASE+BENCH E12/E13 | GAP | CASE E13 | GAP | SPEC(实验性 LLM) E14 | GAP | GAP | 强项证据集中在视觉推理；W1 解码/预处理及 W2/W6/W9 依赖 host |
-| Hailo-8 / Hailo-10H | HOST依赖 | CASE(系统) E15/E16 | CASE E15/E16 | GAP | INFER | GAP | SPEC E17 | GAP | GAP | Hailo-8 有真实视觉案例，Hailo-10H 扩展到 GenAI；都不能替代主控/飞控 |
+| Hailo-8 / Hailo-10H | HOST依赖 | CASE(系统) E15/E16 | CASE+BENCH(vendor) E15/E16/E22 | GAP | INFER | GAP | SPEC+BENCH(vendor) E17/E22 | GAP | GAP | Hailo-8 有真实视觉案例，Hailo-10H 有视觉/GenAI 厂商量级数据；都不能替代主控/飞控 |
 | Houmo M50 / LQ50 M.2 | HOST依赖 E18 | GAP | GAP/待公开benchmark | GAP | GAP | GAP | SPEC+vendor benchmark E18/E19 | GAP | GAP | 当前公开证据最强的是 W7；160 TOPS 不能直接外推无人机 W2/W3/W6 |
 
 ## 4. 按体系结构得到的工程判断

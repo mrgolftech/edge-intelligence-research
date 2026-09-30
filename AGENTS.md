@@ -88,7 +88,7 @@ TOPS 只是一个指标。必须同时关注 CPU、GPU、NPU/AI ASIC、精度、
 - SPEC：官方规格/SDK
 - PAPER：论文实测
 
-如果只有架构推导，必须标记 **INFER**；没有足够资料标记 **GAP**。
+如果只有架构推导，必须标记 **INFER**；没有足够资料标记 **GAP**。公开演示但无法复现的结果标记 **DEMO**，不得冒充 BENCH。
 
 禁止：
 - 因为“TOPS 足够”就判定 W2/W4/W6/W9 适配；
@@ -243,13 +243,14 @@ scripts/
 - 代表平台事实底座；
 - **证据驱动 workload → resource → platform 适配矩阵 v0.1**；
 - **平台 workload 证据索引（Jetson/Qualcomm/RK3588/Journey6/A2000/Metis/Hailo/LQ50）**；
-- 六摄像头 workload model。
+- 六摄像头 workload model；\n- **结构化平台事实表 data/product-specs/platform-facts.csv**；\n- **结构化公开 Benchmark 表 data/benchmarks/public-platform-benchmarks.csv**；\n- **平台证据缺口 Backlog 与自动校验脚本**。
 
 下一阶段：
-1. 将平台参数与 benchmark 结构化到 data/product-specs 与 data/benchmarks；
-2. 补 RK3588、IQ-9075、LQ50 的 W2/W3 可量化证据；
+1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；
+2. 按 evidence-gap-backlog 补 RK3588、IQ-9075、LQ50 的 W2/W3 可量化证据；
 3. 六摄像头 Case 冻结 W1 参数并完成第一轮推导；
 4. 分别建立一体 SoC 与 Host+Accelerator Benchmark；
-5. 用实测逐步替换 INFER/GAP；
-6. 分析 E2E/VLM/VLA/World Model 的增量资源需求；
-7. 形成需求驱动的平台选型方法。
+5. 用统一测试条件和实测逐步替换 INFER/GAP；
+6. 运行 scripts/validate_evidence_tables.py 检查证据字段；
+7. 分析 E2E/VLM/VLA/World Model 的增量资源需求；
+8. 形成需求驱动的平台选型方法。
