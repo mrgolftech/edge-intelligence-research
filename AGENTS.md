@@ -501,7 +501,8 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 产品层代表性调研已达到停止扩张条件，正式报告编制已启动。
 
 当前已落盘：
-- `reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md`（当前证据强化版）
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.4.md`（当前分类依据与国产可信标准强化版）
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md`（证据强化版）
 - `reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md`（可读性增强版）
 - `reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md`（历史初稿）
 - `reports/drafts/final-report-evidence-map-v0.3.md`
@@ -598,3 +599,38 @@ Mission + Threat Model
 - SoC Secure Boot：启动完整性。
 
 只有公开资料明确支持时才能合并能力。
+
+
+## 21. 最终报告分类定义与国产可信标准规则
+
+### 21.1 W1–W9
+W1–W9 是本项目面向资源预算的 workload taxonomy，不是行业标准。报告提出任何 W 分类前必须：
+- 先给 PX4/Nav2/Autoware/Waymo/论文等外部功能依据；
+- 再解释为什么需要按主导资源、时延语义、状态生命周期、验证方式和架构 Gate 重分组；
+- 明确“为什么单独成为一类”；
+- 禁止把 W1→W9 写成能力升级路径。
+
+### 21.2 C1–C5
+C1–C5 是 workload composition archetype，不是自主等级。必须：
+- 首次出现同时给中文名称；
+- 给出真实系统/论文来源；
+- 解释为什么该组合会显著改变资源结构；
+- 明确 C4/C5 是正交叠加项，不是比 C2/C3 更高级；
+- 六摄 UAV 基础组合可用 C2，但需由项目 Requirement 冻结后确认具体 workload cardinality。
+
+### 21.3 国产 Trust Plane
+安全可信章节不得只引用 TPM/TEE/RATS 等国外体系。国产产品方向至少检查：
+- GB/T 38638-2020；
+- GB/T 29829-2022；
+- GM/T 0011-2023；
+- GM/T 0012-2020；
+- GM/T 0013-2021；
+- GM/T 0058-2018；
+- GM/T 0079-2020；
+- GM/T 0082-2020；
+- GM/T 0028-2024；
+- GM/T 0132-2023；
+- GM/T 0115-2021；
+- SM2/SM3/SM4 现行国家标准。
+
+标准只能作为规范依据，不得因此推断具体 SoC/板卡已实现全部能力。
