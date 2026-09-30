@@ -498,15 +498,33 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 
 ## 19. Phase 3：最终报告准备
 
-产品层代表性调研已达到停止扩张条件。
+产品层代表性调研已达到停止扩张条件，正式报告编制已启动。
+
+当前已落盘：
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md`
+- `reports/drafts/final-report-evidence-map.md`
+
+报告主线：
+```text
+应用场景
+→ 功能栈
+→ Workload
+→ 系统资源
+→ 计算架构
+→ 产品形态
+→ 安全可信
+→ 六摄 Case
+→ 产品研发建议
+```
 
 后续默认主线：
-1. 建立 final report evidence map；
-2. 按“应用 → workload → resource → architecture → product → case”组织报告；
-3. 产品章节不按厂商逐家罗列；
-4. 六摄 Case 单独作为方法验证；
-5. 工程建议必须标明 FACT / VENDOR / INFER / GAP；
-6. 若报告写作发现证据缺口，只按具体结论回补资料，不重新开启泛产品搜索。
+1. 以 evidence map 驱动正文迭代，不重新按厂商组织材料；
+2. 产品章节不按厂商逐家罗列，而按产品形态和 workload 适配组织；
+3. 六摄 Case 单独作为 Requirement→Workload→Resource→Architecture→Validation 方法验证；
+4. 工程建议必须标明 FACT / VENDOR / INFER / GAP；
+5. 若报告写作发现证据缺口，只按具体结论回补资料，不重新开启泛产品搜索；
+6. v0.2 优先补产品形态对比表、Trust Plane 正式架构图、六摄 Gate 总表和统一 References；
+7. 最终报告图表必须保留原始数据与可重复生成路径。
 
 
 ## 20. 安全可信无人智算扩展
