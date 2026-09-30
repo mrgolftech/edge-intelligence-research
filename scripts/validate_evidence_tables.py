@@ -27,11 +27,20 @@ TABLES = {
         "fps", "pixel_rate_mp_s", "bpp_scenario", "payload_gbps",
         "payload_MBps", "source_url", "evidence_note"
     ],
+    ROOT / "data/calculations/avoidance-timing-fact-anchors.csv": [
+        "anchor_id", "source_type", "source_name", "speed_mps",
+        "evidence_status", "source_url", "limitations"
+    ],
+    ROOT / "data/calculations/six-camera-observed-mode-sensitivity.csv": [
+        "profile_id", "camera_count", "width", "height", "format",
+        "fps_scenario", "six_stream_pixel_rate_mp_s",
+        "six_stream_memory_payload_MBps", "status", "notes"
+    ],
 }
 
 ALLOWED_EVIDENCE_TOKENS = {
     "SPEC", "REF", "CASE", "BENCH", "PAPER", "DEMO",
-    "VENDOR_BENCH", "PARTNER_BENCH", "INFER", "GAP", "HOST"
+    "VENDOR_BENCH", "PARTNER_BENCH", "HISTORICAL_REF", "INFER", "GAP", "HOST"
 }
 
 
@@ -56,9 +65,10 @@ def validate_table(path: Path, required: list[str]) -> list[str]:
                 if not (row.get(col) or "").strip():
                     errors.append(f"{path.name}:{lineno}: empty required field {col}")
 
-            urls = [u.strip() for u in (row.get("source_url") or "").split("|") if u.strip()]
-            if not urls or any(not u.startswith(("http://", "https://")) for u in urls):
-                errors.append(f"{path.name}:{lineno}: invalid source_url")
+            if "source_url" in fields:
+                urls = [u.strip() for u in (row.get("source_url") or "").split("|") if u.strip()]
+                if not urls or any(not u.startswith(("http://", "https://")) for u in urls):
+                    errors.append(f"{path.name}:{lineno}: invalid source_url")
 
             status = row.get("evidence_status") or ""
             unknown = [x for x in split_status(status) if x not in ALLOWED_EVIDENCE_TOKENS]

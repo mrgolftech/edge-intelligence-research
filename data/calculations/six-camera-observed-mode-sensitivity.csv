@@ -1,0 +1,6 @@
+profile_id,camera_count,width,height,format,bytes_per_pixel,fps_scenario,frame_period_ms,six_stream_pixel_rate_mp_s,six_stream_memory_payload_MBps,travel_per_frame_at_3mps_m,travel_per_frame_at_4mps_m,status,notes
+OBS_1072x1280_NV12_F10,6,1072,1280,NV12,1.5,10,100,82.3296,123.4944,0.3,0.4,SENSITIVITY,"1072x1280 NV12 is project-observed single-stream output; six-stream same-mode and 10fps are not confirmed"
+OBS_1072x1280_NV12_F20,6,1072,1280,NV12,1.5,20,50,164.6592,246.9888,0.15,0.2,SENSITIVITY,"FPS scenario only"
+OBS_1072x1280_NV12_F30,6,1072,1280,NV12,1.5,30,33.3333,246.9888,370.4832,0.1,0.133333,SENSITIVITY,"FPS scenario only"
+OBS_1072x1280_NV12_F60,6,1072,1280,NV12,1.5,60,16.6667,493.9776,740.9664,0.05,0.066667,SENSITIVITY,"FPS scenario only"
+OBS_1072x1280_NV12_F120,6,1072,1280,NV12,1.5,120,8.3333,987.9552,1481.9328,0.025,0.033333,STRESS_ONLY,"120fps is SC132GS public max capability anchor; project actual FPS is unconfirmed"

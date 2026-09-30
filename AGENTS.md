@@ -59,6 +59,36 @@
 
 不得用“需要 XX TOPS”替代工作负载分析。
 
+### 5.1 避障时延必须由任务动力学反推
+
+对 UAV/UGV/机器人避障，禁止直接规定“模型 ≥XX FPS”或“推理 ≤XX ms”后宣称系统满足实时性。
+
+至少建立：
+
+```text
+T_reaction =
+T_sample_wait
++ T_sensor/ISP
++ T_queue
++ T_perception
++ T_fusion/map
++ T_planner
++ T_command
++ T_vehicle_response
+
+D_reaction = speed × T_reaction
+```
+
+并结合：
+- usable sensor/detection range；
+- keep-out distance；
+- acceleration / jerk / turning capability；
+- measured braking/vehicle tracking response；
+- P50/P95/P99/max Frame Age；
+- drop/deadline miss。
+
+必须区分 **update rate、单模块 compute latency、Frame Age、closed-loop response**。
+
 ## 6. Benchmark 证据规则
 
 第一版公共基线：
@@ -258,12 +288,14 @@ scripts/
 - **平台证据缺口 Backlog 与自动校验脚本**；
 - **Nova Carter 物理多相机 W1+W2+W3(depth)+W4 Live Graph Benchmark**；
 - **Metis/Hailo/M50 的 ARM Host + Accelerator 证据链与架构分析**；
-- **六摄像头公开参考负载档位（EuRoC/TUM-VI/nuScenes/Nova），含可复现计算 CSV/脚本**。
+- **六摄像头公开参考负载档位（EuRoC/TUM-VI/nuScenes/Nova），含可复现计算 CSV/脚本**；
+- **PX4/EGO/FASTER 证据锚定的避障闭环时延预算与计算脚本**；
+- **项目单路 1072×1280 NV12 观测模式的 FPS 敏感性数据，明确与 Sensor RAW/六路实际模式区分**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；
 2. 按 evidence-gap-backlog 补六摄像头同构多 workload 并发、IQ-9075 物理多 Camera/VIO，以及 RK3588+独立 Accelerator 的端到端证据；
-3. 六摄像头 Case 冻结 W1 参数并完成第一轮推导；
+3. 六摄像头 Case 冻结实际 FPS/六路模式、速度/探测距离/vehicle response，并由此反推 Frame Age deadline；
 4. 分别建立一体 SoC 与 Host+Accelerator Benchmark；
 5. 用统一测试条件和实测逐步替换 INFER/GAP；
 6. 运行 scripts/validate_evidence_tables.py 检查证据字段；

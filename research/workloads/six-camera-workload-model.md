@@ -1,6 +1,6 @@
 # 六摄像头无人平台工作负载模型
 
-- 状态：v0.2
+- 状态：v0.3
 - 日期：2026-09-30
 - 目的：把“六路摄像头 + 智能任务”转换为可计算、可测试的系统资源需求
 - 原则：未知输入保持“待确认”，不以产品 TOPS 反推需求
@@ -24,10 +24,10 @@
 | 参数 | 符号 | 当前值 |
 |---|---:|---|
 | 摄像头数量 | N | **6（已确认）** |
-| 单路宽度 | W | 待确认 |
-| 单路高度 | H | 待确认 |
+| 单路宽度 | W | **已观测单路 downstream output = 1072；六路一致性待确认** |
+| 单路高度 | H | **已观测单路 downstream output = 1280；六路一致性待确认** |
 | 帧率 | F | 待确认 |
-| 传感器输出位宽/像素格式 | bpp | 待确认 |
+| 传感器输出位宽/像素格式 | bpp | **已观测 downstream media format = NV12；Sensor RAW 格式待确认** |
 | 是否全部同时工作 | - | 待确认 |
 | 是否需要录像编码 | - | 待确认 |
 | 相机同步误差要求 | Δt | 待确认 |
@@ -283,6 +283,13 @@ T9: VLM（可选）
 
 ## 8. 端到端延迟模型
 
+详见：
+- `research/workloads/avoidance-latency-budget.md`
+- `data/calculations/avoidance-timing-fact-anchors.csv`
+- `scripts/calc_avoidance_latency_budget.py`
+
+公开事实已确认：PX4 Collision Prevention 本身就是将 sensor range、sensor/vehicle delay、acceleration/jerk 与 keep-out distance 联合考虑，而不是按固定 FPS 判定安全性。
+
 对于避障或实时感知，不能只看模型推理 latency。
 
 完整延迟：
@@ -300,9 +307,28 @@ L_exposure
 + L_fusion
 + L_planning
 + L_control_interface
++ L_vehicle_response
 ```
 
 后续应测量实际时间戳，而不是只将各模块宣传值相加。
+
+对避障筛查，进一步使用：
+
+```text
+T_reaction_worst =
+1 / SensorUpdateRate
++ L_pipeline
++ L_vehicle_response
+
+D_reaction = VehicleSpeed × T_reaction_worst
+
+D_required =
+D_keepout
++ D_reaction
++ D_braking_or_turning
+```
+
+其中 `1/SensorUpdateRate` 表示障碍刚好错过上一帧时的最坏一周期采样等待。
 
 ### 关键风险
 
@@ -495,7 +521,7 @@ P_compute
 5. 同步要求；
 6. 第一版检测模型；
 7. 第一版避障算法路线；
-8. 目标端到端延迟；
+8. 目标飞行速度、有效探测距离、keep-out distance、车辆响应与由此反推的 P95/P99 端到端 deadline；
 9. 目标功耗；
 10. 现有平台实测 CPU/DDR/NPU 占用。
 

@@ -63,12 +63,14 @@
 
 ### 工程架构
 - [PX4 Computer Vision](references/webpages/px4-computer-vision.md)
+- [PX4 Collision Prevention 时延事实](references/webpages/px4-collision-prevention-timing.md)
 - [Nav2](references/webpages/nav2-navigation.md)
 - [Autoware Architecture](references/webpages/autoware-architecture.md)
 - [NVIDIA Isaac ROS](references/webpages/nvidia-isaac-ros.md)
 
 ### 综述/趋势
 - [UAV 自主系统综述索引](references/papers/uav-autonomy-surveys.md)
+- [UAV 局部规划计算时延证据](references/papers/uav-planning-latency-evidence.md)
 - [UAV GNSS拒止导航综述 2025](references/papers/uav-gnss-denied-navigation-2025.md)
 - [仓储与物流机器人综述 2026](references/papers/amr-logistics-2026.md)
 - [多机器人导航综述 2025](references/papers/multi-robot-navigation-2025.md)
@@ -121,11 +123,14 @@
 - [Sensor payload baselines](data/calculations/sensor-payload-baselines.csv)
 - [Model memory baselines](data/calculations/model-memory-baselines.csv)
 - [Six-camera reference profiles](data/calculations/six-camera-reference-profiles.csv)
+- [Avoidance timing fact anchors](data/calculations/avoidance-timing-fact-anchors.csv)
+- [Observed 1072×1280 NV12 sensitivity](data/calculations/six-camera-observed-mode-sensitivity.csv)
 
 ## 工程 Case
 - [六摄像头无人平台](cases/six-camera-uav/README.md)
 - [六摄像头工作负载模型](research/workloads/six-camera-workload-model.md)
 - [六摄像头参考工作负载档位](research/workloads/six-camera-reference-load-profiles.md)
+- [六摄像头避障闭环时延预算](research/workloads/avoidance-latency-budget.md)
 
 ## 当前研究判断
 
@@ -141,6 +146,7 @@
 10. Nova Carter 已有物理多相机 Live Graph Benchmark，可把 Jetson 的证据从“单节点/整机案例”推进到 W1+W2+W3(depth)+W4 组合 workload；但仍不能等同六摄像头+YOLO。
 11. Metis/Hailo/M50 均已证明 ARM Host 路线真实存在；因此独立 Accelerator 评估必须把 Host CPU/VPU/DDR、PCIe、预处理和总系统功耗作为一等指标。
 12. 六摄像头 W1 已建立证据锚定的参考档位：六路等效公开参考约 43–829 MP/s，说明 Camera 数量相同也可能相差近一个数量级以上；分辨率/FPS/数据路径必须先于 TOPS 冻结。
+13. 避障实时性已改为参数化闭环预算：速度、有效探测距离、sensor/frame age、vehicle tracking delay、acceleration/jerk 和 keep-out distance共同决定 deadline；禁止用单模型 FPS 或 planner latency 代替端到端时延。
 
 ## 下一阶段
 
@@ -149,7 +155,7 @@
 1. 继续补全结构化平台事实表中的“未确认”字段，不跨 SKU 猜参数；
 2. 按 evidence-gap-backlog 优先补六摄像头同构 W1+W2+W3 并发、IQ-9075 物理多 Camera/VIO，以及 RK3588+Metis/Hailo/LQ50 的同 Host 端到端数据；
 3. 将 Jetson/Metis/Hailo/LQ50/IQ-9075 的公开 benchmark 进一步补齐 precision、software、power 条件；
-4. 冻结六摄像头 Case 的 W1 输入参数；
+4. 冻结六摄像头 Case 的实际 FPS/六路 mode 一致性，以及 flight speed / usable detection range / vehicle response；
 5. 分别设计“一体 SoC”和“Host + AI Accelerator”两条实验路径；
 6. 运行 scripts/validate_evidence_tables.py 保持证据字段完整；
 7. 逐步用可复现实测替换矩阵中的 INFER/GAP。

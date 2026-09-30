@@ -1,6 +1,6 @@
 # 六摄像头无人平台视觉系统 Case Study
 
-- 状态：Baseline v0.2
+- 状态：Baseline v0.3
 - 日期：2026-09-30
 
 ## 研究目的
@@ -32,6 +32,7 @@ VLM / 多模态场景理解
 ## 当前已确认
 
 - 系统以六路摄像头为主要视觉输入；
+- 既往单路媒体链路已观测到 **1072×1280、NV12** downstream output；当前尚不能确认六路全部为同一 mode/FPS；
 - 需要研究多路同步采集；
 - 需要完成视频采集和处理；
 - 后续目标包括检测、融合、障碍检测和避障；
@@ -44,16 +45,16 @@ VLM / 多模态场景理解
 
 | 参数 | 当前状态 |
 |---|---|
-| 每路分辨率 | 待确认 |
+| 每路分辨率 | 单路已观测 1072×1280；六路一致性待确认 |
 | 每路帧率 | 待确认 |
-| 像素格式 | 待确认 |
+| 像素格式 | 单路 downstream 已观测 NV12；Sensor RAW 待确认 |
 | 是否同时编码录像 | 待确认 |
 | 六路同步误差指标 | 待确认 |
 | 检测模型及输入尺寸 | 待确认 |
 | 跟踪算法 | 待确认 |
 | 拼接/融合方式 | 待确认 |
 | 深度估计方案 | 待确认 |
-| 避障最大允许延迟 | 待确认 |
+| 避障最大允许延迟 | **改为由速度/探测距离/车辆响应反推；当前待冻结任务参数** |
 | VIO/SLAM 输入相机数量 | 待确认 |
 | 目标功耗预算 | 待确认 |
 | 尺寸/重量约束 | 待确认 |
@@ -144,6 +145,21 @@ VLM / 多模态场景理解
 - Token吞吐
 - 多模态输入延迟
 - 与实时感知任务共存情况
+
+## 避障闭环时延预算
+
+已新增：
+- `research/workloads/avoidance-latency-budget.md`
+- `data/calculations/avoidance-timing-fact-anchors.csv`
+- `scripts/calc_avoidance_latency_budget.py`
+
+核心判断：
+- 不预设“30 FPS”或“100 ms”就是合格；
+- 先冻结 flight speed、usable detection range、keep-out distance、vehicle response、acceleration/jerk；
+- 再反推 sensor update rate 与 Frame Age P95/P99 deadline；
+- planner/DNN 的单模块 latency 只占闭环预算的一部分。
+
+PX4 当前 Collision Prevention 公开资料可作为事实锚点：`CP_DELAY` 明确包含 sensor delay 和 vehicle tracking delay，速度限制还考虑 sensor range、acceleration 和 jerk。
 
 ## 第一版 Benchmark 建议
 

@@ -1,6 +1,6 @@
 # 端侧自主系统定量工作负载基线
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 目的：为 W1–W8 建立可复现、可量化、可跨平台复测的第一版 workload baseline
 - 原则：优先采用公开数据集、同行评审论文、官方开源实现和行业 benchmark；没有统一基准时明确标注
@@ -23,7 +23,7 @@
 | W3 DNN Perception | MLPerf Inference v6.1 YOLOv11 Edge | COCO safe subset；Offline/SingleStream/MultiStream | latency、throughput、accuracy、power | 已定义 |
 | W4 3D/BEV | MLPerf PointPainting + BEVFormer/nuScenes | PointPainting 44M/3T FLOPs；nuScenes 6-camera suite | 3D mAP/NDS、latency、memory、DDR | 已定义 |
 | W5 Prediction | Waymo Open Motion Dataset | 103,354×20s@10Hz；1s history + 8s future windows | minADE/minFDE/MR/mAP、latency | 已定义为算法/实时回放基线 |
-| W6 Planning | Nav2 MPPI | example: 30Hz, 2000 batches, 56 points；官方测得100+Hz on 4th-gen i5 | cycle time、WCET、CPU、success | 已定义 |
+| W6 Planning | Nav2 MPPI + EGO-Planner + PX4 Collision Prevention timing | Nav2 example 30Hz；EGO planner 0.81ms paper benchmark；PX4 当前逻辑联合 sensor range/delay/jerk/acc 限速 | cycle time、WCET、Frame Age、vehicle response、CPU、success | 已定义；UAV closed-loop 需参数化 |
 | W7 VLM/VLA | OpenVLA + LIBERO/LIBERO-Plus | OpenVLA 7B；建议控制数据约5–10Hz；LIBERO 130 tasks | task success、action latency、memory、power | 已定义 |
 | W8 Multi-Agent | MRTA/Multi-Robot survey-derived scaling profile | robots N、tasks M、update rate、network | allocation latency、task throughput、network、scaling | 尚无统一硬件 benchmark，定义参数化实验 |
 
@@ -77,6 +77,25 @@ Nav2 MPPI 当前文档：
 - 官方称 modest 4th-gen Intel i5 可达到 100+ Hz
 
 这是 CPU/优化 workload 事实基线，不是所有机器人频率要求。
+
+### W6 UAV 避障闭环
+
+新增事实锚点：
+- PX4 Collision Prevention 当前文档：外部 vision sensor delay 可高达约 0.2s；vehicle tracking delay 典型约 0.1–0.5s；速度限制同时依赖 sensor range、delay、jerk/acceleration；
+- PX4 历史 Obstacle Avoidance：local planner 约30Hz/3m/s，global planner 约10Hz/1–1.5m/s，但该旧 Path Planning Interface 自v1.15起移除，只作历史参考；
+- EGO-Planner：论文规划计算平均约0.81ms；官方代码默认100Hz FSM、20Hz collision check；这些都不等于端到端感知闭环频率；
+- FASTER：公开真实未知环境飞行最高约7.8m/s，可作为高动态 stress anchor。
+
+因此 UAV W6 Benchmark 需要额外记录：
+- sensor update rate；
+- Frame Age P50/P95/P99/max；
+- map/fusion latency；
+- planner latency；
+- command transport latency；
+- measured vehicle tracking response；
+- speed/range/deadline miss。
+
+详见 `avoidance-latency-budget.md`。
 
 ### W7 VLA
 
