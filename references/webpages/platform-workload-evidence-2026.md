@@ -1,6 +1,6 @@
 # 平台—工作负载适配证据索引（2026-09）
 
-- 状态：v0.2
+- 状态：v0.3
 - 日期：2026-09-30
 - 目的：为“workload → compute resource → platform”适配矩阵提供可追溯事实依据
 - 原则：本文件只记录公开证据及其能支撑的结论，不把厂商定位、峰值算力或系统案例自动外推为所有 workload 的实测能力
@@ -9,6 +9,7 @@
 
 - **CASE**：已公开的命名产品、量产项目或实际系统案例
 - **BENCH**：公开 benchmark / 实测，且有明确模型、输入或平台条件
+- **PARTNER_BENCH**：合作伙伴实测，测试条件较明确，但不是芯片厂商独立复测
 - **REF**：官方 reference design / 官方明确给出的应用路径
 - **SPEC**：官方 Datasheet / Product Brief / Developer Guide 明确能力
 - **PAPER**：论文中的平台实测
@@ -114,7 +115,7 @@
   - 最多 16 concurrent cameras
   - CPU + GPU + NPU + 4-core real-time MCU subsystem
   - Ubuntu / Qualcomm Linux
-  - 官方称可运行 13B 模型；EVK 页面给出约 12 tokens/s 的示例
+  - 官方产品页给出 Llama 2 7B up to 22 tokens/s，并称平台可运行 13B 参数模型
   - 目标应用明确包含 Robotics、AMR、Drones
 - 支撑：W1/W3/W7/W9 的结构性能力；W2/W4/W6 需要后续系统 benchmark。
 - 限制：截至本轮尚未收集到与 Jetson Isaac ROS 同口径的公开机器人 benchmark。
@@ -310,9 +311,80 @@
   - 2.5W 为产品典型功耗，不能当作每条 benchmark 的独立实测功耗；
   - 不能据此推断 W2/W6/W9。
 
+### E23 — RKNN Model Zoo / RK3588 官方模型性能
+- 类型：BENCH
+- 来源：Rockchip 官方 GitHub（airockchip/rknn_model_zoo）
+- URL：https://github.com/airockchip/rknn_model_zoo
+- 访问日期：2026-09-30
+- 已确认：
+  - 性能表明确标注 RK3588 为 `@single_core`；
+  - YOLOv8n，INT8，输入 [1,3,640,640]：73.5 FPS；
+  - YOLOv8s：38.0 FPS；YOLOv8m：16.2 FPS；
+  - YOLO11n：60.0 FPS；YOLO11s：33.0 FPS；YOLO11m：12.7 FPS；
+  - 数据按各平台最大 NPU 频率采集；
+  - 默认只统计 model inference，不含未特别注明的 pre/post-processing。
+- 支撑：RK3588 的 W3 DNN perception 已有官方可量化 benchmark，不再仅停留在 6 TOPS 规格层。
+- 限制：
+  - 单 NPU 核、单模型 inference-only；
+  - 不能代表六摄像头并发、视频 decode/ISP、CPU post-process、SLAM 同时运行时的端到端性能；
+  - toolkit/runtime/模型导出方式会影响实际结果，复现时必须冻结版本和频率。
+
+### E24 — ROIV-SLAM on RK3588
+- 类型：PAPER
+- 来源：Sensors 2026, 26(13), 4053，同行评审
+- DOI：https://doi.org/10.3390/s26134053
+- URL：https://www.mdpi.com/1424-8220/26/13/4053
+- 已确认：
+  - 感知计算单元采用 RK3588 embedded platform；
+  - RGB-D：30 Hz，RGB 1920×1080、Depth 640×480；
+  - IMU：200 Hz；
+  - 2D LiDAR：12 Hz，20,000 points/s；
+  - 系统执行视觉、LiDAR、IMU、wheel odometry 融合，包含前端估计、factor-graph back-end 与 loop closure；
+  - 论文报告真实机器人实验与建图/轨迹比较。
+- 支撑：RK3588 上 W2 Localization/SLAM 与 W4 Mapping 的真实论文系统证据。
+- 限制：
+  - 不是 ORB-SLAM3；
+  - 未给出可直接用于平台横比的 CPU/GPU/NPU 占用、每帧 latency、DDR、功耗；
+  - 不能说明与 YOLO、多路摄像头并发后的性能边界。
+
+### E25 — IQ-9075 + acontis EC-Master 实时控制 Benchmark
+- 类型：PARTNER_BENCH
+- 来源：acontis partner benchmark，发布于 Qualcomm Partner Network，2026-06-22
+- URL：https://www.qualcomm.com/support/partner/blog/acontis-iq9
+- 已确认：
+  - EC-Master 运行在 Dragonwing IQ-9075；
+  - Linux CLOCK_MONOTONIC real-time scheduling；
+  - target cycle time 1 ms；
+  - 完整 EtherCAT frame processing，包括 send/receive/application workload；
+  - acontis 标准测试台：7 slaves，512-byte process data；
+  - 连续稳定 round-trip 约 100 μs；
+  - jitter 为个位数微秒，文章标题明确称 under 8 μs；
+  - 文中给出 ROS 2 integration 路径。
+- 支撑：IQ-9075 的 W9 deterministic control / real-time communication 有实际量化证据，不再只是“存在 4-core MCU”的规格推断。
+- 限制：
+  - 合作伙伴 Benchmark，不等于 Qualcomm 独立 Benchmark；
+  - EtherCAT timing 不等于整机飞控 WCET/安全认证；
+  - 没有同时公布 AI+EtherCAT 满负载下的完整资源占用。
+
+### E26 — M50/BX50 多路视频分析系统路线
+- 类型：SPEC（系统级厂商资料）
+- 来源：后摩智能官方
+- URL：https://www.houmoai.com/1/35/NewsDetails.html
+- URL：https://www.houmoai.com/58/10/Product.html
+- 已确认/厂商宣称：
+  - 后摩发布资料称 BX50 计算盒子支持 32 路视频分析与本地大模型；
+  - BX50 采用 RK3588 CPU/GPU host + 1×M50 NPU；
+  - BX50 官方页面列出 Ubuntu 20.04、整机典型功耗 ≤25W；
+  - M50 为 160 TOPS INT8 / 100 TFLOPS bFP16，PCIe Gen4 x4。
+- 支撑：M50 可以进入“Host + accelerator”的多路视频分析系统，不应再把其产业定位仅理解为 LLM。
+- 限制：
+  - 没有公开 32 路视频的 codec、分辨率、FPS、模型、精度、检测 FPS/latency；
+  - 这是 BX50 整机资料，不能直接等价为任意 LQ50 + 任意 host 的 W3 性能；
+  - 因此 LQ50 直接 W3 benchmark 仍然是 GAP。
+
 ## 11. 关键结论
 
 1. **有完整自主系统案例的平台，不代表每个 workload 都在同一处理器上执行。** Skydio X10、Journey 6M 等只能证明系统级组合成立，必须保留任务分区未知这一限制。
-2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo/LQ50 都需要 host；W1/W2/W6/W9 不能因为“TOPS 足够”就自动判定适配。
+2. **独立 AI 加速器的证据目前最集中在 W3 和 W7。** Metis/Hailo 已有直接视觉证据；M50/BX50 已有系统级多路视频路线，但 LQ50 直接视觉 benchmark 仍缺失。W1/W2/W6/W9 不能因为“TOPS 足够”就自动判定适配。
 3. **公开 benchmark 必须记录 host。** Metis 官方 YOLO benchmark 使用 i9-13900K；若换成 RK3588/ARM host，端到端性能必须重新测试。
 4. **六摄像头无人平台不能直接从任何一条产品案例抄结论。** 可把 Skydio X10 的“6 路导航相机 + Jetson Orin”作为案例锚点，但仍需按本项目分辨率、帧率、同步、算法、功耗重新建模。

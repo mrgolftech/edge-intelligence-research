@@ -8,8 +8,10 @@
 
 ### G01 — RK3588: W1 + W2 + W3 并发
 当前：
-- 有 W1/W3 规格基础；
-- 缺少可复现的 VIO/SLAM + 多路视频 + detection 并发数据。
+- W1 有官方规格基础；
+- W3 已有 Rockchip 官方 RKNN Model Zoo 单核 NPU benchmark：YOLOv8n INT8 640×640 为 73.5 FPS，YOLO11n 为 60.0 FPS；
+- W2/W4 已有 2026 Sensors 论文在 RK3588 上运行多传感器 SLAM 的系统证据；
+- **仍缺** 可复现的 VIO/SLAM + 多路视频 + detection 并发数据。
 
 可接受证据：
 1. 官方/论文/开源项目，明确板卡、算法、输入、FPS、软件版本；
@@ -26,7 +28,9 @@
 ### G02 — LQ50: W3 视觉推理与 Host 开销
 当前：
 - W7 大模型证据明确；
-- W3 公开、条件完整的数据不足。
+- 后摩官方 BX50 已证明 RK3588 host + M50 可作为多路视频分析系统，厂商称支持 32 路视频分析；
+- 但没有公开 codec / 分辨率 / FPS / 模型 / precision / latency；
+- 因此 **LQ50 direct W3 BENCH 仍为 GAP**。
 
 可接受证据：
 - 同一 YOLO 模型的 input/precision/FPS；
@@ -55,7 +59,9 @@
 ### G04 — Qualcomm IQ-9075: Robotics workload benchmark
 当前：
 - 100 dense TOPS、16 camera、36GB ECC、real-time subsystem、LLM 数据已有官方证据；
-- 缺 ROS2/VIO/SLAM/多路 detection 的公开统一测试。
+- acontis 已在 IQ-9075 上完成 EtherCAT partner benchmark：1 ms target cycle、约100 μs round-trip、<8 μs jitter（7 slaves / 512-byte process data）；
+- W9 的实时通信基础已从 SPEC 升级为 PARTNER_BENCH；
+- 仍缺 ROS2/VIO/SLAM/多路 detection 的公开统一测试。
 
 目标：
 - 搜索 Qualcomm/partner robotics reference implementation；
@@ -110,6 +116,7 @@ Metis/Hailo/LQ50统一测试：
 - GAP → SPEC：官方文档明确硬件/SDK能力
 - SPEC → REF：官方给出完整 reference design/application flow
 - SPEC/REF → BENCH：测试条件足够复现
+- PARTNER_BENCH：合作伙伴公开实测，条件明确但需保留来源独立性限制
 - 任意 → CASE：出现命名真实产品/量产部署
 - DEMO 不自动升级为 BENCH
 - CASE 不自动升级为 BENCH

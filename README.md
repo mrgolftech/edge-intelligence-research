@@ -126,7 +126,7 @@
 4. 大模型进入机器人端侧已有真实产品和研究依据，但不能作为所有无人装备的默认需求。
 5. 端侧与边缘/云协同将长期并存。
 6. 公开 workload 已可用 EuRoC/TUM-VI、MLPerf、nuScenes/Waymo、Nav2 MPPI、OpenVLA/LIBERO 建立第一版跨平台基准。
-7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**\n8. 平台公开 Benchmark 已开始结构化，当前可以确认：Jetson Isaac ROS 与 Metis 视觉数据具有较好的量化条件；IQ-9075、Hailo-10H、LQ50 的 GenAI 数据仍属于厂商量级锚点，条件不完整时禁止横向排序。
+7. 第一版证据驱动的平台适配矩阵已经建立；当前最重要的新结论是：**高集成 SoC/SoM 与 M.2/PCIe AI accelerator 必须分两类评估，后者的 TOPS 不能替代 host 的 W1/W2/W6/W9 能力。**\n8. 平台公开 Benchmark 已开始结构化，当前可以确认：Jetson Isaac ROS、Rockchip RKNN Model Zoo 与 Metis 视觉数据具有量化条件；IQ-9075 的实时 EtherCAT 控制已有 partner benchmark；Hailo-10H、LQ50 的 GenAI 数据仍需保留厂商量级锚点属性。
 
 ## 下一阶段
 
