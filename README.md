@@ -221,7 +221,8 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 
 Phase 3 已进入正式报告编制阶段：
 
-- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.1](reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md)
+- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.2（当前版）](reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md)
+- [v0.1 初稿](reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md)
 - [最终调研报告 Evidence Map](reports/drafts/final-report-evidence-map.md)
 
 报告主线：
