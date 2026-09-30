@@ -1,6 +1,6 @@
 # 六摄像头无人平台：Phase 2 Requirement Card
 
-- 状态：v0.2
+- 状态：v0.3
 - 日期：2026-09-30
 - 性质：需求基线 + 待冻结项
 - 原则：已确认事实与工程场景变量分开
@@ -86,6 +86,29 @@ Workload：
 - no/drop target。
 
 平台判断首先看 Camera subsystem，不看 NPU TOPS。
+
+### R25 — Perception Topology
+
+W3 必须先区分：
+
+- `PER_VIEW`：每路 Camera 独立 detector；
+- `FUSED_MULTI_VIEW`：一次 model call 联合消费多个 Camera views；
+- `MIXED`：两者并存。
+
+只有 PER_VIEW 才能直接使用：
+
+```text
+InferenceRate = N_detection × detection_hz
+```
+
+FUSED_MULTI_VIEW 应使用：
+
+```text
+ModelCallRate = perception_update_hz
+InputViewRate = N_views_per_call × perception_update_hz
+```
+
+因此 `N_detection × Hz` 不再作为所有多 Camera 感知的通用公式。
 
 ### Package B — Detection / Tracking
 
@@ -295,3 +318,16 @@ Requirement Card
 2. traceability CSV；
 3. Architecture Gate Matrix；
 4. 对应 Benchmark/validation gap。
+
+
+---
+
+## 10. Requirement Profile v0.2
+
+公开 Reference / Benchmark / Stress 锚点已独立整理：
+
+- `cases/six-camera-uav/phase-2-requirement-profile-v0.2.md`
+- `data/calculations/six-camera-requirement-profile-v02.csv`
+- `references/webpages/six-camera-requirement-reference-anchors-2026.md`
+
+规则：Reference/Benchmark/Stress 不得自动提升为 Project Nominal。

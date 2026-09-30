@@ -1,6 +1,6 @@
 # 从任务需求到端侧计算架构：需求驱动选型方法
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 阶段：Phase 2 — Requirement & Architecture Synthesis
 - 目的：把 Phase 1 已建立的场景、工作负载、Benchmark 和平台证据转化为可复用的系统架构决策方法
@@ -139,9 +139,19 @@ BW_DDR,working ≈
 ### 3.3 W3 推理调用率
 
 ```text
+PER_VIEW:
 InferenceRate_total =
 Σ(N_model_stream × inference_hz)
+
+FUSED_MULTI_VIEW:
+ModelCallRate =
+Σ(model_update_hz)
+
+InputViewRate =
+Σ(N_views_per_call × model_update_hz)
 ```
+
+先冻结 perception topology：PER_VIEW / FUSED_MULTI_VIEW / MIXED。多视图融合模型不能按 Camera 数机械乘 model inference 次数。
 
 然后再绑定：
 - model；

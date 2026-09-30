@@ -1,6 +1,6 @@
 # 系统资源预算模型：从 W1–W9 到 CPU/GPU/NPU/DDR/I/O
 
-- 状态：v0.1
+- 状态：v0.2
 - 日期：2026-09-30
 - 性质：工程计算框架
 - 证据基础：本仓库已有 workload profiles、public benchmark、platform evidence
@@ -96,6 +96,7 @@ FramePayload = Σ(N×W×H×FPS×bytes_per_pixel)
 ## 4. W3 DNN Perception
 
 输入：
+- perception topology：PER_VIEW / FUSED_MULTI_VIEW / MIXED；
 - model；
 - input；
 - precision；
@@ -103,7 +104,12 @@ FramePayload = Σ(N×W×H×FPS×bytes_per_pixel)
 - inference rate。
 
 ```text
-InferenceRate = Σ(N_detection_i × Hz_i)
+PER_VIEW:
+InferenceRate = Σ(N_view_i × Hz_i)
+
+FUSED_MULTI_VIEW:
+ModelCallRate = Σ(ModelUpdateHz_i)
+InputViewRate = Σ(N_views_per_call_i × ModelUpdateHz_i)
 ```
 
 资源：
@@ -111,6 +117,11 @@ InferenceRate = Σ(N_detection_i × Hz_i)
 - CPU pre/post；
 - DDR/tensor；
 - queue。
+
+注意：
+- 只有 PER_VIEW 才能把 Camera 数直接乘以 per-view Hz 得到 model calls/s；
+- fused multi-view 模型一次调用可同时消费多路 Camera，必须同时记录 `views/call` 与 `model calls/s`；
+- MIXED 架构按 branch 分别预算。
 
 输出：
 - single inference latency；
