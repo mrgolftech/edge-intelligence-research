@@ -1,7 +1,7 @@
 # 六摄像头无人平台视觉系统 Case Study
 
-- 状态：Baseline v0.1
-- 日期：2026-09-29
+- 状态：Baseline v0.2
+- 日期：2026-09-30
 
 ## 研究目的
 
@@ -59,6 +59,22 @@ VLM / 多模态场景理解
 | 尺寸/重量约束 | 待确认 |
 
 禁止在这些输入没有明确前直接得出“需要 XX TOPS”的结论。
+
+## 公开参考负载档位
+
+在实际 Camera mode 未冻结前，使用公开系统/数据集做参考量级，不把其当成项目指标：
+
+| 参考 | Camera/图像配置 | 六路等效 Pixel Rate | 用途 |
+|---|---|---:|---|
+| EuRoC MAV | 752×480 @20Hz | 43.315 MP/s | MAV/VIO 低分辨率参考 |
+| TUM VI | 1024×1024 @20Hz | 125.829 MP/s | VIO 高分辨率参考 |
+| nuScenes | 6×1600×900 @12Hz | 103.680 MP/s | 原生六 Camera 感知参考 |
+| NVIDIA Hawk | 1920×1200 @30Hz | 414.720 MP/s | 高分辨率机器人参考 |
+| NVIDIA Hawk | 1920×1200 @60Hz | 829.440 MP/s | 高帧率压力档 |
+
+详见 `research/workloads/six-camera-reference-load-profiles.md`。
+
+注意：Hawk 是双目模块，一个模块含两个同步 imager；表中的“六路等效”按 **六个 image streams** 算术缩放，不是六个 Hawk 模块。
 
 ## 后续工作负载模型
 

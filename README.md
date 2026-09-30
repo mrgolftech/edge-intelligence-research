@@ -120,10 +120,12 @@
 ### 可复用计算数据
 - [Sensor payload baselines](data/calculations/sensor-payload-baselines.csv)
 - [Model memory baselines](data/calculations/model-memory-baselines.csv)
+- [Six-camera reference profiles](data/calculations/six-camera-reference-profiles.csv)
 
 ## 工程 Case
 - [六摄像头无人平台](cases/six-camera-uav/README.md)
 - [六摄像头工作负载模型](research/workloads/six-camera-workload-model.md)
+- [六摄像头参考工作负载档位](research/workloads/six-camera-reference-load-profiles.md)
 
 ## 当前研究判断
 
@@ -138,6 +140,7 @@
 9. M50 已有官方 xh2 YOLOv5s/YOLO11m 模型级 latency/accuracy/throughput 数据；LQ50 板卡 + Host 的多流视频、PCIe 和总功耗仍需单独证据。
 10. Nova Carter 已有物理多相机 Live Graph Benchmark，可把 Jetson 的证据从“单节点/整机案例”推进到 W1+W2+W3(depth)+W4 组合 workload；但仍不能等同六摄像头+YOLO。
 11. Metis/Hailo/M50 均已证明 ARM Host 路线真实存在；因此独立 Accelerator 评估必须把 Host CPU/VPU/DDR、PCIe、预处理和总系统功耗作为一等指标。
+12. 六摄像头 W1 已建立证据锚定的参考档位：六路等效公开参考约 43–829 MP/s，说明 Camera 数量相同也可能相差近一个数量级以上；分辨率/FPS/数据路径必须先于 TOPS 冻结。
 
 ## 下一阶段
 

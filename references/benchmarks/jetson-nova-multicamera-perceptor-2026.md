@@ -20,7 +20,8 @@
 ## 2. 物理传感器与同步
 
 Nova Carter 使用 Jetson AGX Orin，并包含：
-- 4× HAWK stereo camera，1920×1200，60 FPS；
+- 4× HAWK stereo camera module，1920×1200，60 FPS；
+- **一个 Hawk 模块内部包含两个同步的 global-shutter 1920×1200 imagers**；
 - 4× OWL fisheye camera，1920×1200，120 FPS；
 - 32-beam 360° LiDAR、2× planar LiDAR、IMU 等。
 
@@ -40,10 +41,10 @@ https://nvidia-isaac-ros.github.io/v/release-3.2/performance/index.html
 
 | Live Graph | 输入 | 公开结果 |
 |---|---|---|
-| Data Recorder | 4 Hawk Cameras, 1200p | 22.4 FPS/stream avg；0 dropped frames avg |
-| Multicam Visual SLAM | 4 Hawk Cameras, 1200p | 30.1 FPS |
-| DNN Stereo Disparity | 3 Hawk Cameras, 1200p；1×Full ESS + 2×throttled Light ESS | Full 30.2 FPS；Light 15.2 FPS avg |
-| Perceptor | 3 Hawk Cameras, 1200p | Visual Odometry 30.0 FPS；Nvblox ESDF 9.45 FPS；Mesh 2.63 FPS |
+| Data Recorder | 4 Hawk stereo modules, 1200p | 22.4 FPS/stream avg；0 dropped frames avg |
+| Multicam Visual SLAM | 4 Hawk stereo modules, 1200p | 30.1 FPS |
+| DNN Stereo Disparity | 3 Hawk stereo modules, 1200p；1×Full ESS + 2×throttled Light ESS | Full 30.2 FPS；Light 15.2 FPS avg |
+| Perceptor | 3 Hawk stereo modules, 1200p | Visual Odometry 30.0 FPS；Nvblox ESDF 9.45 FPS；Mesh 2.63 FPS |
 
 ## 4. Benchmark 方法
 
@@ -79,7 +80,8 @@ https://nvidia-isaac-ros.github.io/v/release-3.1/reference_workflows/isaac_perce
 ## 6. 证据边界
 
 这组数据仍然不能直接回答本项目六摄像头系统：
-- 不是 6-camera graph；
+- Hawk 是 stereo module，官方表中的“3/4 Hawk”不能机械等同于 3/4 个单目 image stream；
+- 不是与本项目 6 个独立 Camera 完全同构的 graph；
 - W3 是 stereo depth，不是 YOLO object detection；
 - 未在性能汇总表中给出系统功耗、CPU/GPU/DDR utilization；
 - release-3.2 是历史固定软件版本，不能自动代表当前 release-5.x；

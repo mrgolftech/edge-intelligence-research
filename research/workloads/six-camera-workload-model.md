@@ -1,7 +1,7 @@
 # 六摄像头无人平台工作负载模型
 
-- 状态：v0.1
-- 日期：2026-09-29
+- 状态：v0.2
+- 日期：2026-09-30
 - 目的：把“六路摄像头 + 智能任务”转换为可计算、可测试的系统资源需求
 - 原则：未知输入保持“待确认”，不以产品 TOPS 反推需求
 
@@ -41,6 +41,24 @@
 | 尺寸/重量预算 | - | 待确认 |
 
 这些参数未冻结前，不输出固定“需要 XX TOPS”的结论。
+
+### 2.1 公开参考负载档位
+
+在项目实际 Sensor mode 未冻结前，新增：
+- `research/workloads/six-camera-reference-load-profiles.md`
+- `data/calculations/six-camera-reference-profiles.csv`
+- `scripts/calc_six_camera_reference_profiles.py`
+
+它们使用 EuRoC、TUM-VI、nuScenes、NVIDIA Hawk/Nova 的公开分辨率与帧率作为**参考锚点**，再做六路等效算术，不把参考系统参数当成项目要求。
+
+当前六路等效 pixel-rate 参考范围：
+- EuRoC 量级：约 43.315 MP/s；
+- nuScenes 原生六 Camera：103.680 MP/s；
+- TUM-VI 六路等效：125.829 MP/s；
+- Hawk 1920×1200@30 六 image-stream 等效：414.720 MP/s；
+- Hawk 1920×1200@60 六 image-stream 等效：829.440 MP/s。
+
+这说明“6 路 Camera”本身不能定义 W1；resolution、FPS、pixel representation 才能把系统负载确定下来。
 
 ---
 
@@ -216,6 +234,17 @@ Compute_total = Σ Compute_i
 - 温度
 
 ---
+
+### 6.1 不再默认六路都执行同一种算法
+
+后续必须分别冻结：
+- `N_capture`：物理持续采集路数；
+- `N_detection`：进入 DNN detection 的路数；
+- `N_vio`：进入 VIO/SLAM 的路数；
+- `N_depth`：进入 stereo/depth 的路数；
+- `N_record`：进入编码/录像的路数。
+
+公开事实说明这些集合通常并不相同：EuRoC/TUM-VI 使用 stereo VIO；nuScenes 使用六路环视感知；Nova 使用 stereo depth/VSLAM。不能预设本项目“六路全部跑同一模型”。
 
 ## 7. 多任务并发模型
 
@@ -457,7 +486,7 @@ P_compute
 
 ## 14. 下一步需要获取的数据
 
-第一优先级不是找更多芯片，而是冻结或测量以下输入：
+第一优先级不是找更多芯片，而是冻结或从硬件资料确认以下输入：
 
 1. 六路相机分辨率；
 2. 帧率；

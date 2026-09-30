@@ -140,6 +140,8 @@ TOPS 只是一个指标。必须同时关注 CPU、GPU、NPU/AI ASIC、精度、
 
 不得外推到所有无人系统。
 
+六摄像头 Case 必须分别记录 `N_capture / N_detection / N_vio / N_depth / N_record`，禁止默认“六路全部进入同一个 DNN/VIO/Depth workload”。
+
 ## 11. 信息源与证据
 
 优先级：
@@ -248,14 +250,15 @@ scripts/
 - 公共 benchmark 基线；
 - sensor payload / model memory calculation data；
 - 代表平台事实底座；
-- **证据驱动 workload → resource → platform 适配矩阵 v0.7**；
+- **证据驱动 workload → resource → platform 适配矩阵 v0.8**；
 - **平台 workload 证据索引（Jetson/Qualcomm/RK3588/Journey6/A2000/Metis/Hailo/LQ50）**；
 - 六摄像头 workload model；
 - **结构化平台事实表 data/product-specs/platform-facts.csv**；
 - **结构化公开 Benchmark 表 data/benchmarks/public-platform-benchmarks.csv**；
 - **平台证据缺口 Backlog 与自动校验脚本**；
 - **Nova Carter 物理多相机 W1+W2+W3(depth)+W4 Live Graph Benchmark**；
-- **Metis/Hailo/M50 的 ARM Host + Accelerator 证据链与架构分析**。
+- **Metis/Hailo/M50 的 ARM Host + Accelerator 证据链与架构分析**；
+- **六摄像头公开参考负载档位（EuRoC/TUM-VI/nuScenes/Nova），含可复现计算 CSV/脚本**。
 
 下一阶段：
 1. 继续补平台事实表中的未确认字段，禁止跨 SKU 推测；
