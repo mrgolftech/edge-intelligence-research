@@ -1,0 +1,15 @@
+flowchart TB
+    S["传感器/数据源<br/>Camera / LiDAR / Radar / IMU / GNSS"] --> W1["W1 传感器输入与视频流水线"]
+    W1 --> W2["W2 状态估计与定位<br/>VO / VIO / GNSS-INS"]
+    W1 --> W3["W3 DNN 感知<br/>Detection / Segmentation / Depth"]
+    W2 --> W4["W4 地图与世界表示<br/>SLAM / Costmap / BEV / Occupancy"]
+    W3 --> W4
+    W3 --> W5["W5 跟踪/预测/态势理解"]
+    W4 --> W6["W6 规划/优化/决策"]
+    W5 --> W6
+    W6 --> W9["W9 安全监督与控制接口"]
+    W7["W7 Foundation Model<br/>LLM / VLM / VLA"] -. 增强感知/理解/规划 .-> W3
+    W7 -. 高层决策 .-> W6
+    W8["W8 多机协同 / Fleet"] -. 共享状态/任务/感知 .-> W4
+    W8 -. 协同规划 .-> W6
+    W9 --> A["FCU / MCU / 执行机构"]
