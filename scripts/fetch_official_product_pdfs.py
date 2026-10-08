@@ -123,7 +123,7 @@ def run():
                 succeeded += 1
                 # Public GitHub: honor ND and copy byte-for-byte (no rewriting).
                 if item.get("publish_to_git") == "YES":
-                    if item.get("rights_policy") == "CC-BY-ND-4.0-UNMODIFIED" and confirm_cc_by_nd(extracted):
+                    if item.get("rights_policy") in ("CC-BY-ND-4.0-UNMODIFIED", "CC-BY-ND-4.0-VERIFY") and confirm_cc_by_nd(extracted):
                         name = item["id"] + "_" + pathlib.Path(urllib.parse.urlparse(raw_url).path).name
                         path = DEST / name
                         path.write_bytes(data)
