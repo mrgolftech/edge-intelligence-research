@@ -501,7 +501,8 @@ C1–C5 **不是能力等级、自主等级、性能等级或 TOPS 档位**。
 产品层代表性调研已达到停止扩张条件，正式报告编制已启动。
 
 当前已落盘：
-- `reports/drafts/secure-trusted-edge-intelligence-report-v0.4.md`（当前分类依据与国产可信标准强化版）
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.5.md`（当前技术报告体例版，已纳入产品调研）
+- `reports/drafts/secure-trusted-edge-intelligence-report-v0.4.md`（分类依据与国产可信标准强化版）
 - `reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md`（证据强化版）
 - `reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md`（可读性增强版）
 - `reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md`（历史初稿）
