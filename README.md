@@ -268,3 +268,10 @@ Phase 3 已进入正式报告编制阶段：
 - [原始资料快照、来源、许可、归档状态与高价值阅读索引](references/archive/README.md)
 - [R01–R62 逐条引用及本地归档状态](references/archive/reference-inventory-2026-10-08.csv)
 - [六份官方/开源源文档的固定版本清单](references/archive/source-manifest-2026-10-08.csv)
+
+
+## 原始参考文献 PDF 已归档（2026-10-08）
+
+- [6 份原始 PDF 全文](references/archive/pdfs/)
+- [官方来源、页数与 SHA-256 校验清单](references/archive/pdfs/MANIFEST.csv)
+- [参考资料归档目录说明](references/archive/README.md)
