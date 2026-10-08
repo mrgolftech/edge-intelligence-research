@@ -275,3 +275,12 @@ Phase 3 已进入正式报告编制阶段：
 - [9 份原始 PDF 全文](references/archive/pdfs/)
 - [官方来源、页数与 SHA-256 校验清单](references/archive/pdfs/MANIFEST.csv)
 - [参考资料归档目录说明](references/archive/README.md)
+
+
+## 产品原始规格书与开发资料（2026-10-08）
+
+- [13项厂商产品 PDF 原始下载源与自动校验](references/product-documents/official-product-pdf-sources.csv)
+- [厂商原版 PDF 获取/校验审计与可点击资料](references/product-documents/audit-report-2026-10-08.md)
+- [可公开再分发的产品原版 PDF 文件](references/product-documents/originals/)
+- [逐条校验结果：页数、SHA-256、许可状态](references/product-documents/fetch-results.csv)
+- [原始产品资料采集脚本](scripts/fetch_official_product_pdfs.py)
