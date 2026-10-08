@@ -1,0 +1,12 @@
+flowchart LR
+    R["任务与 Requirement Vector"] --> S{"Sensor/I/O Gate"}
+    S -->|Fail| X["淘汰/需外部桥接"]
+    S -->|Pass| RT{"Real-Time Gate"}
+    RT -->|Pass| M{"Memory/DDR Gate"}
+    M -->|Pass| C{"Compute Engine Gate"}
+    C -->|Pass| Q{"Concurrency/P99 Gate"}
+    Q -->|Pass| P{"SWaP/Thermal Gate"}
+    P -->|Pass| SW{"Software/Productization Gate"}
+    SW -->|Pass| SEC{"Security/Trust Gate"}
+    SEC -->|Pass| V["进入系统 Benchmark"]
+    V --> O["Confirmed-fit / Candidate / Constraint"]
