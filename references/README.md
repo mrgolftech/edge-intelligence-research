@@ -13,3 +13,15 @@
 - [上游 Commit/Blob SHA/许可证与本地路径](archive/source-manifest-2026-10-08.csv)
 
 **说明：** 开放访问不必然等于可以转载。GB/T、GM/T、SAE 和不明授权的厂商文档不直接归档受限全文。源项目 README 快照不等于正式论文原文。
+
+
+## 已归档原始 PDF（可下载）
+
+- **R01**：[NIST ALFUS Volume II（73页）](archive/pdfs/NIST_ALFUS_SP1011_II_1_0.pdf)
+- **R14**：[Edge Robotics Survey（27页）](archive/pdfs/Edge_Computing_Robotics_Survey_JSAN2025.pdf)
+- **R18**：[PaLM-E（20页）](archive/pdfs/PaLM-E_ICML2023.pdf)
+- **R20**：[OpenVLA（37页）](archive/pdfs/OpenVLA_2024_arxiv2406.09246v3.pdf)
+- **R30**：[IETF RFC 9334（46页）](archive/pdfs/IETF_RFC9334_RATS_Architecture.pdf)
+- **R31**：[NIST SP 800-193（45页）](archive/pdfs/NIST_SP_800-193_Firmware_Resiliency.pdf)
+
+[PDF 原始文件校验清单](archive/pdfs/MANIFEST.csv)
