@@ -98,6 +98,7 @@
 
 <a id="r11"></a>
 ### R11 — GNSS-Denied UAV Navigation Review
+- **原版论文 PDF（已校验归档）**：[GNSS拒止无人机导航综述（32页）](archive/pdfs/GNSS_Denied_UAV_Navigation_Review_2025.pdf)；[SHA-256/许可/来源](archive/pdfs/MANIFEST.csv)。
 - 类型：同行评审综述
 - 文献：Gnss-denied unmanned aerial vehicle navigation: analyzing computational complexity, sensor fusion, and localization methodologies
 - 期刊：Satellite Navigation, 2025
@@ -154,6 +155,7 @@
 
 <a id="r17"></a>
 ### R17 — BEVFormer
+- **原版论文 PDF（已校验归档）**：[BEVFormer ECCV2022（20页）](archive/pdfs/BEVFormer_ECCV2022_arxiv2203.17270v2.pdf)；[SHA-256/许可/来源](archive/pdfs/MANIFEST.csv)。
 - 类型：ECCV 2022 论文
 - 主要用途：证明 multi-camera + spatial cross-attention + temporal self-attention 的 BEV 感知是真实工作负载；支撑 W4/W5 的多视图时空融合分析。
 - ECVA 页面：https://www.ecva.net/papers/eccv_2022/papers_ECCV/html/694_ECCV_2022_paper.php
@@ -187,6 +189,7 @@
 
 <a id="r21"></a>
 ### R21 — Efficient Vision-Language-Action Models Survey
+- **原版论文 PDF（已校验归档）**：[VLA效率综述（25页）](archive/pdfs/Efficient_VLA_Models_Survey_2025_arxiv2510.17111v3.pdf)；[SHA-256/许可/来源](archive/pdfs/MANIFEST.csv)。
 - 类型：系统综述
 - 主要用途：支撑 VLA 部署的 computational demand、memory demand、real-time requirement、latency 与 onboard constraints。
 - 页面：https://arxiv.org/abs/2510.17111
