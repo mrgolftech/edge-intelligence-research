@@ -9,6 +9,21 @@
 - [GitHub Actions 自动取证任务](../../.github/workflows/collect-product-reference-pdfs.yml)：跑一次下载和校验，生成可下载的完整原件包。未获再分发授权的文件不提交到公开仓库，只保留官方原始地址、页数、大小及 SHA-256；工作流运行时校验 PDF，之后不保留受限全文。
 - [持续归档目录](originals/)：仅纳入可明确原样再分发的官方 PDF，保留原文许可。
 
+
+## 已新增：15 份可直接在 GitHub 打开的产品原版 PDF
+
+[打开 BeagleBoard 15 份 PDF 产品硬件设计原件](originals/beagleboard/README.md)
+
+- 产品：BeagleBone AI-64（TI TDA4VM）、BeagleY-AI（TI AM67A）、BeagleV-Fire、BeaglePlay、BeagleBone AI、BeagleV-Ahead。
+- 文件类别：完整原理图、I²C总线树、电源流向图、系统框图、BOM 器件位号参考、PCB 布局及机械结构。
+- 校验：[固定来源、文件大小、页数、SHA-256、实际归档路径](open-hardware-pdf-manifest.csv)。
+- 许可：上述厂商开源硬件仓库具有 CC BY 4.0 原文许可，15 份原件未经修改，已经成功写入公开 Git 仓库。
+- 与此前 Raspberry Pi CM4/CM5/CM5 IO Board 3 份产品原版 PDF 合计，**当前本仓库实际持有 18 份产品硬件 PDF 原件**；另外还有早期归档的 9 份论文/规范原文。
+
+### 受限制厂商资料
+
+Jetson、Qualcomm、Firefly、Axelera、Radxa 等来源清单中成功下载校验的 PDF **没有获得统一公开转载授权**，因此不作为公开 Git 提交。需要查看原件时可直接使用 CSV 中的官方下载 URL；不要把“PDF 已校验”误判为“二进制原件已入库”。
+
 ## 第二批补充状态（2026-10-08）
 
 - 官方产品原版 PDF 地址累计 **30** 项；
