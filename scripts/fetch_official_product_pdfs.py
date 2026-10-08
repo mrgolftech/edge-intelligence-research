@@ -37,6 +37,7 @@ ALLOWED = (
     "advdownload.advantech.com",
     "hailo.ai",
     "datasheets.raspberrypi.com",
+    "docs.axelera.ai",
 )
 
 
@@ -108,7 +109,8 @@ def run():
             try:
                 data, pages, extracted = fetch_pdf(raw_url)
                 hint = (item.get("keyword") or "").lower().strip()
-                if hint and hint not in extracted.lower():
+                compact = lambda s: re.sub(r"[^a-z0-9]", "", s.lower())
+                if hint and compact(hint) not in compact(extracted):
                     raise ValueError("model/product keyword missing in PDF first/last pages: " + hint)
                 record.update({
                     "actual_url": raw_url,
