@@ -1,0 +1,12 @@
+flowchart LR
+    C1["C1 多摄像头智能分析<br/>W1+W3+W5"] --> C2["C2 视觉自主系统<br/>W1+W2+W3+W4+W6+W9"]
+    C2 --> C3["C3 多传感器自主系统<br/>+W5 / LiDAR / Radar / Fusion"]
+    W7["W7 Foundation Model<br/>VLM / LLM / VLA"] -. 增强 .-> C1
+    W7 -. 增强 .-> C2
+    W7 -. 增强 .-> C3
+    W8["W8 Multi-Agent / Fleet"] -. 协同 .-> C2
+    W8 -. 协同 .-> C3
+    C4["C4 基础模型增强<br/>= Base + W7"]
+    C5["C5 协同自主<br/>= C2/C3 + W8"]
+    W7 --> C4
+    W8 --> C5
