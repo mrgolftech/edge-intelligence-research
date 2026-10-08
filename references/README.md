@@ -24,4 +24,8 @@
 - **R30**：[IETF RFC 9334（46页）](archive/pdfs/IETF_RFC9334_RATS_Architecture.pdf)
 - **R31**：[NIST SP 800-193（45页）](archive/pdfs/NIST_SP_800-193_Firmware_Resiliency.pdf)
 
+- **R11**：[GNSS拒止无人机导航综述（32页）](archive/pdfs/GNSS_Denied_UAV_Navigation_Review_2025.pdf)
+- **R17**：[BEVFormer ECCV2022（20页）](archive/pdfs/BEVFormer_ECCV2022_arxiv2203.17270v2.pdf)
+- **R21**：[VLA效率综述（25页）](archive/pdfs/Efficient_VLA_Models_Survey_2025_arxiv2510.17111v3.pdf)
+
 [PDF 原始文件校验清单](archive/pdfs/MANIFEST.csv)
