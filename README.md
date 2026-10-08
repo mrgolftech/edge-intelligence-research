@@ -221,7 +221,8 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 
 Phase 3 已进入正式报告编制阶段：
 
-- [面向无人装备的安全可信端侧智能计算平台技术调研与产品化建议 v0.4（当前版：分类依据与国产可信标准强化）](reports/drafts/secure-trusted-edge-intelligence-report-v0.4.md)
+- [面向无人装备的安全可信端侧智能计算平台技术调研报告 v0.5（当前版：技术报告体例 + 产品调研）](reports/drafts/secure-trusted-edge-intelligence-report-v0.5.md)
+- [v0.4 分类依据与国产可信标准强化版](reports/drafts/secure-trusted-edge-intelligence-report-v0.4.md)
 - [v0.3 证据强化版](reports/drafts/secure-trusted-edge-intelligence-report-v0.3.md)
 - [v0.2 可读性增强版](reports/drafts/secure-trusted-edge-intelligence-report-v0.2.md)
 - [v0.1 初稿](reports/drafts/secure-trusted-edge-intelligence-report-v0.1.md)
@@ -251,3 +252,13 @@ Phase 3 已进入正式报告编制阶段：
 - [C1–C5 工作负载组合定义依据](research/workloads/workload-composition-definition-basis-v1.md)
 - [国产可信计算与商用密码标准证据索引](references/standards/china-trusted-computing-crypto-standards-2026.md)
 - [最终报告参考文献索引 v0.4](references/final-report-reference-index-v0.4.md)
+
+
+### v0.5 新增报告资产
+
+- [代表产品调研数据 v0.5](data/product-specs/final-report-representative-products-v05.csv)
+- [C1–C5 组合关系图源](assets/diagrams/final-report-composition-map-v05.mmd)
+- [产品 Landscape 图源](assets/diagrams/final-report-product-landscape-v05.mmd)
+- [平台筛选流程图源](assets/diagrams/final-report-platform-selection-v05.mmd)
+- [2026-10-08 产品公开资料复核](references/webpages/product-refresh-2026-10-08.md)
+- [最终报告参考文献索引 v0.5](references/final-report-reference-index-v0.5.md)
