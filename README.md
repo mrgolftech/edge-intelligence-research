@@ -262,3 +262,9 @@ Phase 3 已进入正式报告编制阶段：
 - [平台筛选流程图源](assets/diagrams/final-report-platform-selection-v05.mmd)
 - [2026-10-08 产品公开资料复核](references/webpages/product-refresh-2026-10-08.md)
 - [最终报告参考文献索引 v0.5](references/final-report-reference-index-v0.5.md)
+
+
+## 参考文献原文与证据归档（2026-10-08）
+- [原始资料快照、来源、许可、归档状态与高价值阅读索引](references/archive/README.md)
+- [R01–R62 逐条引用及本地归档状态](references/archive/reference-inventory-2026-10-08.csv)
+- [六份官方/开源源文档的固定版本清单](references/archive/source-manifest-2026-10-08.csv)
