@@ -13,12 +13,16 @@
 | R30 | IETF RFC 9334（46页） | [打开 PDF](pdfs/IETF_RFC9334_RATS_Architecture.pdf) |
 | R31 | NIST SP 800-193（45页） | [打开 PDF](pdfs/NIST_SP_800-193_Firmware_Resiliency.pdf) |
 
+| R11 | GNSS拒止无人机导航综述（32页） | [打开 PDF](pdfs/GNSS_Denied_UAV_Navigation_Review_2025.pdf) |
+| R17 | BEVFormer ECCV2022（20页） | [打开 PDF](pdfs/BEVFormer_ECCV2022_arxiv2203.17270v2.pdf) |
+| R21 | VLA效率综述（25页） | [打开 PDF](pdfs/Efficient_VLA_Models_Survey_2025_arxiv2510.17111v3.pdf) |
+
 - [PDF 校验、源网址、许可与 SHA-256 清单](pdfs/MANIFEST.csv)
 - [下载/校验的 GitHub Actions](../../.github/workflows/archive-licensed-reference-pdfs.yml)
 
 **许可：** PaLM-E、OpenVLA、Edge Robotics 为 CC BY 4.0；RFC 9334 按 IETF Trust 许可完整、未经修改地转载；NIST 公开报告保留完整原文及署名。GB/T、GM/T、SAE 等标准全文以及授权不明确的厂商手册暂不复制。
 
-当前为原版 PDF 6 份；另有官方工程文档和开源项目 README 快照 6 份、对应许可证 4 份。
+当前为原版 PDF 9 份；另有官方工程文档和开源项目 README 快照 6 份、对应许可证 4 份。
 
 
 **归档日期：2026-10-08；当前批次：首批 6 份许可明确的原始资料快照。**
