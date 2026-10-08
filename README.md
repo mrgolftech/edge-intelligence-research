@@ -286,3 +286,11 @@ Phase 3 已进入正式报告编制阶段：
 - [可公开再分发的产品原版 PDF 文件](references/product-documents/originals/)
 - [逐条校验结果：页数、SHA-256、许可状态](references/product-documents/fetch-results.csv)
 - [原始产品资料采集脚本](scripts/fetch_official_product_pdfs.py)
+
+## 产品原版 PDF 实际入库（2026-10-08）
+
+- [新增15份可直接打开的 BeagleBoard AI/机器人计算板原始硬件 PDF](references/product-documents/originals/beagleboard/README.md)
+- [产品 PDF 文件实存目录](references/product-documents/originals/)
+- [15份新增 PDF 的 SHA-256、页数、上游 Git 版本](references/product-documents/open-hardware-pdf-manifest.csv)
+- 现有产品原版 PDF：**18份**（15 份 BeagleBoard + 3 份 Raspberry Pi），均为实际入库原件；另有论文/安全规范原版 PDF 9 份。
+- 其他厂商文档的下载和 SHA-256 校验结果记录于 [产品文档状态清单](references/product-documents/fetch-results.csv)，并不代表受限 PDF 已公开入库。
