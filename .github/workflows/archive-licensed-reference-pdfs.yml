@@ -33,6 +33,9 @@ jobs:
            dict(ref='R31',name='NIST_SP_800-193_Firmware_Resiliency.pdf',title='Platform Firmware Resiliency Guidelines',authors='Regen­scheid / NIST',year='2018',license='US Government work; confirm third-party elements before downstream adaptations',url='https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-193.pdf',alternative='',page='https://csrc.nist.gov/pubs/sp/800/193/final'),
            dict(ref='R01',name='NIST_ALFUS_SP1011_II_1_0.pdf',title='Autonomy Levels for Unmanned Systems (ALFUS) Framework Volume II',authors='Huang, Messina and Albus / NIST',year='2007',license='US Government publication; retain original attribution',url='https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication1011-II-1.0.pdf',alternative='',page='https://www.nist.gov/publications/autonomy-levels-unmanned-systems-alfus-frameworkvolume-ii-framework-models-initial'),
            dict(ref='R30',name='IETF_RFC9334_RATS_Architecture.pdf',title='Remote ATtestation procedureS (RATS) Architecture',authors='Birkholz et al. / IETF',year='2023',license='IETF Trust Legal Provisions; full, unmodified redistribution',url='https://www.rfc-editor.org/rfc/rfc9334.pdf',alternative='',page='https://www.rfc-editor.org/rfc/rfc9334'),
+           dict(ref='R11',name='GNSS_Denied_UAV_Navigation_Review_2025.pdf',title='GNSS-denied UAV Navigation Review',authors='Jarraya et al.',year='2025',license='CC BY 4.0',url='https://link.springer.com/content/pdf/10.1186/s43020-025-00162-z.pdf',alternative='',page='https://link.springer.com/article/10.1186/s43020-025-00162-z'),
+           dict(ref='R17',name='BEVFormer_ECCV2022_arxiv2203.17270v2.pdf',title='BEVFormer: Learning Bird Eye View Representation from Multi-Camera Images via Spatiotemporal Transformers',authors='Li et al.',year='2022',license='CC BY 4.0',url='https://arxiv.org/pdf/2203.17270v2',alternative='',page='https://arxiv.org/abs/2203.17270'),
+           dict(ref='R21',name='Efficient_VLA_Models_Survey_2025_arxiv2510.17111v3.pdf',title='Efficient Vision-Language-Action Models for Embodied Manipulation: A Systematic Survey',authors='Guan et al.',year='2025',license='CC BY 4.0',url='https://arxiv.org/pdf/2510.17111v3',alternative='',page='https://arxiv.org/abs/2510.17111'),
           ]
           dst=Path('references/archive/pdfs');dst.mkdir(parents=True,exist_ok=True)
           manifest=dst/'MANIFEST.csv'
@@ -54,7 +57,7 @@ jobs:
              np=len(pdf.pages)
              if np<2:raise ValueError('suspiciously few pages')
              text=((pdf.pages[0].extract_text() or '')+(pdf.pages[1].extract_text() or '')).lower()
-             keywords={'R18':['palm-e','multimodal'], 'R20':['openvla','vision-language-action'],'R14':['edge computing','robotics'],'R31':['firmware','resiliency'],'R01':['autonomy','unmanned'],'R30':['attestation','rats']}[item['ref']]
+             keywords={'R18':['palm-e','multimodal'], 'R20':['openvla','vision-language-action'],'R14':['edge computing','robotics'],'R31':['firmware','resiliency'],'R01':['autonomy','unmanned'],'R30':['attestation','rats'],'R11':['navigation','gnss'],'R17':['bevformer','bird'],'R21':['efficient','vision-language-action']}[item['ref']]
              if not any(x in text for x in keywords):raise ValueError('unexpected PDF text')
              sha=hashlib.sha256(data).hexdigest()
              records.append([item['ref'],item['title'],item['authors'],item['year'],item['license'],url,item['page'],str(p),len(data),np,sha,'2026-10-08','ARCHIVED'])
