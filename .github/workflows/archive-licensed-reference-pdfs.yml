@@ -1,0 +1,80 @@
+name: Archive licensed reference PDFs
+
+on:
+  push:
+    paths:
+      - ".github/workflows/archive-licensed-reference-pdfs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  archive-pdfs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install PDF verifier
+        run: python -m pip install --quiet pypdf
+      - name: Download originals and verify PDF files
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import csv, hashlib, os, urllib.request, urllib.error
+          from pypdf import PdfReader
+          items=[
+           dict(ref='R18',name='PaLM-E_ICML2023.pdf',title='PaLM-E: An Embodied Multimodal Language Model',authors='Driess et al.',year='2023',license='CC BY 4.0',url='https://proceedings.mlr.press/v202/driess23a/driess23a.pdf',alternative='',page='https://proceedings.mlr.press/v202/driess23a.html'),
+           dict(ref='R20',name='OpenVLA_2024_arxiv2406.09246v3.pdf',title='OpenVLA: An Open-Source Vision-Language-Action Model',authors='Kim et al.',year='2024',license='CC BY 4.0',url='https://arxiv.org/pdf/2406.09246v3',alternative='https://export.arxiv.org/pdf/2406.09246v3',page='https://arxiv.org/abs/2406.09246'),
+           dict(ref='R14',name='Edge_Computing_Robotics_Survey_JSAN2025.pdf',title='Edge Computing and Its Application in Robotics: A Survey',authors='Tahir and Parasuraman',year='2025',license='CC BY 4.0',url='https://www.mdpi.com/2224-2708/14/4/65/pdf',alternative='https://mdpi-res.com/d_attachment/jsan/jsan-14-00065/article_deploy/jsan-14-00065.pdf',page='https://doi.org/10.3390/jsan14040065'),
+           dict(ref='R31',name='NIST_SP_800-193_Firmware_Resiliency.pdf',title='Platform Firmware Resiliency Guidelines',authors='Regen­scheid / NIST',year='2018',license='US Government work; confirm third-party elements before downstream adaptations',url='https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-193.pdf',alternative='',page='https://csrc.nist.gov/pubs/sp/800/193/final')
+          ]
+          dst=Path('references/archive/pdfs');dst.mkdir(parents=True,exist_ok=True)
+          manifest=dst/'MANIFEST.csv'
+          records=[]
+          for item in items:
+           errors=[]
+           p=dst/item['name']
+           for url in [item['url'],item['alternative']]:
+            if not url:continue
+            try:
+             req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 (Research citation archive; reference verification)','Accept':'application/pdf,*/*'})
+             with urllib.request.urlopen(req, timeout=85) as resp:
+              ct=resp.headers.get('Content-Type','')
+              data=resp.read(60*1024*1024+1)
+             if len(data)>60*1024*1024:raise ValueError('too large')
+             if not data.startswith(b'%PDF-'):raise ValueError('not PDF (HTTP may return HTML)')
+             p.write_bytes(data)
+             pdf=PdfReader(str(p))
+             np=len(pdf.pages)
+             if np<2:raise ValueError('suspiciously few pages')
+             text=((pdf.pages[0].extract_text() or '')+(pdf.pages[1].extract_text() or '')).lower()
+             keywords={'R18':['palm-e','multimodal'], 'R20':['openvla','vision-language-action'],'R14':['edge computing','robotics'],'R31':['firmware','resiliency']}[item['ref']]
+             if not any(x in text for x in keywords):raise ValueError('unexpected PDF text')
+             sha=hashlib.sha256(data).hexdigest()
+             records.append([item['ref'],item['title'],item['authors'],item['year'],item['license'],url,item['page'],str(p),len(data),np,sha,'2026-10-08','ARCHIVED'])
+             print('ARCHIVED',item['ref'],np,len(data),sha,item['name'])
+             break
+            except Exception as e:
+             errors.append(type(e).__name__+': '+str(e)[:150])
+             p.unlink(missing_ok=True)
+           else:print('FAILED',item['ref'], ' | '.join(errors))
+          with manifest.open('w',newline='',encoding='utf-8') as f:
+           w=csv.writer(f)
+           w.writerow(['ref_id','title','authors','year','license','download_url','official_landing','local_path','size_bytes','pages','sha256','access_date','status'])
+           w.writerows(records)
+          print(f'Archive result: {len(records)}/{len(items)} originals')
+          if not records:raise SystemExit('No PDFs downloaded; avoid committing empty archive')
+          PY
+      - name: Commit verified original PDFs to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add references/archive/pdfs/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(references): archive verified licensed original PDFs"
+            git push origin HEAD:main
+          fi
