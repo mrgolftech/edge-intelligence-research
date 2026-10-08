@@ -1,17 +1,30 @@
 # 现有端侧计算产品原始文件资料库
 
-更新日期：2026-10-08。
+更新日期：2026-10-08（第二批补证）。
 
 **本目录以厂商原始规格书、数据手册、技术简报与设计指南为主，区别于研究者整理的产品参数表和二次摘要。**
 
 - [官方产品 PDF 下载源清单](official-product-pdf-sources.csv)：字段包括厂商、产品、产品形态、文档类型、官方原始 URL、版本/标题、许可策略、报告引用和优先级。
 - [PDF 下载与校验脚本](../../scripts/fetch_official_product_pdfs.py)：读取 CSV；校验 PDF magic、页数、内容、来源、计算 SHA256；拒绝 HTML 假 PDF；生成逐项状态记录。
-- [GitHub Actions 自动取证任务](../../.github/workflows/collect-product-reference-pdfs.yml)：跑一次下载和校验，生成可下载的完整原件包。部分文件因版权不直接提交到公开仓库。
+- [GitHub Actions 自动取证任务](../../.github/workflows/collect-product-reference-pdfs.yml)：跑一次下载和校验，生成可下载的完整原件包。未获再分发授权的文件不提交到公开仓库，只保留官方原始地址、页数、大小及 SHA-256；工作流运行时校验 PDF，之后不保留受限全文。
 - [持续归档目录](originals/)：仅纳入可明确原样再分发的官方 PDF，保留原文许可。
+
+## 第二批补充状态（2026-10-08）
+
+- 官方产品原版 PDF 地址累计 **30** 项；
+- GitHub Actions 实际下载并校验原版 PDF **27** 项；
+- 仅限官方原件/校验信息可查但不在本仓库存放原件：**24** 项（其中有 4 项下载成功但许可未确认，不可公开转载）；
+- 已明确许可并完整保存在本公开 GitHub 的产品原版 PDF：**3** 项；
+- 失败/返回非 PDF：**3** 项；
+- 新增基于 CC BY 4.0 许可的 [Radxa 原始开发文档源码快照 4 份](open-docs/README.md)。
+- [第二批 P014–P030 原始 PDF 来源与工程证据](second-batch-source-evidence-2026-10-08.md)。
+- [全部 30 条来源的实际原件校验记录](fetch-results.csv)。
+
+**状态含义**：`FETCHED_ORIGINAL_LINK_ONLY` 表示本轮曾下载并校验原始 PDF，但原始二进制内容并未复制到公开 GitHub 仓库；`ORIGINAL_PDF_IN_REPO` 才代表在本仓库能够打开原文；`RIGHTS_NOT_CONFIRMED_NO_REPOST` 表示已取得原始 PDF 但版权证明不足；`DOWNLOAD_FAILED` 表示校验未通过。
 
 ## 为什么与 papers/ 下原版 PDF 的策略不同？
 
-这是**公开仓库**。厂商官网给出下载地址，不代表授予 GitHub 二次分发许可。NVIDIA、Qualcomm、Firefly、Hailo、研华等文档需要区分**公开下载**和**原文再发布**。对尚未取得再发布授权的文档，仓库保留官方下载入口、版本、校验元数据，下载的完整 PDF 作为 GitHub Actions 工作产物供研究使用（不作为永久公开源码分发）。
+这是**公开仓库**。厂商官网给出下载地址，不代表授予 GitHub 二次分发许可。NVIDIA、Qualcomm、Firefly、Hailo、研华等文档需要区分**公开下载**和**原文再发布**。对尚未取得再发布授权的文档，仓库保留官方下载入口、版本、校验元数据，未获再发布授权的完整 PDF **没有保存为 GitHub Actions artifact 或 Git 文件**；如需取得这些原件，应从记录的官方原始 URL 单独下载。
 
 Raspberry Pi Compute Module/AI HAT+ 官方 PDF 明确标明 **CC BY-ND 4.0**；只在确认实际 PDF 中的许可并保持**原样无修改**后才纳入 `originals/`，不得抽取页面重新包装、删掉署名或修改版面。
 
