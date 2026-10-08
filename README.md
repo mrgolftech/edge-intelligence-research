@@ -279,8 +279,10 @@ Phase 3 已进入正式报告编制阶段：
 
 ## 产品原始规格书与开发资料（2026-10-08）
 
-- [13项厂商产品 PDF 原始下载源与自动校验](references/product-documents/official-product-pdf-sources.csv)
-- [厂商原版 PDF 获取/校验审计与可点击资料](references/product-documents/audit-report-2026-10-08.md)
+- [30项官方产品原版 PDF 下载源及自动校验](references/product-documents/official-product-pdf-sources.csv)
+- [厂商原版 PDF 第一批获取/校验审计](references/product-documents/audit-report-2026-10-08.md)
+- [第二批增补的17份产品文献及原始 PDF](references/product-documents/second-batch-source-evidence-2026-10-08.md)
+- [Radxa 原版 Camera/Pinout/接口文档源码快照（CC BY 4.0）](references/product-documents/open-docs/README.md)
 - [可公开再分发的产品原版 PDF 文件](references/product-documents/originals/)
 - [逐条校验结果：页数、SHA-256、许可状态](references/product-documents/fetch-results.csv)
 - [原始产品资料采集脚本](scripts/fetch_official_product_pdfs.py)
