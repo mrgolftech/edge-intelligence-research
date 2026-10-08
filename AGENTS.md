@@ -635,3 +635,12 @@ C1–C5 是 workload composition archetype，不是自主等级。必须：
 - SM2/SM3/SM4 现行国家标准。
 
 标准只能作为规范依据，不得因此推断具体 SoC/板卡已实现全部能力。
+
+
+## 23. 原始参考资料归档及许可
+
+- 原文归档前必须先核对是否已有来源、现行版本、固定 SHA、版权/再分发许可证，不得仅因网页公开就复制受限全文。
+- 允许归档的官方开发文档、论文和项目 README 必须保留源机构、原始 URL、作者、上游 Commit/Blob SHA（或文件 SHA256）、获取日期、许可及与 R 编号的映射。
+- 仅可访问但无明确再分发许可的 GM/T、GB/T、SAE、厂商资料保留官方元数据、来源链接、版本、摘要和支持的结论，不提交来源不明的扫描件。
+- README、源代码文档快照不等于论文全文；获取状态必须明确区分。
+- 参考资产入口：`references/README.md`、`references/archive/README.md`、`references/archive/reference-inventory-2026-10-08.csv`。
