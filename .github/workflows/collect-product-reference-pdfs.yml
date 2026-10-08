@@ -48,10 +48,18 @@ jobs:
           if [ ! -s references/product-documents/fetch-results.csv ]; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # The active main branch may advance while PDFs are being fetched.
+          # Preserve only generated evidence, then apply it cleanly on the newest main.
+          tmp="$(mktemp -d)"
+          cp references/product-documents/fetch-results.csv "$tmp/manifest.csv"
+          cp -a references/product-documents/originals "$tmp/originals"
+          git fetch origin main
+          git reset --hard origin/main
+          cp "$tmp/manifest.csv" references/product-documents/fetch-results.csv
+          mkdir -p references/product-documents/originals
+          cp -a "$tmp/originals/." references/product-documents/originals/
           git add references/product-documents/fetch-results.csv references/product-documents/originals/
           if ! git diff --cached --quiet; then
             git commit -m "references: store verified product PDF metadata and CC-licensed originals"
-            git fetch origin main
-            git rebase origin/main
             git push origin HEAD:main
           fi
