@@ -31,7 +31,7 @@
 
 ## 1.1 调研背景
 
-随着无人装备自主能力不断提升，计算任务已经由早期的飞控、视频编码和遥测，扩展到环境感知、视觉定位、地图构建、自主避障、轨迹规划和任务理解。PX4 已将视觉—惯性里程计（VIO）、光流和 Collision Prevention 纳入无人机计算链路；Nav2 将移动机器人导航划分为状态估计、环境表示、规划和控制；Autoware 则形成 Sensing、Localization、Perception、Planning、Control 等完整自动驾驶软件栈。[R04][R07][R08]
+随着无人装备自主能力不断提升，计算任务已经由早期的飞控、视频编码和遥测，扩展到环境感知、视觉定位、地图构建、自主避障、轨迹规划和任务理解。PX4 已将视觉—惯性里程计（VIO）、光流和 Collision Prevention 纳入无人机计算链路；Nav2 将移动机器人导航划分为状态估计、环境表示、规划和控制；Autoware 则形成 Sensing、Localization、Perception、Planning、Control 等完整自动驾驶软件栈。[R04](../../references/final-report-reference-index-v0.5.md#r04)[R07](../../references/final-report-reference-index-v0.5.md#r07)[R08](../../references/final-report-reference-index-v0.5.md#r08)
 
 上述事实表明，无人装备的“算力”已经不是单一 AI 推理问题，而是多类工作负载在同一平台上的协同问题。平台选型需要同时处理数据吞吐、计算、内存、实时性、接口、软件和安全约束。
 
@@ -110,29 +110,29 @@ flowchart LR
     SS -.-> C
 ```
 
-Waymo 对自动驾驶软件的公开描述“Where am I / What’s around me / What will happen next / What should I do”与上述功能链高度一致。[R10]
+Waymo 对自动驾驶软件的公开描述“Where am I / What’s around me / What will happen next / What should I do”与上述功能链高度一致。[R10](../../references/final-report-reference-index-v0.5.md#r10)
 
 ## 2.2 无人机
 
 无人机应用包括巡检、测绘、监视、物流、搜索救援以及 GNSS 拒止环境自主飞行。其端侧计算特点是 SWaP-C 约束最强，同时对快速运动状态下的同步和闭环时延较为敏感。
 
-在 GNSS 不可靠环境中，VIO 通过 Camera 与 IMU 融合持续估计飞行器位置和姿态；当系统增加障碍检测、局部地图和路径规划后，计算节点即进入完整视觉自主闭环。[R05][R06][R11]
+在 GNSS 不可靠环境中，VIO 通过 Camera 与 IMU 融合持续估计飞行器位置和姿态；当系统增加障碍检测、局部地图和路径规划后，计算节点即进入完整视觉自主闭环。[R05](../../references/final-report-reference-index-v0.5.md#r05)[R06](../../references/final-report-reference-index-v0.5.md#r06)[R11](../../references/final-report-reference-index-v0.5.md#r11)
 
 ## 2.3 UGV/自动驾驶
 
-无人车平台通常具备更高功耗预算，可同时部署 Camera、LiDAR、Radar、GNSS/IMU。Autoware 和 Waymo 表明，高阶 UGV 计算不只包含目标检测，还包括多传感器融合、动态对象预测、BEV/Occupancy 表示以及行为和轨迹规划。[R08][R09][R10]
+无人车平台通常具备更高功耗预算，可同时部署 Camera、LiDAR、Radar、GNSS/IMU。Autoware 和 Waymo 表明，高阶 UGV 计算不只包含目标检测，还包括多传感器融合、动态对象预测、BEV/Occupancy 表示以及行为和轨迹规划。[R08](../../references/final-report-reference-index-v0.5.md#r08)[R09](../../references/final-report-reference-index-v0.5.md#r09)[R10](../../references/final-report-reference-index-v0.5.md#r10)
 
 该类系统是 C3 多传感器自主计算的典型代表，对内存容量、带宽、传感器同步和异构计算要求较高。
 
 ## 2.4 AMR 与机器人
 
-AMR 核心任务包括定位、地图、全局规划、局部避障和 Fleet 管理。Nav2 的架构表明，状态估计、环境表示、planner 和 controller 在移动机器人中是稳定存在的工程模块。[R07]
+AMR 核心任务包括定位、地图、全局规划、局部避障和 Fleet 管理。Nav2 的架构表明，状态估计、环境表示、planner 和 controller 在移动机器人中是稳定存在的工程模块。[R07](../../references/final-report-reference-index-v0.5.md#r07)
 
-具身机器人进一步引入 VLM/VLA。PaLM-E、RT-2、OpenVLA 表明视觉、语言、状态和动作可以由大模型统一建模，但 onboard memory、latency 和 safety constraints 仍是端侧部署的主要限制。[R18][R19][R20][R21]
+具身机器人进一步引入 VLM/VLA。PaLM-E、RT-2、OpenVLA 表明视觉、语言、状态和动作可以由大模型统一建模，但 onboard memory、latency 和 safety constraints 仍是端侧部署的主要限制。[R18](../../references/final-report-reference-index-v0.5.md#r18)[R19](../../references/final-report-reference-index-v0.5.md#r19)[R20](../../references/final-report-reference-index-v0.5.md#r20)[R21](../../references/final-report-reference-index-v0.5.md#r21)
 
 ## 2.5 USV 与固定边缘设备
 
-USV 的典型特点是 Radar/AIS/Camera/GNSS 多源融合、长航时和复杂目标避碰。[R13]
+USV 的典型特点是 Radar/AIS/Camera/GNSS 多源融合、长航时和复杂目标避碰。[R13](../../references/final-report-reference-index-v0.5.md#r13)
 
 固定式边缘设备虽然没有本体定位和控制，但可能需要 8 路、16 路甚至更多视频并发分析。因此，自主程度与计算量并非同一概念，这也是后续划分 C1 多摄像头智能分析的重要原因。
 
@@ -146,12 +146,12 @@ W1～W9 是本项目面向硬件资源预算建立的 Workload Taxonomy，并非
 
 其外部功能依据主要来自：
 
-- PX4：VIO、Optical Flow、Collision Prevention；[R04][R05][R06]
-- Nav2：State Estimation、Environment Representation、Planning、Control；[R07]
-- Autoware：Sensing、Localization、Perception、Planning、Control；[R08][R09]
-- Waymo：定位、感知、预测、决策；[R10]
-- GNSS-denied UAV、USV、多机器人综述；[R11][R12][R13]
-- PaLM-E、RT-2、OpenVLA 等 Foundation Model/VLA 路线。[R18][R19][R20]
+- PX4：VIO、Optical Flow、Collision Prevention；[R04](../../references/final-report-reference-index-v0.5.md#r04)[R05](../../references/final-report-reference-index-v0.5.md#r05)[R06](../../references/final-report-reference-index-v0.5.md#r06)
+- Nav2：State Estimation、Environment Representation、Planning、Control；[R07](../../references/final-report-reference-index-v0.5.md#r07)
+- Autoware：Sensing、Localization、Perception、Planning、Control；[R08](../../references/final-report-reference-index-v0.5.md#r08)[R09](../../references/final-report-reference-index-v0.5.md#r09)
+- Waymo：定位、感知、预测、决策；[R10](../../references/final-report-reference-index-v0.5.md#r10)
+- GNSS-denied UAV、USV、多机器人综述；[R11](../../references/final-report-reference-index-v0.5.md#r11)[R12](../../references/final-report-reference-index-v0.5.md#r12)[R13](../../references/final-report-reference-index-v0.5.md#r13)
+- PaLM-E、RT-2、OpenVLA 等 Foundation Model/VLA 路线。[R18](../../references/final-report-reference-index-v0.5.md#r18)[R19](../../references/final-report-reference-index-v0.5.md#r19)[R20](../../references/final-report-reference-index-v0.5.md#r20)
 
 W1～W9 的划分遵循五项原则：主导资源不同、时延语义不同、状态生命周期不同、验证方法不同、对架构 Gate 的影响不同。详细定义依据见 [W1–W9 工作负载分类定义依据](../../research/workloads/workload-taxonomy-definition-basis-v1.md)。
 
@@ -215,7 +215,7 @@ flowchart LR
 
 ## 4.2 C1 多摄像头智能分析
 
-C1 对应固定式视频分析、工业视觉和多摄跟踪系统，主要由 W1、W3、W5 组成。NVIDIA Metropolis 等平台长期面向 multi-camera analytics、tracking 和 inspection，说明此类系统具有明确产业基础。[R47]
+C1 对应固定式视频分析、工业视觉和多摄跟踪系统，主要由 W1、W3、W5 组成。NVIDIA Metropolis 等平台长期面向 multi-camera analytics、tracking 和 inspection，说明此类系统具有明确产业基础。[R47](../../references/final-report-reference-index-v0.5.md#r47)
 
 C1 的特点是视频和 AI 负载可能很重，但不存在本体定位和控制，因此适合视频 SoC、NPU accelerator 和 Host+Accelerator 架构。
 
@@ -223,13 +223,13 @@ C1 的特点是视频和 AI 负载可能很重，但不存在本体定位和控�
 
 C2 由 W1、W2、W3、W4、W6 和 W9 组成，对应视觉真正参与导航和运动控制的系统。
 
-PX4 VIO、Collision Prevention、Nav2 以及 Isaac ROS 多摄 VSLAM/Depth/Mapping 均体现这一组合。[R05][R06][R07][R24]
+PX4 VIO、Collision Prevention、Nav2 以及 Isaac ROS 多摄 VSLAM/Depth/Mapping 均体现这一组合。[R05](../../references/final-report-reference-index-v0.5.md#r05)[R06](../../references/final-report-reference-index-v0.5.md#r06)[R07](../../references/final-report-reference-index-v0.5.md#r07)[R24](../../references/final-report-reference-index-v0.5.md#r24)
 
 六摄像头 UAV 当前基础目标最接近 C2。
 
 ## 4.4 C3 多传感器自主系统
 
-C3 在 C2 基础上突出 W5 Prediction/Tracking，并引入 LiDAR、Radar 等多类传感器。Autoware、Waymo 和 USV 多源融合体系均属于该类。[R08][R10][R13]
+C3 在 C2 基础上突出 W5 Prediction/Tracking，并引入 LiDAR、Radar 等多类传感器。Autoware、Waymo 和 USV 多源融合体系均属于该类。[R08](../../references/final-report-reference-index-v0.5.md#r08)[R10](../../references/final-report-reference-index-v0.5.md#r10)[R13](../../references/final-report-reference-index-v0.5.md#r13)
 
 C3 对时间同步、内存带宽、动态预测和多传感器 I/O 要求显著高于 C2。
 
@@ -241,7 +241,7 @@ C4 不是“更高自主等级”，其价值主要体现在任务理解、语�
 
 ## 4.6 C5 协同自主系统
 
-C5 表示在 C2/C3 上增加 W8，用于 Fleet、多机协同和共享感知。核心新增约束是 Network QoS、distributed state、task allocation 以及 Fleet identity/trust。[R12][R15]
+C5 表示在 C2/C3 上增加 W8，用于 Fleet、多机协同和共享感知。核心新增约束是 Network QoS、distributed state、task allocation 以及 Fleet identity/trust。[R12](../../references/final-report-reference-index-v0.5.md#r12)[R15](../../references/final-report-reference-index-v0.5.md#r15)
 
 ---
 
@@ -326,7 +326,7 @@ CPU、GPU/NPU、ISP/VPU 和 I/O 集成于同一 SoC 或模块，具有数据路�
 
 ## 6.4 Host + Accelerator
 
-Host 负责 Camera、ISP、CPU workload 和规划，Accelerator 负责 DNN/大模型。Firefly AIBOX PRO 表明该路线已经产品化。[R37]
+Host 负责 Camera、ISP、CPU workload 和规划，Accelerator 负责 DNN/大模型。Firefly AIBOX PRO 表明该路线已经产品化。[R37](../../references/final-report-reference-index-v0.5.md#r37)
 
 ## 6.5 实时控制器 + Companion Computer
 
@@ -381,15 +381,15 @@ flowchart TB
 
 ### 7.2.1 NVIDIA Jetson AGX Orin
 
-Jetson AGX Orin 64GB 是当前机器人和自主系统中具有代表性的 GPU SoM。官方规格给出最高 275 TOPS、64GB LPDDR5、约 204.8GB/s 内存带宽，模块功耗档位 15～60W，并同时提供 Arm CPU、Ampere GPU、DLA、视频编解码和高速 I/O。[R35]
+Jetson AGX Orin 64GB 是当前机器人和自主系统中具有代表性的 GPU SoM。官方规格给出最高 275 TOPS、64GB LPDDR5、约 204.8GB/s 内存带宽，模块功耗档位 15～60W，并同时提供 Arm CPU、Ampere GPU、DLA、视频编解码和高速 I/O。[R35](../../references/final-report-reference-index-v0.5.md#r35)
 
-其工程价值主要在于 CUDA、TensorRT 和 Isaac ROS 软件生态。Isaac ROS 已提供 Visual SLAM、Depth、Mapping 等组件和系统级 Benchmark。[R22][R23][R24]
+其工程价值主要在于 CUDA、TensorRT 和 Isaac ROS 软件生态。Isaac ROS 已提供 Visual SLAM、Depth、Mapping 等组件和系统级 Benchmark。[R22](../../references/final-report-reference-index-v0.5.md#r22)[R23](../../references/final-report-reference-index-v0.5.md#r23)[R24](../../references/final-report-reference-index-v0.5.md#r24)
 
 **工程判断：** Jetson Orin 适合 C2/C3/C4，特别适合算法快速演进和复杂 GPU workload，但对小型 UAV 需要重点评估模块、载板、散热器和电源后的整机 SWaP。
 
 ### 7.2.2 Qualcomm Dragonwing IQ-9075
 
-IQ-9075 是面向工业 AI、AMR 和 Drone 的高集成异构 SoC。官方当前给出 50/100 Dense INT8 TOPS、最高 36GB LPDDR5 ECC、最多 16 路 Camera、8 核 Kryo CPU、Adreno GPU、Hexagon NPU，以及独立 4 核实时子系统。[R36]
+IQ-9075 是面向工业 AI、AMR 和 Drone 的高集成异构 SoC。官方当前给出 50/100 Dense INT8 TOPS、最高 36GB LPDDR5 ECC、最多 16 路 Camera、8 核 Kryo CPU、Adreno GPU、Hexagon NPU，以及独立 4 核实时子系统。[R36](../../references/final-report-reference-index-v0.5.md#r36)
 
 该平台同时具备 PCIe Gen4、2.5GbE TSN、CAN-FD 和 Linux/Ubuntu 支持，体现出“机器人 SoC”向 AI + RT + I/O 一体化发展的趋势。
 
@@ -405,7 +405,7 @@ RK3588 是国内低成本端侧 AI 平台的重要代表，具备 4×Cortex-A76 
 
 ### 7.2.4 Huawei Atlas 200I A2
 
-Atlas 200I A2 是国产高集成边缘模块，官方给出 20 TOPS INT8、10 TFLOPS FP16、4/8/12GB LPDDR4X ECC、ISP/视频、PCIe/Ethernet/MIPI/SATA/USB/CAN，20 TOPS 版本典型功耗约 25W，尺寸约 82×60×7mm。[R41]
+Atlas 200I A2 是国产高集成边缘模块，官方给出 20 TOPS INT8、10 TFLOPS FP16、4/8/12GB LPDDR4X ECC、ISP/视频、PCIe/Ethernet/MIPI/SATA/USB/CAN，20 TOPS 版本典型功耗约 25W，尺寸约 82×60×7mm。[R41](../../references/final-report-reference-index-v0.5.md#r41)
 
 官方应用明确包含机器人和无人机。
 
@@ -413,7 +413,7 @@ Atlas 200I A2 是国产高集成边缘模块，官方给出 20 TOPS INT8、10 TF
 
 ### 7.2.5 BM1688 / Firefly AIO-1688JD4
 
-Firefly BM1688 板级方案公开给出 16 TOPS INT8、4 TFLOPS FP16/BF16、16 路 1080p30 解码、10 路 1080p30 编码，并明确支持 6-channel sensor input 和 ISP。[R42]
+Firefly BM1688 板级方案公开给出 16 TOPS INT8、4 TFLOPS FP16/BF16、16 路 1080p30 解码、10 路 1080p30 编码，并明确支持 6-channel sensor input 和 ISP。[R42](../../references/final-report-reference-index-v0.5.md#r42)
 
 **工程判断：** 这是当前调研产品中与六摄像头 W1 最直接相关的国产板级方案之一。其“6 路 sensor input”属于很强的 Camera 侧事实证据，但并不能直接证明六路项目模式下的同步、VIO 和 C2 并发能力。
 
@@ -421,7 +421,7 @@ Firefly BM1688 板级方案公开给出 16 TOPS INT8、4 TFLOPS FP16/BF16、16 �
 
 ### 7.3.1 Houmo LQ50
 
-LQ50-24GB 是基于 M50 的 M.2 2280 加速卡，官方给出 160 TOPS、100 TFLOPS@bFP16、24GB LPDDR5/LPDDR5X、153.6GB/s、PCIe Gen4 x4、典型 13W、约 9g。[R38]
+LQ50-24GB 是基于 M50 的 M.2 2280 加速卡，官方给出 160 TOPS、100 TFLOPS@bFP16、24GB LPDDR5/LPDDR5X、153.6GB/s、PCIe Gen4 x4、典型 13W、约 9g。[R38](../../references/final-report-reference-index-v0.5.md#r38)
 
 较大的板载内存使其具备 W3 和 W7 的潜力，特别适合向已有 Host 增加大模型和视觉推理能力。
 
@@ -429,13 +429,13 @@ LQ50-24GB 是基于 M50 的 M.2 2280 加速卡，官方给出 160 TOPS、100 TFL
 
 ### 7.3.2 Axelera Metis
 
-Metis M.2 产品最高约 214 TOPS，支持 Arm Host，适合计算机视觉推理。其优势是较高能效和可嵌入性。[R39]
+Metis M.2 产品最高约 214 TOPS，支持 Arm Host，适合计算机视觉推理。其优势是较高能效和可嵌入性。[R39](../../references/final-report-reference-index-v0.5.md#r39)
 
 **工程判断：** 适合作为 W3 专用卸载引擎，但需要将散热器、Host slot power、PCIe 和 Host CPU/DDR 纳入整机评估。
 
 ### 7.3.3 Hailo-10H
 
-Hailo-10H M.2 提供 40 TOPS INT4/20 TOPS INT8，并配置 4GB/8GB 板载内存，面向 CV 和端侧生成式 AI。[R40]
+Hailo-10H M.2 提供 40 TOPS INT4/20 TOPS INT8，并配置 4GB/8GB 板载内存，面向 CV 和端侧生成式 AI。[R40](../../references/final-report-reference-index-v0.5.md#r40)
 
 厂商不同材料对典型功耗存在 <2.5W 和 <3.5W 的条件差异，因此报告不将其合并为单一精确功耗。
 
@@ -445,7 +445,7 @@ Hailo-10H M.2 提供 40 TOPS INT4/20 TOPS INT8，并配置 4GB/8GB 板载内存�
 
 ### 7.4.1 Firefly AIBOX PRO
 
-AIBOX PRO 采用 RK3588/RK3576 Host，并提供双 M.2 accelerator slot，官方支持后摩 LQ50、RK1828、DeepX DX-M1 等卡，整机提供双 GbE、CAN-FD、RS485、DI/DO 和 9～36V 输入。[R37]
+AIBOX PRO 采用 RK3588/RK3576 Host，并提供双 M.2 accelerator slot，官方支持后摩 LQ50、RK1828、DeepX DX-M1 等卡，整机提供双 GbE、CAN-FD、RS485、DI/DO 和 9～36V 输入。[R37](../../references/final-report-reference-index-v0.5.md#r37)
 
 其意义在于证明：
 
@@ -457,13 +457,13 @@ AIBOX PRO 采用 RK3588/RK3576 Host，并提供双 M.2 accelerator slot，官方
 
 ### 7.4.2 Seeed reComputer Robotics / Industrial
 
-Seeed reComputer Robotics/Industrial 系列基于 Jetson Orin NX/Nano，并集成 Ethernet、CAN、串口等机器人接口；部分 Robotics 型号提供 GMSL 摄像头能力。[R43]
+Seeed reComputer Robotics/Industrial 系列基于 Jetson Orin NX/Nano，并集成 Ethernet、CAN、串口等机器人接口；部分 Robotics 型号提供 GMSL 摄像头能力。[R43](../../references/final-report-reference-index-v0.5.md#r43)
 
 **工程判断：** 该产品形态比 Developer Kit 更接近实际机器人整机，适合 UGV、USV、AMR。已公开 Robotics 产品重量约 1kg 级，对小型 UAV 通常过重。
 
 ### 7.4.3 Advantech MIC-733-AO
 
-MIC-733-AO 是基于 Jetson AGX Orin 的工业 AI 计算机，支持 4×GbE、可选 PoE、可选 2 路 GMSL、9～36V、fanless，整机重量约 4.5kg。[R44]
+MIC-733-AO 是基于 Jetson AGX Orin 的工业 AI 计算机，支持 4×GbE、可选 PoE、可选 2 路 GMSL、9～36V、fanless，整机重量约 4.5kg。[R44](../../references/final-report-reference-index-v0.5.md#r44)
 
 **工程判断：** 该产品展示了工业级“芯片→整机”的产品化路径，适合固定边缘、UGV 和工业机器人，但显然不属于小型 UAV SWaP 范围。
 
@@ -545,18 +545,18 @@ Compute Plane 负责智能计算；Real-Time Plane 负责确定性闭环；Trust
 
 国产 Trust Plane 可形成如下标准链：
 
-- GB/T 38638-2020：可信计算体系结构；[R48]
-- GB/T 29829-2022、GM/T 0011-2023：可信密码支撑平台；[R49][R50]
-- GM/T 0012-2020：可信密码模块接口；[R51]
-- GM/T 0013-2021：TCM 接口符合性测试；[R52]
-- GM/T 0058-2018：TCM 服务模块接口；[R53]
-- GM/T 0079-2020：可信计算平台直接匿名证明；[R54]
-- GM/T 0082-2020：可信密码模块保护轮廓；[R55]
-- GM/T 0028-2024：密码模块安全要求；[R56]
-- GM/T 0132-2023：信息系统密码应用实施指南；[R57]
-- GM/T 0115-2021：信息系统密码应用测评要求。[R58]
+- GB/T 38638-2020：可信计算体系结构；[R48](../../references/final-report-reference-index-v0.5.md#r48)
+- GB/T 29829-2022、GM/T 0011-2023：可信密码支撑平台；[R49](../../references/final-report-reference-index-v0.5.md#r49)[R50](../../references/final-report-reference-index-v0.5.md#r50)
+- GM/T 0012-2020：可信密码模块接口；[R51](../../references/final-report-reference-index-v0.5.md#r51)
+- GM/T 0013-2021：TCM 接口符合性测试；[R52](../../references/final-report-reference-index-v0.5.md#r52)
+- GM/T 0058-2018：TCM 服务模块接口；[R53](../../references/final-report-reference-index-v0.5.md#r53)
+- GM/T 0079-2020：可信计算平台直接匿名证明；[R54](../../references/final-report-reference-index-v0.5.md#r54)
+- GM/T 0082-2020：可信密码模块保护轮廓；[R55](../../references/final-report-reference-index-v0.5.md#r55)
+- GM/T 0028-2024：密码模块安全要求；[R56](../../references/final-report-reference-index-v0.5.md#r56)
+- GM/T 0132-2023：信息系统密码应用实施指南；[R57](../../references/final-report-reference-index-v0.5.md#r57)
+- GM/T 0115-2021：信息系统密码应用测评要求。[R58](../../references/final-report-reference-index-v0.5.md#r58)
 
-SM2、SM3、SM4 国家标准可分别支撑设备身份/签名、完整性度量和数据保密。[R59][R60][R61]
+SM2、SM3、SM4 国家标准可分别支撑设备身份/签名、完整性度量和数据保密。[R59](../../references/final-report-reference-index-v0.5.md#r59)[R60](../../references/final-report-reference-index-v0.5.md#r60)[R61](../../references/final-report-reference-index-v0.5.md#r61)
 
 ## 8.4 Trust Plane 能力建议
 
@@ -688,7 +688,7 @@ Benchmark 建议包括：
 
 ## 11.1 多摄时空融合
 
-BEV/Occupancy 等技术推动感知从逐帧单摄向多摄时空融合发展，增加 DDR、同步、temporal state 和 Transformer 计算需求。[R17]
+BEV/Occupancy 等技术推动感知从逐帧单摄向多摄时空融合发展，增加 DDR、同步、temporal state 和 Transformer 计算需求。[R17](../../references/final-report-reference-index-v0.5.md#r17)
 
 ## 11.2 模块化架构与 End-to-End 并存
 
@@ -696,7 +696,7 @@ BEV/Occupancy 等技术推动感知从逐帧单摄向多摄时空融合发展，
 
 ## 11.3 VLM/VLA 进入机器人端侧
 
-PaLM-E、RT-2、OpenVLA 表明 VLM/VLA 已进入机器人研究与工程化阶段，但端侧仍受到 memory、latency、power 和 safety verification 限制。[R18][R19][R20][R21]
+PaLM-E、RT-2、OpenVLA 表明 VLM/VLA 已进入机器人研究与工程化阶段，但端侧仍受到 memory、latency、power 和 safety verification 限制。[R18](../../references/final-report-reference-index-v0.5.md#r18)[R19](../../references/final-report-reference-index-v0.5.md#r19)[R20](../../references/final-report-reference-index-v0.5.md#r20)[R21](../../references/final-report-reference-index-v0.5.md#r21)
 
 ## 11.4 SoC 向 AI + RT + Safety + Trust 融合
 
@@ -704,7 +704,7 @@ IQ-9075、Journey 6、A2000 等平台表明，新一代端侧芯片正把 NPU、
 
 ## 11.5 Fleet 与 Trust 融合
 
-多机器人协同将设备身份、可信状态和网络准入转化为系统架构问题。Remote Attestation 与 Fleet Policy 具有明显结合空间。[R30]
+多机器人协同将设备身份、可信状态和网络准入转化为系统架构问题。Remote Attestation 与 Fleet Policy 具有明显结合空间。[R30](../../references/final-report-reference-index-v0.5.md#r30)
 
 ---
 
