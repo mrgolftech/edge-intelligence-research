@@ -1,0 +1,51 @@
+name: Archive Open-Hardware Original Product PDFs
+
+on:
+  push:
+    paths:
+      - ".github/workflows/archive-open-hardware-pdfs.yml"
+      - "scripts/archive_open_hardware_pdfs.py"
+      - "references/product-documents/open-hardware-pdf-sources.csv"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: open-hardware-original-pdf-archive
+  cancel-in-progress: false
+
+jobs:
+  download-and-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install PDF file reader
+        run: python -m pip install --quiet 'pypdf>=5,<7'
+      - name: Download verified unmodified original hardware PDF files
+        run: python scripts/archive_open_hardware_pdfs.py
+      - name: Preserve PDFs, reconcile current main, and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Archival results:"
+          wc -l references/product-documents/open-hardware-pdf-manifest.csv
+          find references/product-documents/originals/beagleboard -name '*.pdf' -printf '%f %s bytes\n' | sort
+          tmpdir="$(mktemp -d)"
+          cp references/product-documents/open-hardware-pdf-manifest.csv "$tmpdir/manifest.csv"
+          cp -a references/product-documents/originals/beagleboard "$tmpdir/beagleboard"
+          git fetch origin main
+          git reset --hard origin/main
+          cp "$tmpdir/manifest.csv" references/product-documents/open-hardware-pdf-manifest.csv
+          mkdir -p references/product-documents/originals/beagleboard
+          cp -a "$tmpdir/beagleboard/." references/product-documents/originals/beagleboard/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add references/product-documents/open-hardware-pdf-manifest.csv references/product-documents/originals/beagleboard/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(references): sync original CC BY 4.0 product schematics and hardware PDFs"
+            git push origin HEAD:main
+          fi
