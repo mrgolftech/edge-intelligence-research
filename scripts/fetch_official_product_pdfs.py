@@ -38,6 +38,7 @@ ALLOWED = (
     "hailo.ai",
     "datasheets.raspberrypi.com",
     "docs.axelera.ai",
+    "dl.radxa.com",
 )
 
 
