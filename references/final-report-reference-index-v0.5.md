@@ -13,6 +13,7 @@
 
 <a id="r01"></a>
 ### R01 — NIST ALFUS：Autonomy Levels for Unmanned Systems
+- **原版全文 PDF（已归档）**：[NIST ALFUS Volume II（73页）](archive/pdfs/NIST_ALFUS_SP1011_II_1_0.pdf)；[SHA-256 与下载来源](archive/pdfs/MANIFEST.csv)。
 - 类型：标准/政府研究框架
 - 机构：NIST
 - 主要用途：支撑“不使用跨 UAV/UGV/USV/Robot 的自创线性 L1–L5”；支撑 Mission Complexity、Environmental Complexity、Human Independence 等多维描述。
@@ -124,6 +125,7 @@
 
 <a id="r14"></a>
 ### R14 — Edge Computing and Its Application in Robotics
+- **原版全文 PDF（已归档）**：[Edge Robotics Survey（27页）](archive/pdfs/Edge_Computing_Robotics_Survey_JSAN2025.pdf)；[SHA-256 与下载来源](archive/pdfs/MANIFEST.csv)。
 - 类型：Open Access Review
 - 作者：Nazish Tahir, Ramviyas Parasuraman
 - 期刊：Journal of Sensor and Actuator Networks, 2025, 14(4):65
@@ -159,6 +161,7 @@
 
 <a id="r18"></a>
 ### R18 — PaLM-E
+- **原版全文 PDF（已归档）**：[PaLM-E（20页）](archive/pdfs/PaLM-E_ICML2023.pdf)；[SHA-256 与下载来源](archive/pdfs/MANIFEST.csv)。
 - 类型：ICML 2023 论文
 - 文献：PaLM-E: An Embodied Multimodal Language Model
 - 主要用途：支撑机器人中视觉、连续状态与语言融合的 Foundation Model 路线。
@@ -174,6 +177,7 @@
 
 <a id="r20"></a>
 ### R20 — OpenVLA
+- **原版全文 PDF（已归档）**：[OpenVLA（37页）](archive/pdfs/OpenVLA_2024_arxiv2406.09246v3.pdf)；[SHA-256 与下载来源](archive/pdfs/MANIFEST.csv)。
 - 类型：论文 + 开源项目
 - 主要事实：7B 参数；基于 970k real-world robot demonstrations 训练。
 - 主要用途：支撑 W7 的模型规模、内存和动作输出工作负载。
@@ -255,12 +259,14 @@
 
 <a id="r30"></a>
 ### R30 — IETF RFC 9334: RATS Architecture
+- **原版全文 PDF（已归档）**：[IETF RFC 9334（46页）](archive/pdfs/IETF_RFC9334_RATS_Architecture.pdf)；[SHA-256 与下载来源](archive/pdfs/MANIFEST.csv)。
 - 类型：IETF 标准化架构
 - 主要用途：Remote Attestation 中 Attester、Verifier、Relying Party、Evidence、Attestation Result 的术语与角色依据。
 - 官方入口：https://www.rfc-editor.org/rfc/rfc9334.html
 
 <a id="r31"></a>
 ### R31 — NIST SP 800-193 Platform Firmware Resiliency Guidelines
+- **原版全文 PDF（已归档）**：[NIST SP 800-193（45页）](archive/pdfs/NIST_SP_800-193_Firmware_Resiliency.pdf)；[SHA-256 与下载来源](archive/pdfs/MANIFEST.csv)。
 - 类型：NIST 指南
 - 主要用途：支撑平台固件“保护—检测—恢复”、Root of Trust、安全更新和恢复机制。
 - 官方入口：https://csrc.nist.gov/pubs/sp/800/193/final
