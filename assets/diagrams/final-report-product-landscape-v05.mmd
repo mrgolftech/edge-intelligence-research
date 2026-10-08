@@ -1,0 +1,23 @@
+flowchart TB
+    A["端侧智能计算产品形态"] --> B["高集成 SoC / SoM"]
+    A --> C["GPU Robotics Platform"]
+    A --> D["独立 AI Accelerator"]
+    A --> E["Host + Accelerator Box"]
+    A --> F["工业/机器人整机"]
+    A --> G["车规 / Physical AI SoC"]
+    B --> B1["RK3588 / BM1688 / Atlas 200I A2"]
+    B --> B2["Qualcomm IQ-9075"]
+    C --> C1["Jetson Orin / Thor"]
+    D --> D1["Houmo LQ50"]
+    D --> D2["Axelera Metis"]
+    D --> D3["Hailo-10H / MLU220"]
+    E --> E1["Firefly AIBOX PRO"]
+    F --> F1["Seeed reComputer Robotics"]
+    F --> F2["Advantech MIC-733"]
+    G --> G1["Horizon Journey 6"]
+    G --> G2["Black Sesame A2000"]
+    H["小型 UAV 优先关注<br/>SWaP + Camera + C2闭环"] -.-> B
+    H -.-> C
+    H -.-> E
+    I["UGV/USV/AMR 优先关注<br/>接口 + Rugged + C3"] -.-> F
+    I -.-> G
