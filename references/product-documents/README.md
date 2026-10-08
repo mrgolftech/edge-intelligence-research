@@ -26,7 +26,7 @@
 
 这是**公开仓库**。厂商官网给出下载地址，不代表授予 GitHub 二次分发许可。NVIDIA、Qualcomm、Firefly、Hailo、研华等文档需要区分**公开下载**和**原文再发布**。对尚未取得再发布授权的文档，仓库保留官方下载入口、版本、校验元数据，未获再发布授权的完整 PDF **没有保存为 GitHub Actions artifact 或 Git 文件**；如需取得这些原件，应从记录的官方原始 URL 单独下载。
 
-Raspberry Pi Compute Module/AI HAT+ 官方 PDF 明确标明 **CC BY-ND 4.0**；只在确认实际 PDF 中的许可并保持**原样无修改**后才纳入 `originals/`，不得抽取页面重新包装、删掉署名或修改版面。
+Raspberry Pi **Compute Module 4/5、CM5 IO Board** 已通过原始 PDF 内许可检查，按 **CC BY-ND 4.0** 原样保存；AI HAT+、Camera Module 3、AI Camera、AI Kit 的 Product Brief 虽可取得原版 PDF，但当前未在被检查页面明确检测到相同再分发许可，因此仅保留官方链接和 SHA-256，**未上传全文**。
 
 ## 阅读优先级
 
