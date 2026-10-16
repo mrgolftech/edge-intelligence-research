@@ -260,3 +260,10 @@ W3 继续区分：
 - 安全能力与 W1/W2/W3/W4/W6/W9 并发验证；
 - 安全机制不得破坏 FCU/W9 实时与 failsafe；
 - Integrated SoC 与 Host+Accelerator 均需独立检查 Trust Boundary。
+
+
+## 端侧任务级智能扩展（2026-10-16）
+
+- [六摄 UAV：VLM/LLM 任务级智能分层架构、加速卡选型假设与 V13–V18 共运行验证](mission-intelligence-llm-vlm-architecture-2026-10.md)
+
+研究结论区分任务级 VLM/LLM 与 FCU/局部避障硬实时闭环；对 RK3588 + LQ50 等 Host+Accelerator 路线保持工程待验证状态。
