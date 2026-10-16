@@ -294,3 +294,11 @@ Phase 3 已进入正式报告编制阶段：
 - [15份新增 PDF 的 SHA-256、页数、上游 Git 版本](references/product-documents/open-hardware-pdf-manifest.csv)
 - 现有产品原版 PDF：**18份**（15 份 BeagleBoard + 3 份 Raspberry Pi），均为实际入库原件；另有论文/安全规范原版 PDF 9 份。
 - 其他厂商文档的下载和 SHA-256 校验结果记录于 [产品文档状态清单](references/product-documents/fetch-results.csv)，并不代表受限 PDF 已公开入库。
+
+
+## 端侧大模型专项调研（2026-10-16）
+
+- [国内可用端侧大模型计算方案：小米 AI Cube、DGX Spark、后摩 M50/LQ50、联想 P7、Jetson Thor、RK3588、算能等](research/products/on-device-llm-computing-solutions-2026-10.md)
+- [端侧大模型公开生成性能结构化数据（17 条，区分官方实测、厂商声明和原型展示）](data/benchmarks/on-device-llm-public-performance-2026-10.csv)
+
+专项严格区分模型总/激活参数、量化和内存、prefill/decode、板卡/Host/整机功耗。千亿级模型“支持部署”不代表已验证多摄像头自主闭环；大模型性能不代替 W1–W6 同构并发 P99 证据。
