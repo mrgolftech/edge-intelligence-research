@@ -219,6 +219,8 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 
 ## 最终报告
 
+- [v0.7 正式逐章校核初稿：RISC-V/PX4 飞控、双 RK3588 ATR/双目避障与端侧任务智能论证](reports/drafts/unmanned-edge-companion-report-v0.7.md)
+
 - [v0.6 正式初稿：补充端侧/边侧应用、伴飞计算机、ATR/双目避障与机载任务智能必要性](reports/drafts/secure-trusted-edge-intelligence-report-v0.6.md)
 
 Phase 3 已进入正式报告编制阶段：
