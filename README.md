@@ -219,6 +219,8 @@ Phase 1/2 已完成场景、workload、资源、架构 Gate 与代表产品事�
 
 ## 最终报告
 
+- [v0.6 正式初稿：补充端侧/边侧应用、伴飞计算机、ATR/双目避障与机载任务智能必要性](reports/drafts/secure-trusted-edge-intelligence-report-v0.6.md)
+
 Phase 3 已进入正式报告编制阶段：
 
 - [面向无人装备的安全可信端侧智能计算平台技术调研报告 v0.5（当前版：技术报告体例 + 产品调研）](reports/drafts/secure-trusted-edge-intelligence-report-v0.5.md)
