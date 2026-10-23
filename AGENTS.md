@@ -654,3 +654,11 @@ C1–C5 是 workload composition archetype，不是自主等级。必须：
 - 先实现经典立体深度/传统规划/FCU 安全分区的可测基线；VLM/LLM 作为低频语义扩展，设有无大模型对照组。
 - 伴飞计算机竞品对照需区分 VOXL 2/Skynode X 这类飞控/任务板、Manifold 3 这类外挂计算机、Skydio 整机以及 M.2 加速卡。
 - 每个原始来源区分 SPEC、CASE、VENDOR、BENCH、INFER、GAP；伴飞案例详细分析见 `reports/drafts/secure-trusted-edge-intelligence-report-v0.6.md`。
+
+## 当前项目结构补充（2026-10-23，用户现场说明）
+
+当前自研无人机飞控采用**将PX4主要源代码移植至RISC-V处理器**的架构，已明确计划采用**两套RK3588**作为分工独立的机载视觉计算节点：一套处理吊舱ATR目标识别，一套处理机头双目深度/避障；M.2加速卡面向LLM/VLM/VLA与任务辅助决策的可选研究能力。此系统结构取代此前“单个RK3588同时处理所有六路任务”的笼统假设。不得把上游PX4的适配完成度自动认定为当前RISC-V移植实测结论。
+
+正式报告研发结论：保留PX4飞控最终安全控制权限；两个RK3588分别服务ATR和避障；语义模型不进入高时效闭环，建议M.2首先由ATR计算节点承载；多机全局指挥/任务分配优先放地面或近端边缘，端侧保持失联后的确定性自治。具体接口和性能应按实机验收，不虚构目标指标。
+
+证据与报告初稿：`reports/drafts/unmanned-edge-companion-report-v0.7.md`。
