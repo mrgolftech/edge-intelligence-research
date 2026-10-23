@@ -644,3 +644,13 @@ C1–C5 是 workload composition archetype，不是自主等级。必须：
 - 仅可访问但无明确再分发许可的 GM/T、GB/T、SAE、厂商资料保留官方元数据、来源链接、版本、摘要和支持的结论，不提交来源不明的扫描件。
 - README、源代码文档快照不等于论文全文；获取状态必须明确区分。
 - 参考资产入口：`references/README.md`、`references/archive/README.md`、`references/archive/reference-inventory-2026-10-08.csv`。
+
+## Phase 3 补充写作重点（2026-10-23）
+
+正式报告 v0.6 不再仅强调 workload 和硬件产品分类，而以**当前真实无人装备应用与部署案例→功能边界→量化资源→候选计算架构→伴飞计算机工程验证**为叙事主线。
+
+- 端侧必须与地面边侧、后方云侧按部署位置区分，不因“失联自主”自动推出机载 LLM 需求。
+- 六摄机头空间感知/避障、独立吊舱 ATR、任务管理、机群协同为不同的计算/数据链，先确认模块边界再共享资源预算。
+- 先实现经典立体深度/传统规划/FCU 安全分区的可测基线；VLM/LLM 作为低频语义扩展，设有无大模型对照组。
+- 伴飞计算机竞品对照需区分 VOXL 2/Skynode X 这类飞控/任务板、Manifold 3 这类外挂计算机、Skydio 整机以及 M.2 加速卡。
+- 每个原始来源区分 SPEC、CASE、VENDOR、BENCH、INFER、GAP；伴飞案例详细分析见 `reports/drafts/secure-trusted-edge-intelligence-report-v0.6.md`。
