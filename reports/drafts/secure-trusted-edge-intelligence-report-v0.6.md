@@ -1000,7 +1000,7 @@ W1～W9 和 C1～C5 的作用是把复杂应用转化为可预算、可比较、
 | P07 | PX4, *Collision Prevention*, https://docs.px4.io/main/en/computer_vision/collision_prevention | 障碍消息、延迟、覆盖与降级；需留意该页面所示 companion 实现维护/测试边界 |
 | P08 | Autoware Foundation, *Autoware Overview*, https://autoware.org/autoware-overview/ | UGV 感知、定位、规划、控制功能链 |
 | P09 | Waymo, *A look under our trunk: what’s in our compute*, 2026-08-20, https://waymo.com/blog/2026/08/look-under-our-trunk/ | 自动驾驶异构低延迟计算，企业一手技术叙述 |
-| P10 | Nav2, *Navigation Concepts*, https://docs.nav2.org/ | AMR 状态估计、规划、控制架构 |
+| P10 | Nav2, *Navigation Concepts*, https://docs.nav2.org/jazzy/getting_started/navigation_concepts/ | AMR 状态估计、规划、控制架构 |
 | P11 | OpenCV, *Depth Map from Stereo Images*, https://docs.opencv.org/4.13.0/dd/d53/tutorial_py_depthmap.html | 双目几何及视差/深度关系，开发文档 |
 | P12 | Auterion, *Skynode X*, https://auterion.com/product/skynode-x/ | 飞控+任务计算+通信一体化，厂商产品形态 |
 | P13 | Rockchip, *rknn-llm benchmark*, https://github.com/airockchip/rknn-llm/blob/main/benchmark.md | RK3588 RKLLM 分阶段模型数据，官方仓库；应固定 commit 版本后复测 |
